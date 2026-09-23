@@ -12,7 +12,7 @@ setup:
 
 lint:
 	$(VENV)/bin/ruff check marl backend tests scripts
-	$(VENV)/bin/mypy marl/utils marl/envs marl/algorithms marl/evaluation marl/analysis marl/replay
+	$(VENV)/bin/mypy marl/utils marl/envs marl/algorithms marl/evaluation marl/analysis marl/replay marl/networks marl/buffers marl/training
 
 test:
 	$(VENV)/bin/pytest -m "not slow" --cov=marl --cov=backend --cov-report=term-missing

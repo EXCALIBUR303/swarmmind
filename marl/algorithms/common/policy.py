@@ -14,9 +14,10 @@ import-boundary tests and the §12.4 counterfactual checks.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Protocol
+from typing import TYPE_CHECKING, Any, Protocol
 
 import numpy as np
+import torch
 
 if TYPE_CHECKING:
     from marl.envs.core.world import SwarmWorld
@@ -33,3 +34,55 @@ class Policy(Protocol):
         that evaluation is reproducible given an evaluation seed (§22, §34).
         """
         ...
+
+
+def load_actor(path: str, map_location: str = "cpu") -> tuple[Any, dict]:
+    """Load an actor-only export (§12.3, §15.10) and return
+    `(ActorPolicy, meta)`. Uses `weights_only=True` — this file, and this
+    function, NEVER touch critic code, by construction: it is impossible
+    to run a critic forward pass from what this function returns."""
+    from marl.networks.actor import ActorPolicy
+    from marl.training.checkpoint import load_actor_export
+
+    payload = load_actor_export(path, map_location=map_location)
+    meta = payload["meta"]
+    grid_size = meta.get("grid_size", 11)
+    hidden = meta.get("hidden", 256)
+    actor = ActorPolicy(grid_size=grid_size, hidden=hidden)
+    actor.load_state_dict(payload["actor_state_dict"])
+    actor.eval()
+    return actor, meta
+
+
+class LearnedActorPolicy:
+    """Wraps an `ActorPolicy` (a trained IPPO/MAPPO actor — MAPPO's actor
+    is architecturally identical to IPPO's, since the critic is the only
+    difference between them, §16.3) so it can be driven through the same
+    `Policy` protocol as Random/heuristic — used by the evaluator, replay
+    recorder, and (from Phase 10) the backend's live sessions.
+
+    Only ever calls `world.all_actor_obs()` — the actor's local,
+    non-privileged view. Never touches `world.state` directly, never
+    imports anything from `global_state` or `critics`.
+    """
+
+    def __init__(self, actor: Any, stochastic: bool = True) -> None:
+        self.actor = actor
+        self.stochastic = stochastic
+        self._generator = torch.Generator()
+
+    def act(self, world: SwarmWorld, rng: np.random.Generator) -> np.ndarray:
+        # Re-seed the torch generator from the caller's numpy `rng` on
+        # every call, so the whole episode's action sequence is
+        # reproducible given the same `rng` stream (§22, §34) — torch and
+        # numpy generators can't share state directly, so this is the
+        # bridge between them.
+        self._generator.manual_seed(int(rng.integers(0, 2**31 - 1)))
+        grids, vecs, masks = world.all_actor_obs()
+        grid_t = torch.as_tensor(grids, dtype=torch.float32)
+        vec_t = torch.as_tensor(vecs, dtype=torch.float32)
+        mask_t = torch.as_tensor(masks, dtype=torch.bool)
+        actions, _ = self.actor.act(
+            grid_t, vec_t, mask_t, generator=self._generator, stochastic=self.stochastic
+        )
+        return actions.cpu().numpy().astype(np.int32)

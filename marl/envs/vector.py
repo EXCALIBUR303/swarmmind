@@ -78,6 +78,29 @@ class SyncVectorSwarm:
     def _next_seed(self, e: int) -> int:
         return int(self._seed_gens[e].integers(0, MAX_SEED))
 
+    def current_batch(self) -> Batch:
+        """Rebuild a `Batch` from each world's CURRENT state, without
+        stepping or resetting anything. Used after directly restoring
+        world states (e.g. training resume, §33.3) so the trainer's next
+        rollout observation reflects the restored states rather than
+        whatever `reset()` last produced."""
+        if not self._reset_done:
+            raise RuntimeError("current_batch() called before reset()")
+        obs_grid, obs_vec, mask = self._collect_obs()
+        state_grid, state_vec = self._collect_state()
+        n = self.n_robots
+        return Batch(
+            obs_grid=obs_grid,
+            obs_vec=obs_vec,
+            mask=mask,
+            state_grid=state_grid,
+            state_vec=state_vec,
+            reward=np.zeros((self.n_envs, n), dtype=np.float32),
+            terminated=np.zeros(self.n_envs, dtype=bool),
+            truncated=np.zeros(self.n_envs, dtype=bool),
+            final=None,
+        )
+
     def reset(self) -> Batch:
         for e, w in enumerate(self.worlds):
             w.reset(seed=self._next_seed(e))

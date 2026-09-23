@@ -1,0 +1,5 @@
+name: random
+# Non-learning baseline (§14.1). Samples uniformly over the masked action set
+# (or all 5 actions if action_masking is disabled at the env level).
+# No hyperparameters; kept here for a uniform config-loading interface
+# across all "algorithms" (random, heuristic, ippo, mappo).

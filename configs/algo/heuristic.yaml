@@ -1,0 +1,6 @@
+name: heuristic
+# Greedy nearest-frontier reference policy (§14.2). Non-learning.
+# Used ONLY for: (a) max_steps calibration, (b) solvability checks,
+# (c) a labelled context line in comparison charts. Never presented as
+# learned behaviour.
+tie_break: lexicographic

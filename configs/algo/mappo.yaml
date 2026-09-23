@@ -1,0 +1,31 @@
+name: mappo
+critic:
+  input: agent_specific_global   # ippo's is "local" — the ONLY intended difference
+actor:
+  encoder: local_cnn_v1
+  hidden: 256
+ppo:
+  n_envs: 16
+  rollout_len: 128
+  epochs: 5
+  minibatches: 4
+  clip: 0.2
+  gamma: 0.99
+  gae_lambda: 0.95
+  lr_actor: 3.0e-4
+  lr_critic: 3.0e-4
+  adam_eps: 1.0e-5
+  entropy_coef: 0.01
+  max_grad_norm: 0.5
+  value_norm: true
+  value_clip: false
+  target_kl: null
+  lr_schedule: constant
+eval:
+  interval_updates: 20
+  n_val_maps: 50
+  stochastic: true
+checkpoint:
+  fractions: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+device: auto
+deterministic: false

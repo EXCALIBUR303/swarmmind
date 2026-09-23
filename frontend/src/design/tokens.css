@@ -1,0 +1,79 @@
+/* SWARMMIND design tokens — the ONLY source of raw colour/spacing/type
+ * values (spec §30.3). Every component reads these variables; no raw hex
+ * or px literals are allowed outside this file (enforced in Phase 13).
+ *
+ * Phase 1 scope: baseline tokens needed for the app shell only. The full
+ * simulation-layer and chart tokens are added in Phase 9 (design phase).
+ */
+
+:root {
+  /* Typography */
+  --sm-font-ui: "Inter", system-ui, -apple-system, sans-serif;
+  --sm-font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --sm-font-xs: 500 11px/16px var(--sm-font-ui);
+  --sm-font-sm: 400 12px/16px var(--sm-font-ui);
+  --sm-font-md: 400 14px/20px var(--sm-font-ui);
+  --sm-font-lg: 600 16px/24px var(--sm-font-ui);
+  --sm-font-xl: 600 20px/28px var(--sm-font-ui);
+  --sm-font-2xl: 600 24px/32px var(--sm-font-ui);
+
+  /* Spacing (4px base) */
+  --sm-space-0: 0;
+  --sm-space-1: 2px;
+  --sm-space-2: 4px;
+  --sm-space-3: 8px;
+  --sm-space-4: 12px;
+  --sm-space-5: 16px;
+  --sm-space-6: 24px;
+  --sm-space-7: 32px;
+  --sm-space-8: 48px;
+
+  /* Radius */
+  --sm-radius-cell: 2px;
+  --sm-radius-control: 4px;
+  --sm-radius-panel: 6px;
+  --sm-radius-pill: 999px;
+
+  /* Elevation */
+  --sm-elev-0: none;
+  --sm-elev-1: 0 1px 2px rgba(15, 27, 45, 0.06);
+  --sm-elev-2: 0 4px 12px rgba(15, 27, 45, 0.12);
+
+  /* Surfaces */
+  --sm-bg-app: #f4f6f9;
+  --sm-bg-panel: #ffffff;
+  --sm-bg-sunken: #eef1f5;
+  --sm-bg-nav: #0f1b2d;
+  --sm-border: #dce1e8;
+  --sm-text: #111827;
+  --sm-text-muted: #5b6576;
+  --sm-text-on-dark: #e6eaf0;
+
+  /* Accent / semantic */
+  --sm-accent: #2563eb;
+  --sm-accent-hover: #1d4ed8;
+  --sm-accent-2: #0e7490;
+  --sm-success: #15803d;
+  --sm-warning: #b45309;
+  --sm-danger: #b91c1c;
+  --sm-info: #0369a1;
+
+  /* Algorithm colours (charts) */
+  --sm-algo-random: #6b7280;
+  --sm-algo-ippo: #0e7490;
+  --sm-algo-mappo: #2563eb;
+  --sm-algo-heuristic: #111827;
+
+  /* Robot identity colours (Okabe-Ito derived, CVD-safe) */
+  --sm-robot-1: #0072b2;
+  --sm-robot-2: #d55e00;
+  --sm-robot-3: #009e73;
+  --sm-robot-4: #cc79a7;
+  --sm-robot-5: #56b4e9;
+  --sm-robot-6: #7a5195;
+
+  --sm-nav-width-expanded: 220px;
+  --sm-nav-width-collapsed: 64px;
+  --sm-right-rail-width: 320px;
+}

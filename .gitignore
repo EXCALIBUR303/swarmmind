@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.coverage
+htmlcov/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Results & models (large, regenerable)
+results/runs/
+results/replays/
+models/*.pt
+*.pt
+
+# OS
+.DS_Store
+
+# Env
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/

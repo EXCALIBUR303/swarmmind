@@ -1,0 +1,26 @@
+name: L3
+width: 12
+height: 12
+n_robots: 4
+n_targets: 3
+obstacle_density: 0.20
+max_steps: 200          # provisional; calibrated in Phase 3, frozen in Phase 6
+sensor_radius: 2.0
+obs_radius: 5
+comm_mode: shared_map
+comm_radius: 4.0
+spawn: clustered
+target_min_dist: 3
+action_masking: true
+sensing:
+  occlusion: false
+reward:
+  explore_total: 1.0
+  discover: 0.25
+  rescue: 1.0
+  complete: 2.0
+  time_cost: 0.01
+  collision: 0.05
+  team_share: 1.0
+obs:
+  agent_id_onehot: false

@@ -1,0 +1,23 @@
+@import "./design/tokens.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--sm-bg-app);
+  color: var(--sm-text);
+  font: var(--sm-font-md);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--sm-accent);
+}

@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "backend",
+      "runtimeExecutable": ".venv/bin/uvicorn",
+      "runtimeArgs": ["backend.app.main:app", "--port", "8000"],
+      "port": 8000
+    },
+    {
+      "name": "swarmmind-frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "frontend"],
+      "port": 5173
+    }
+  ]
+}

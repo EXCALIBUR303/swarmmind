@@ -84,6 +84,34 @@ def test_exploration_budget_invariant_multi_step():
     assert abs(total_explore - expected_total_explore) < 1e-5
 
 
+def test_reward_components_sum_exactly_to_total_reward():
+    """Regression test: every component must appear in exactly one of the
+    summed terms. This directly would have caught the terminal-payout
+    double-counting bug (the exploration payout was briefly added to both
+    "explore" and "complete", which sum() below would double)."""
+    cfg = _cfg(width=6, height=6, n_robots=2, n_targets=1, sensor_radius=1.0)
+    starts = [(1, 1), (4, 4)]
+    targets = [(1, 2)]
+    m = _empty_map(6, 6, starts, targets)
+    world = SwarmWorld(cfg)
+    world.reset(map_spec=m)
+
+    from marl.envs.core.types import RIGHT, WAIT
+
+    result = world.step(np.array([RIGHT, WAIT]))
+    assert result.success
+
+    reconstructed = (
+        result.reward_components["explore"]
+        + result.reward_components["discover"]
+        + result.reward_components["rescue"]
+        + result.reward_components["complete"]
+        - result.reward_components["time"]
+        - result.reward_components["collision"]
+    )
+    assert np.allclose(reconstructed, result.reward, atol=1e-5)
+
+
 def test_no_double_counting_on_simultaneous_discovery():
     """Two robots that simultaneously bring the same NEW target within
     sensing range must not double-count the discover reward."""

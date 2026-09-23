@@ -4,7 +4,7 @@ height: 8
 n_robots: 2
 n_targets: 1
 obstacle_density: 0.10
-max_steps: 100          # provisional; calibrated in Phase 3, frozen in Phase 6
+max_steps: 100          # calibrated Phase 3 (heuristic P90=17.1 steps, formula floor=60 < provisional=100; kept); frozen in Phase 6
 sensor_radius: 2.0
 obs_radius: 5
 comm_mode: shared_map

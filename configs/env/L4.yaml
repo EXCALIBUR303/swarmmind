@@ -4,7 +4,7 @@ height: 12
 n_robots: 4
 n_targets: 3
 obstacle_density: 0.20
-max_steps: 200          # provisional; calibrated in Phase 3, frozen in Phase 6
+max_steps: 200          # calibrated Phase 3 (heuristic P90=60.0 steps, formula floor=180 < provisional=200; kept); frozen in Phase 6
 sensor_radius: 2.0
 obs_radius: 5
 comm_mode: none         # stretch: communication-constrained study (H5); use "limited_range" for mode C

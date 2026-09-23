@@ -51,12 +51,15 @@ def compute_rewards(cfg: RewardConfig, inputs: RewardInputs) -> tuple[np.ndarray
 
     complete_component = np.zeros(n, dtype=np.float32)
     if inputs.success:
+        # §13.2's success term is ONE bracket: w_c + w_x·(|G|-|K_{t+1}|).
+        # Split for reporting: the constant bonus w_c goes to "complete",
+        # and the exploration payout goes to "explore" — so that the
+        # exploration-budget invariant (§13.3) holds by summing "explore"
+        # alone. Each piece must appear in EXACTLY ONE component, since
+        # `reward` below sums all components: putting the payout in both
+        # would silently double it.
         remaining_unknown = max(inputs.n_reachable_free - inputs.known_count_after, 0)
-        payout = cfg.complete + w_x * remaining_unknown
-        complete_component[:] = payout
-        # The payout's exploration portion also counts toward the "explore"
-        # component total, so the invariant check (sum of explore == budget)
-        # holds by summing "explore" + the exploration part of "complete".
+        complete_component[:] = cfg.complete
         explore_component[:] += w_x * remaining_unknown
 
     # Apply team_share: shared positive rewards are what they are (already

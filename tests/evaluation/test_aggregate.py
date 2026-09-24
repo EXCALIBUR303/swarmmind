@@ -151,3 +151,109 @@ def test_h2_metric_and_auc_window_follow_the_analysis_config(tmp_path):
     assert "success_rate" in h2["secondary"]
     auc = lvl["methods"]["ippo"]["validation_curve"]["auc_per_seed"][0]
     assert auc == pytest.approx((0.5 + 0.7) / 2)  # window [0, 500] only
+
+
+# --- Phase 8: H3 / §24.4 coordination-emergence decision ---
+
+def _coord_entry(der50, der_iso, rp):
+    return {"der": 0.1, "der_at_50": {"mean": der50, "n_defined": 1, "n_excluded": 0},
+            "visitation_overlap": 0.1, "mean_inter_robot_distance": 3.0, "min_inter_robot_distance": 1.0,
+            "redundant_pursuit": {"mean": rp, "n_defined": 1, "n_excluded": 0},
+            "allocation_optimality": {"mean": 1.0, "n_defined": 1, "n_excluded": 0},
+            "dispersion_speed": {"mean": 3, "n_defined": 1, "n_excluded": 0},
+            "der_iso": der_iso}
+
+
+def _coord_json(ippo_der50, ippo_iso, ippo_rp, mappo_der50, mappo_iso, mappo_rp, random_der50, random_rp,
+                ablation_ok=True):
+    ablation = {"channel6_collision_multiplier_median": 300.0 if ablation_ok else 1.0,
+                "channel5_success_drop_median": 0.1 if ablation_ok else 0.0}
+    return {
+        "level": "L2", "protocol": {"n_maps": 5, "eval_seeds": [0, 1]},
+        "methods": {
+            "ippo": [_coord_entry(d, i, r) for d, i, r in zip(ippo_der50, ippo_iso, ippo_rp, strict=True)],
+            "mappo": [_coord_entry(d, i, r) for d, i, r in zip(mappo_der50, mappo_iso, mappo_rp, strict=True)],
+            "random": [_coord_entry(d, None, r) for d, r in zip(random_der50, random_rp, strict=True)],
+        },
+        "ablation": {"ippo": ablation, "mappo": ablation},
+    }
+
+
+def test_h3_coordination_emerged_when_all_four_criteria_hold(tmp_path):
+    study_dir, runs = _build(tmp_path)
+    (study_dir / "analysis").mkdir(parents=True)
+    coord = _coord_json(
+        ippo_der50=[0.10, 0.12, 0.11], ippo_iso=[0.30, 0.32, 0.31], ippo_rp=[0.9, 0.8, 0.85],
+        mappo_der50=[0.10, 0.11, 0.09], mappo_iso=[0.30, 0.29, 0.31], mappo_rp=[0.8, 0.9, 0.85],
+        random_der50=[0.40, 0.42, 0.41], random_rp=[1.8, 1.9, 1.85],
+    )
+    (study_dir / "analysis" / "L2_coordination.json").write_text(json.dumps(coord))
+    s = aggregate_study(study_dir, runs, _cfg())
+    h3 = s["levels"]["L2"]["hypotheses"]["H3"]
+    assert h3["verdict"] == "emerged"
+    assert h3["per_algo"]["ippo"]["coordination_emerged"] is True
+    assert h3["per_algo"]["mappo"]["coordination_emerged"] is True
+    for algo in ("ippo", "mappo"):
+        c = h3["per_algo"][algo]["criteria"]
+        assert c["h1_supported"] and c["der50_lower_than_random"] and c["der50_lower_than_isolation_null"]
+        assert c["redundant_pursuit_lower_than_random"] and c["ablation_degrades_coordination"]
+    assert "coordination" in s["levels"]["L2"]
+
+
+def test_h3_inconclusive_when_der50_not_below_random(tmp_path):
+    study_dir, runs = _build(tmp_path)
+    (study_dir / "analysis").mkdir(parents=True)
+    # IPPO's DER@50 is NOT lower than Random's -> criterion 2 fails.
+    coord = _coord_json(
+        ippo_der50=[0.45, 0.46, 0.44], ippo_iso=[0.30, 0.32, 0.31], ippo_rp=[0.9, 0.8, 0.85],
+        mappo_der50=[0.10, 0.11, 0.09], mappo_iso=[0.30, 0.29, 0.31], mappo_rp=[0.8, 0.9, 0.85],
+        random_der50=[0.40, 0.42, 0.41], random_rp=[1.8, 1.9, 1.85],
+    )
+    (study_dir / "analysis" / "L2_coordination.json").write_text(json.dumps(coord))
+    s = aggregate_study(study_dir, runs, _cfg())
+    h3 = s["levels"]["L2"]["hypotheses"]["H3"]
+    assert h3["verdict"] == "inconclusive"
+    assert h3["per_algo"]["ippo"]["coordination_emerged"] is False
+    assert h3["per_algo"]["ippo"]["criteria"]["der50_lower_than_random"] is False
+    assert "inconclusive" in h3["statement"]
+
+
+def test_h3_inconclusive_when_ablation_does_not_degrade(tmp_path):
+    study_dir, runs = _build(tmp_path)
+    (study_dir / "analysis").mkdir(parents=True)
+    coord = _coord_json(
+        ippo_der50=[0.10, 0.12, 0.11], ippo_iso=[0.30, 0.32, 0.31], ippo_rp=[0.9, 0.8, 0.85],
+        mappo_der50=[0.10, 0.11, 0.09], mappo_iso=[0.30, 0.29, 0.31], mappo_rp=[0.8, 0.9, 0.85],
+        random_der50=[0.40, 0.42, 0.41], random_rp=[1.8, 1.9, 1.85],
+        ablation_ok=False,
+    )
+    (study_dir / "analysis" / "L2_coordination.json").write_text(json.dumps(coord))
+    s = aggregate_study(study_dir, runs, _cfg())
+    h3 = s["levels"]["L2"]["hypotheses"]["H3"]
+    assert h3["verdict"] == "inconclusive"
+    assert h3["per_algo"]["ippo"]["criteria"]["ablation_degrades_coordination"] is False
+
+
+def test_h3_pending_when_no_coordination_file_present(tmp_path):
+    study_dir, runs = _build(tmp_path)
+    s = aggregate_study(study_dir, runs, _cfg())
+    assert s["levels"]["L2"]["hypotheses"]["H3"]["verdict"] == "pending"
+    assert "coordination" not in s["levels"]["L2"]
+
+
+def test_results_md_renders_coordination_section(tmp_path):
+    from marl.analysis.report import render_results_md
+
+    study_dir, runs = _build(tmp_path)
+    (study_dir / "analysis").mkdir(parents=True)
+    coord = _coord_json(
+        ippo_der50=[0.10, 0.12, 0.11], ippo_iso=[0.30, 0.32, 0.31], ippo_rp=[0.9, 0.8, 0.85],
+        mappo_der50=[0.10, 0.11, 0.09], mappo_iso=[0.30, 0.29, 0.31], mappo_rp=[0.8, 0.9, 0.85],
+        random_der50=[0.40, 0.42, 0.41], random_rp=[1.8, 1.9, 1.85],
+    )
+    (study_dir / "analysis" / "L2_coordination.json").write_text(json.dumps(coord))
+    s = aggregate_study(study_dir, runs, _cfg())
+    md = render_results_md(s, [], tmp_path / "RESULTS.md")
+    assert "Coordination analysis (§24)" in md
+    assert "DER@50" in md and "Coordination emerged" in md
+    assert "✅" in md

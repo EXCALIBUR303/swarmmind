@@ -134,6 +134,71 @@ def plot_heldout_dots(summary: dict[str, Any], level: str, split: str, metric: s
     return path
 
 
+def plot_heatmap(counts: list[list[int]], obstacles: list[list[bool]], title: str, path: Path) -> Path:
+    """A sequential single-hue heatmap (§26: exploration/collision heatmaps),
+    with obstacle cells hatched out so the map layout stays legible."""
+    arr = np.array(counts, dtype=float)
+    obs = np.array(obstacles, dtype=bool)
+    fig, ax = plt.subplots(figsize=(4.6, 4.6), facecolor=SURFACE)
+    ax.set_facecolor(SURFACE)
+    masked = np.ma.masked_where(obs, arr)
+    im = ax.imshow(masked, cmap="Blues", vmin=0)
+    ax.imshow(np.ma.masked_where(~obs, np.ones_like(arr)), cmap="Greys", vmin=0, vmax=1, alpha=0.6)
+    ax.set_xticks([])
+    ax.set_yticks([])
+    for side in ax.spines.values():
+        side.set_color(GRID)
+    fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    ax.set_title(title, loc="left", fontsize=10.5, color=INK)
+    fig.tight_layout()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(path, dpi=150, facecolor=SURFACE)
+    plt.close(fig)
+    return path
+
+
+def plot_der_vs_coverage(coverage: list[float], der: list[float], algo: str, title: str, path: Path) -> Path:
+    """§24.1's "DER vs. coverage curve" — one illustrative episode, not an
+    aggregate statistic (aggregates are DER@50, in the dot-style tables)."""
+    fig, ax = plt.subplots(figsize=(6, 4), facecolor=SURFACE)
+    _style(ax)
+    ax.plot(coverage, der, color=COLORS.get(algo, INK), linewidth=2.0)
+    ax.set_xlabel("Coverage C(t)", color=INK)
+    ax.set_ylabel("DER", color=INK)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, max(0.05, max(der) * 1.1) if der else 1.0)
+    ax.set_title(title, loc="left", fontsize=10.5, color=INK)
+    fig.tight_layout()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(path, dpi=150, facecolor=SURFACE)
+    plt.close(fig)
+    return path
+
+
+def plot_discovery_timeline(timeline: list[dict[str, Any]], max_t: int, title: str, path: Path) -> Path:
+    """A Gantt-style strip: discovery -> rescue latency per target (§26)."""
+    fig, ax = plt.subplots(figsize=(6, 0.6 + 0.4 * max(len(timeline), 1)), facecolor=SURFACE)
+    ax.set_facecolor(SURFACE)
+    for i, t in enumerate(timeline):
+        d, r = t["t_discovered"], t["t_rescued"]
+        if d is not None and r is not None:
+            ax.barh(i, r - d, left=d, color=COLORS.get("mappo", INK), alpha=0.7)
+            ax.plot(r, i, "D", color=INK, markersize=5)
+        if d is not None:
+            ax.plot(d, i, "o", color=INK_MUTED, markersize=6)
+    ax.set_yticks(range(len(timeline)), [f"target {t['target']}" for t in timeline], color=INK)
+    ax.set_xlim(0, max_t)
+    ax.set_xlabel("Step", color=INK)
+    ax.set_title(title, loc="left", fontsize=10.5, color=INK)
+    for side in ("top", "right"):
+        ax.spines[side].set_visible(False)
+    fig.tight_layout()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(path, dpi=150, facecolor=SURFACE)
+    plt.close(fig)
+    return path
+
+
 def make_study_figures(summary: dict[str, Any], out_dir: Path) -> list[Path]:
     paths: list[Path] = []
     for level, data in summary["levels"].items():

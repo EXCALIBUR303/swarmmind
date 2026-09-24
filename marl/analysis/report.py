@@ -18,6 +18,16 @@ TABLE_METRICS = [
     ("return_mean", "Return", 2),
 ]
 COMPARE_METRICS = ["success_rate", "censored_steps", "coverage", "collisions_per_100_agent_steps"]
+COORD_TABLE_METRICS = [
+    ("der", "DER", 3),
+    ("der_at_50", "DER@50", 3),
+    ("der_iso", "DER (isolation null)", 3),
+    ("visitation_overlap", "Visitation overlap", 3),
+    ("redundant_pursuit", "Redundant pursuit", 2),
+    ("allocation_optimality", "Allocation optimality", 2),
+    ("mean_inter_robot_distance", "Mean inter-robot dist.", 2),
+    ("dispersion_speed", "Dispersion speed (steps)", 1),
+]
 
 
 def _cell(iv: dict[str, Any] | None, nd: int) -> str:
@@ -52,6 +62,41 @@ def _diff_cell(d: dict[str, Any] | None) -> str:
     pv = d["p_value"]
     p = "" if pv is None else (", p<0.001" if pv < 0.001 else f", p={pv:.3f}")
     return f"{d['diff']:+.3f} [{d['lo']:+.3f}, {d['hi']:+.3f}]{p}, g {g}"
+
+
+def _coordination_table(coord: dict[str, Any]) -> list[str]:
+    rows = []
+    for m in ("random", "ippo", "mappo"):
+        blk = coord["methods"].get(m)
+        if not blk:
+            continue
+        rows.append(f"| {LABELS[m]} | {blk['n_seeds']} | " + " | ".join(
+            _cell(blk.get(k), nd) for k, _, nd in COORD_TABLE_METRICS) + " |")
+    if not rows:
+        return []
+    head = "| Method | Seeds | " + " | ".join(label for _, label, _ in COORD_TABLE_METRICS) + " |"
+    return [head, "|" + "---|" * (len(COORD_TABLE_METRICS) + 2), *rows]
+
+
+def _h3_criteria_table(h3: dict[str, Any]) -> list[str]:
+    per_algo = h3.get("per_algo")
+    if not per_algo:
+        return []
+    rows = ["| Criterion (§24.4) | " + " | ".join(LABELS[a] for a in per_algo) + " |",
+            "|" + "---|" * (len(per_algo) + 1)]
+    labels = [
+        ("h1_supported", "1. H1 supported"),
+        ("der50_lower_than_random", "2a. DER@50 < Random"),
+        ("der50_lower_than_isolation_null", "2b. DER@50 < isolation null"),
+        ("redundant_pursuit_lower_than_random", "3. Redundant pursuit < Random"),
+        ("ablation_degrades_coordination", "4. Ablation degrades coordination"),
+    ]
+    for key, label in labels:
+        rows.append(f"| {label} | " + " | ".join(
+            "✅" if v["criteria"].get(key) else "❌" for v in per_algo.values()) + " |")
+    rows.append("| **Coordination emerged** | " + " | ".join(
+        "**✅**" if v["coordination_emerged"] else "**❌**" for v in per_algo.values()) + " |")
+    return rows
 
 
 def render_results_md(summary: dict[str, Any], figures: list[Path], md_path: Path) -> str:
@@ -90,6 +135,15 @@ def render_results_md(summary: dict[str, Any], figures: list[Path], md_path: Pat
             else:
                 lines.append(f"- {hyp[h]['statement']}")
         lines.append("")
+        if "coordination" in data:
+            coord_table = _coordination_table(data["coordination"])
+            criteria_table = _h3_criteria_table(hyp.get("H3", {}))
+            if coord_table:
+                proto = data["coordination"].get("protocol", {})
+                lines += [f"### Coordination analysis (§24) — {proto.get('n_maps', '?')} maps × eval seeds "
+                          f"{proto.get('eval_seeds', [])}", "", *coord_table, ""]
+            if criteria_table:
+                lines += ["**§24.4 coordination-emergence criteria**", "", *criteria_table, ""]
         for split in summary["config"]["final_eval"]["map_sets"]:
             for mode in ("stochastic", "greedy"):
                 table = _method_table(methods, split, mode)

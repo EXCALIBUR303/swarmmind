@@ -170,6 +170,115 @@ def _h4(methods: dict[str, Any], prefix: str) -> dict[str, Any] | None:
             "statement": prefix + "H4 (descriptive, no threshold): " + "; ".join(parts) + "."}
 
 
+COORD_ALWAYS = ("der", "visitation_overlap", "mean_inter_robot_distance", "min_inter_robot_distance")
+COORD_SOMETIMES = ("der_at_50", "redundant_pursuit", "allocation_optimality", "dispersion_speed")
+
+
+def _coord_values(entries: list[dict[str, Any]], field: str) -> list[float]:
+    """Per-seed values for one coordination field (§24), pulling `.mean`
+    out of the `_SOMETIMES` fields' `{mean, n_defined, n_excluded}` shape
+    and skipping any seed where it is undefined."""
+    out = []
+    for e in entries:
+        v = e.get(field)
+        if isinstance(v, dict):
+            v = v.get("mean")
+        if v is not None:
+            out.append(float(v))
+    return out
+
+
+# Materiality thresholds for "the ablation degrades coordination-relevant
+# metrics" (§24.4 criterion 4). A median collision-rate multiplier > 2x
+# from zeroing the teammate channel, or a median success-rate drop > 2
+# points from zeroing the visited-known channel, either counts.
+ABLATION_COLLISION_MULTIPLIER_THRESHOLD = 2.0
+ABLATION_SUCCESS_DROP_THRESHOLD = 0.02
+
+
+def _ablation_degrades(entry: dict[str, Any]) -> bool:
+    mult = entry.get("channel6_collision_multiplier_median")
+    drop = entry.get("channel5_success_drop_median")
+    return bool((mult is not None and mult > ABLATION_COLLISION_MULTIPLIER_THRESHOLD)
+                or (drop is not None and drop > ABLATION_SUCCESS_DROP_THRESHOLD))
+
+
+def _h3(coord: dict[str, Any] | None, h1: dict[str, Any], ablation_ok: dict[str, bool], prefix: str) -> dict[str, Any]:
+    """§24.4's four-criterion "coordination emerged" decision, mechanically
+    from already-computed data (H1, this level's coordination.json, and the
+    ablation summary). Every criterion must hold, for a given algorithm,
+    across seeds, with CIs, or the report says coordination is inconclusive
+    for that algorithm — the exact §24.4 fallback wording."""
+    if coord is None:
+        return {"verdict": "pending", "statement": prefix + "H3 pending: coordination analysis "
+                "(scripts/analyze_study.py, §24) has not been run for this study yet."}
+    verdicts: dict[str, Any] = {}
+    for algo in LEARNED:
+        algo_entries = coord["methods"].get(algo, [])
+        rnd_entries = coord["methods"].get("random", [])
+        if not algo_entries or not rnd_entries:
+            verdicts[algo] = {"criteria": {}, "coordination_emerged": False,
+                              "statement": f"{LABELS[algo]}: no coordination data."}
+            continue
+        c1 = h1.get(algo, {}).get("verdict") == "supported"
+
+        der50_algo = _coord_values(algo_entries, "der_at_50")
+        der50_rnd = _coord_values(rnd_entries, "der_at_50")
+        d_der50_random = welch_difference(der50_algo, der50_rnd)
+        vs_random = bool(d_der50_random.hi is not None and d_der50_random.hi < 0)
+
+        der_iso_algo = [e["der_iso"] for e in algo_entries if e.get("der_iso") is not None]
+        paired = [a - b for a, b in zip(der50_algo, der_iso_algo, strict=False) if a is not None and b is not None]
+        iv_paired = t_interval(paired) if len(paired) >= 2 else None
+        vs_iso = bool(iv_paired and iv_paired.hi is not None and iv_paired.hi < 0)
+        c2 = vs_random and vs_iso
+
+        rp_algo = _coord_values(algo_entries, "redundant_pursuit")
+        rp_rnd = _coord_values(rnd_entries, "redundant_pursuit")
+        d_rp = welch_difference(rp_algo, rp_rnd)
+        c3 = bool(d_rp.hi is not None and d_rp.hi < 0)
+
+        c4 = bool(ablation_ok.get(algo, False))
+
+        all_met = c1 and c2 and c3 and c4
+        verdicts[algo] = {
+            "coordination_emerged": all_met,
+            "criteria": {
+                "h1_supported": c1,
+                "der50_lower_than_random": vs_random,
+                "der50_lower_than_isolation_null": vs_iso,
+                "der50_vs_random": d_der50_random.to_dict(),
+                "der50_vs_isolation_null_paired": iv_paired.to_dict() if iv_paired else None,
+                "redundant_pursuit_lower_than_random": c3,
+                "redundant_pursuit_vs_random": d_rp.to_dict(),
+                "ablation_degrades_coordination": c4,
+            },
+        }
+    all_emerged = all(v.get("coordination_emerged") for v in verdicts.values()) if verdicts else False
+    if all_emerged:
+        stmt = ("Coordination/cooperation is supported per §24.4 for " + " and ".join(LABELS[a] for a in LEARNED)
+                + ": H1 holds, DER@50 is lower than both Random's and the isolation null's, redundant pursuit is "
+                "lower than Random's, and the input ablation degrades coordination-relevant metrics.")
+    else:
+        stmt = "Differences in behaviour were observed; evidence of learned coordination is inconclusive (§24.4)."
+    return {"verdict": "emerged" if all_emerged else "inconclusive", "per_algo": verdicts,
+            "statement": prefix + stmt}
+
+
+def _coordination_block(coord: dict[str, Any]) -> dict[str, Any]:
+    """Descriptive per-arm coordination summary for the report (§26),
+    separate from the §24.4 pass/fail decision in `_h3`."""
+    out: dict[str, Any] = {"protocol": coord.get("protocol", {}), "methods": {}}
+    for arm, entries in coord["methods"].items():
+        block: dict[str, Any] = {"n_seeds": len(entries)}
+        for field in (*COORD_ALWAYS, *COORD_SOMETIMES):
+            block[field] = _interval_or_none(_coord_values(entries, field))
+        der_iso = [e["der_iso"] for e in entries if e.get("der_iso") is not None]
+        block["der_iso"] = _interval_or_none(der_iso) if der_iso else None
+        out["methods"][arm] = block
+    return out
+
+
 def aggregate_study(study_dir: Path, runs: list[dict[str, Any]], cfg: dict[str, Any]) -> dict[str, Any]:
     """`runs`: [{"algo","level","seed","run_dir"}] for every planned learned
     job (run_dir None if it never completed)."""
@@ -290,10 +399,16 @@ def aggregate_study(study_dir: Path, runs: list[dict[str, Any]], cfg: dict[str, 
                 **{m: test_comp.get(m) for m in ("success_rate", "censored_steps") if m != h2_metric},
                 "validation_auc": comparisons.get("validation_auc", {}).get("mappo-ippo"),
             }
-        hyp["H3"] = {"verdict": "pending", "statement": prefix + "H3 pending: DER@50 and the coordination "
-                     "metrics are computed in Phase 8 (§24); no coordination claim is made here."}
+        coord = _read_json(study_dir / "analysis" / f"{level}_coordination.json")
+        ablation_ok = {
+            algo: _ablation_degrades(coord.get("ablation", {}).get(algo, {})) for algo in LEARNED
+        } if coord else {}
+        hyp["H3"] = _h3(coord, hyp.get("H1", {}), ablation_ok, prefix)
         h4 = _h4(methods, prefix)
         if h4:
             hyp["H4"] = h4
-        summary["levels"][level] = {"methods": methods, "comparisons": comparisons, "hypotheses": hyp}
+        level_summary: dict[str, Any] = {"methods": methods, "comparisons": comparisons, "hypotheses": hyp}
+        if coord:
+            level_summary["coordination"] = _coordination_block(coord)
+        summary["levels"][level] = level_summary
     return summary

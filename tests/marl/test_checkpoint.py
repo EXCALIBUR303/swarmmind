@@ -186,3 +186,53 @@ def test_final_checkpoint_saved_when_budget_not_multiple_of_update(tmp_path):
     by_frac = {f: c["env_steps"] for c in manifest["checkpoints"] for f in c["fractions"]}
     assert by_frac == {0.0: 0, 0.5: 32, 1.0: 64}
     assert manifest["trained_env_steps"] == 64 and manifest["budget_env_steps"] == 69
+
+
+def test_ablated_actor_policy_zeros_only_the_named_channel():
+    """§22.4 item 4: AblatedActorPolicy must zero exactly the requested
+    observation channel and leave the actor's other inputs untouched."""
+    from marl.algorithms.common.policy import AblatedActorPolicy
+
+    agent = _make_agent()
+    env_cfg = LevelRegistry().get("L1")
+
+    from marl.envs.core.world import SwarmWorld
+
+    world = SwarmWorld(env_cfg)
+    world.reset(seed=3)
+
+    grids, _vecs, _masks = world.all_actor_obs()
+    ablated_5 = AblatedActorPolicy(agent.actor, channel=5)
+    ablated_6 = AblatedActorPolicy(agent.actor, channel=6)
+
+    prepared_5 = ablated_5._prepare_grid(grids)
+    prepared_6 = ablated_6._prepare_grid(grids)
+    baseline = LearnedActorPolicy(agent.actor)._prepare_grid(grids)
+
+    assert (prepared_5[:, 5] == 0).all()
+    assert (prepared_6[:, 6] == 0).all()
+    for ch in range(8):
+        if ch != 5:
+            np.testing.assert_array_equal(prepared_5[:, ch], baseline[:, ch])
+        if ch != 6:
+            np.testing.assert_array_equal(prepared_6[:, ch], baseline[:, ch])
+    # The ablation call never mutates the caller's original observation array.
+    np.testing.assert_array_equal(grids, baseline)
+
+
+def test_ablated_actor_policy_runs_a_full_episode():
+    from marl.algorithms.common.policy import AblatedActorPolicy
+
+    agent = _make_agent()
+    env_cfg = LevelRegistry().get("L1")
+
+    from marl.envs.core.world import SwarmWorld
+
+    world = SwarmWorld(env_cfg)
+    world.reset(seed=1)
+    policy = AblatedActorPolicy(agent.actor, channel=6, stochastic=True)
+    rng = np.random.default_rng(0)
+    for _ in range(20):
+        actions = policy.act(world, rng)
+        assert actions.shape == (env_cfg.n_robots,)
+        world.step(actions)

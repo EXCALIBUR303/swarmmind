@@ -71,6 +71,12 @@ class LearnedActorPolicy:
         self.stochastic = stochastic
         self._generator = torch.Generator()
 
+    def _prepare_grid(self, grids: np.ndarray) -> np.ndarray:
+        """Hook for evaluation-time input ablation (§22.4 item 4):
+        `AblatedActorPolicy` overrides this to zero one observation channel
+        before the actor ever sees it. Identity here."""
+        return grids
+
     def act(self, world: SwarmWorld, rng: np.random.Generator) -> np.ndarray:
         # Re-seed the torch generator from the caller's numpy `rng` on
         # every call, so the whole episode's action sequence is
@@ -79,10 +85,30 @@ class LearnedActorPolicy:
         # bridge between them.
         self._generator.manual_seed(int(rng.integers(0, 2**31 - 1)))
         grids, vecs, masks = world.all_actor_obs()
-        grid_t = torch.as_tensor(grids, dtype=torch.float32)
+        grid_t = torch.as_tensor(self._prepare_grid(grids), dtype=torch.float32)
         vec_t = torch.as_tensor(vecs, dtype=torch.float32)
         mask_t = torch.as_tensor(masks, dtype=torch.bool)
         actions, _ = self.actor.act(
             grid_t, vec_t, mask_t, generator=self._generator, stochastic=self.stochastic
         )
         return actions.cpu().numpy().astype(np.int32)
+
+
+class AblatedActorPolicy(LearnedActorPolicy):
+    """`LearnedActorPolicy`, but with one local-observation channel zeroed
+    before the actor sees it — EVALUATION ONLY, never during training
+    (§22.4 item 4: "genuine learning" evidence). Zeroing channel 5
+    (`visited_known`, the team's shared visited cells under comm mode B) or
+    channel 6 (`teammate`, currently-sensed teammates) removes information
+    a coordinating policy would use; if doing so changes outcomes
+    measurably, the policy was actually using that channel rather than
+    ignoring it."""
+
+    def __init__(self, actor: Any, channel: int, stochastic: bool = True) -> None:
+        super().__init__(actor, stochastic=stochastic)
+        self.channel = channel
+
+    def _prepare_grid(self, grids: np.ndarray) -> np.ndarray:
+        grids = grids.copy()
+        grids[..., self.channel, :, :] = 0
+        return grids

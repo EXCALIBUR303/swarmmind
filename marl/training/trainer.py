@@ -23,9 +23,10 @@ from marl.algorithms.common.ppo_update import (
     compute_update_losses,
     explained_variance,
 )
-from marl.buffers.rollout_buffer import RolloutBuffer, flatten_batch
-from marl.envs.core.config import EnvConfig
+from marl.buffers.rollout_buffer import RolloutBuffer, build_agent_specific_state, flatten_batch
+from marl.envs.core.config import EnvConfig, LevelRegistry
 from marl.envs.vector import SyncVectorSwarm
+from marl.evaluation.eval_sets import frozen_hash_manifest
 from marl.training.checkpoint import (
     export_actor,
     load_checkpoint,
@@ -60,6 +61,32 @@ def _unflatten_en(x: torch.Tensor, e: int, n: int) -> torch.Tensor:
     return x.reshape(e, n, *x.shape[1:])
 
 
+def _critic_inputs(
+    local_grid: torch.Tensor,  # [M, 8, K, K], M = (E*)N in env-major, agent-minor order
+    local_vec: torch.Tensor,  # [M, 10]
+    shared_grid: np.ndarray,  # [(E,) 7, H, W]
+    agent_state: np.ndarray | None,  # [(E,) N, 2, H, W]; None -> local-only critic input (IPPO)
+    state_vec: np.ndarray,  # [(E,) 4]
+) -> CriticInputs:
+    """Build the critic's inputs for M agent-samples. The single place the
+    agent-specific global state is assembled at rollout / bootstrap time —
+    it goes through the same `build_agent_specific_state` the update-time
+    `flatten_batch` uses, so the channel layout can't diverge between them."""
+    if agent_state is None:
+        return CriticInputs(local_grid=local_grid, local_vec=local_vec)
+    grid, vec = build_agent_specific_state(
+        torch.as_tensor(shared_grid, dtype=torch.float32),
+        torch.as_tensor(agent_state, dtype=torch.float32),
+        torch.as_tensor(state_vec, dtype=torch.float32),
+    )
+    return CriticInputs(
+        local_grid=local_grid,
+        local_vec=local_vec,
+        state_grid=grid.reshape(-1, *grid.shape[-3:]),
+        state_vec=vec.reshape(-1, vec.shape[-1]),
+    )
+
+
 def train(
     env_cfg: EnvConfig,
     algo_cfg: AlgoConfig,
@@ -86,14 +113,39 @@ def train(
     e_n, t_len, n_robots = algo_cfg.ppo.n_envs, algo_cfg.ppo.rollout_len, env_cfg.n_robots
     env_steps_per_update = e_n * t_len
     n_updates = max(total_env_steps // env_steps_per_update, 1)
+    # Checkpoint fractions are fractions of the steps actually trained. The
+    # budget is rarely a multiple of E*T (e.g. 3M / 2048), and measuring
+    # against the nominal budget meant fraction 1.0 was never reached, so the
+    # final checkpoint was silently missing from the schedule.
+    trained_env_steps = n_updates * env_steps_per_update
 
     resolved_config = {"env": env_cfg.model_dump(), "algo": algo_cfg.model_dump(), "run_seed": run_seed}
     h8 = config_hash(resolved_config)
-    manifest = RunManifest.load(run_dir) if resume_from is not None else RunManifest.create(
-        run_dir, study, algo_name, level, run_seed, env_cfg.model_dump(), algo_cfg.model_dump(), h8
-    )
+    if resume_from is not None:
+        manifest = RunManifest.load(run_dir)
+        manifest.data["status"] = "running"
+        manifest.data["resumed_from"] = manifest.data.get("resumed_from", []) + [str(resume_from)]
+        manifest.save()
+    else:
+        manifest = RunManifest.create(
+            run_dir, study, algo_name, level, run_seed, env_cfg.model_dump(), algo_cfg.model_dump(), h8
+        )
+        manifest.data["budget_env_steps"] = total_env_steps
+        manifest.data["trained_env_steps"] = trained_env_steps
+        manifest.save()
 
-    vec_env = SyncVectorSwarm(env_cfg, n_envs=e_n, seed_generators=env_seed_gens)
+    uses_global = agent.uses_global_state
+    state_hw = (env_cfg.height, env_cfg.width) if uses_global else None
+    # §20.3 isolation guard: no frozen validation/test map of ANY level may
+    # appear in the training stream.
+    eval_hashes = frozenset(frozen_hash_manifest(LevelRegistry().available_levels()))
+    vec_env = SyncVectorSwarm(
+        env_cfg,
+        n_envs=e_n,
+        seed_generators=env_seed_gens,
+        include_agent_state=uses_global,
+        exclude_hashes=eval_hashes,
+    )
     batch = vec_env.reset()
 
     metrics_logger = JsonlLogger(run_dir / "metrics.jsonl")
@@ -113,7 +165,7 @@ def train(
         global_env_steps = ckpt["global_env_steps"]
         global_agent_steps = ckpt["global_agent_steps"] if ckpt.get("global_agent_steps") is not None else global_env_steps * n_robots
         start_update = ckpt["update_idx"] + 1
-        frac_now = global_env_steps / total_env_steps
+        frac_now = global_env_steps / trained_env_steps
         checkpoints_saved = {f for f in algo_cfg.checkpoint.fractions if frac_now + 1e-9 >= f}
     checkpoint_paths: list[str] = []
     final_val_metrics: dict[str, Any] | None = None
@@ -122,7 +174,7 @@ def train(
         return snapshot_trainer_state(env_seed_gens, policy_gen, shuffle_rng, vec_env)
 
     def maybe_checkpoint() -> None:
-        frac = global_env_steps / total_env_steps
+        frac = global_env_steps / trained_env_steps
         # Multiple fraction thresholds can be crossed within one update
         # when updates are coarse relative to the fraction granularity
         # (common for small/smoke runs) — collect ALL newly-crossed
@@ -148,22 +200,32 @@ def train(
         )
 
     update_idx = start_update - 1
-    if resume_from is None:
-        maybe_checkpoint()  # fraction 0.0: the untrained policy
-
     try:
+        if resume_from is None:
+            maybe_checkpoint()  # fraction 0.0: the untrained policy
+            # Validation point at env step 0, so every learning curve (and the
+            # §22.2 AUC) starts from the untrained policy. Evaluation uses its
+            # own seeded RNGs — it cannot perturb the training streams.
+            step0 = evaluate_on_validation(
+                env_cfg, agent.actor, level, n_maps=algo_cfg.eval.n_val_maps, stochastic=algo_cfg.eval.stochastic
+            )
+            val_logger.log({"update": -1, "env_steps": 0, **step0})
+
         for update_idx in range(start_update, n_updates):
-            buf = RolloutBuffer(t_len=t_len, n_envs=e_n, n_agents=n_robots, grid_size=grid_size)
+            buf = RolloutBuffer(
+                t_len=t_len, n_envs=e_n, n_agents=n_robots, grid_size=grid_size, state_hw=state_hw
+            )
 
             for _t in range(t_len):
                 grid = torch.as_tensor(batch.obs_grid, dtype=torch.float32)
                 vec = torch.as_tensor(batch.obs_vec, dtype=torch.float32)
                 mask = torch.as_tensor(batch.mask, dtype=torch.bool)
-                grid_f, vec_f, mask_f = _flatten_en(grid, e_n, n_robots), _flatten_en(vec, e_n, n_robots), _flatten_en(mask, e_n, n_robots)
+                grid_f = _flatten_en(grid, e_n, n_robots)
+                vec_f = _flatten_en(vec, e_n, n_robots)
+                mask_f = _flatten_en(mask, e_n, n_robots)
+                inputs = _critic_inputs(grid_f, vec_f, batch.state_grid, batch.agent_state, batch.state_vec)
 
-                actions_f, logp_f, value_f = agent.collect(
-                    grid_f, vec_f, mask_f, CriticInputs(local_grid=grid_f, local_vec=vec_f), policy_gen, stochastic=True
-                )
+                actions_f, logp_f, value_f = agent.collect(grid_f, vec_f, mask_f, inputs, policy_gen, stochastic=True)
                 actions = _unflatten_en(actions_f, e_n, n_robots).numpy().astype(np.int64)
                 logp = _unflatten_en(logp_f, e_n, n_robots).numpy()
                 value = _unflatten_en(value_f, e_n, n_robots).numpy()
@@ -172,12 +234,21 @@ def train(
                 reward = nxt.reward.copy()
 
                 if nxt.final is not None:
-                    for local_idx, e in enumerate(nxt.final.env_indices):
+                    final = nxt.final
+                    for local_idx, e in enumerate(final.env_indices):
                         if nxt.truncated[e] and not nxt.terminated[e]:
-                            fg = torch.as_tensor(nxt.final.obs_grid[local_idx], dtype=torch.float32)
-                            fv = torch.as_tensor(nxt.final.obs_vec[local_idx], dtype=torch.float32)
+                            # Bootstrap from the TRUE final state (captured
+                            # before auto-reset), for the actor's obs AND,
+                            # for MAPPO, the critic's global state (§15.6).
+                            final_inputs = _critic_inputs(
+                                torch.as_tensor(final.obs_grid[local_idx], dtype=torch.float32),
+                                torch.as_tensor(final.obs_vec[local_idx], dtype=torch.float32),
+                                final.state_grid[local_idx],
+                                final.agent_state[local_idx] if final.agent_state is not None else None,
+                                final.state_vec[local_idx],
+                            )
                             with torch.no_grad():
-                                v_final = agent.critic_value_denormalized(CriticInputs(local_grid=fg, local_vec=fv))
+                                v_final = agent.critic_value_denormalized(final_inputs)
                             reward[e] += algo_cfg.ppo.gamma * v_final.numpy()
 
                 buf.add(
@@ -190,6 +261,9 @@ def train(
                     reward=reward,
                     terminated=nxt.terminated,
                     truncated=nxt.truncated,
+                    state_grid=batch.state_grid,
+                    state_vec=batch.state_vec,
+                    agent_state=batch.agent_state,
                 )
 
                 batch = nxt
@@ -199,10 +273,9 @@ def train(
             grid = torch.as_tensor(batch.obs_grid, dtype=torch.float32)
             vec = torch.as_tensor(batch.obs_vec, dtype=torch.float32)
             grid_f, vec_f = _flatten_en(grid, e_n, n_robots), _flatten_en(vec, e_n, n_robots)
+            last_inputs = _critic_inputs(grid_f, vec_f, batch.state_grid, batch.agent_state, batch.state_vec)
             with torch.no_grad():
-                last_value = _unflatten_en(
-                    agent.critic_value_denormalized(CriticInputs(local_grid=grid_f, local_vec=vec_f)), e_n, n_robots
-                )
+                last_value = _unflatten_en(agent.critic_value_denormalized(last_inputs), e_n, n_robots)
 
             buf_t = buf.to_torch()
             advantages, returns = compute_gae(
@@ -210,7 +283,9 @@ def train(
             )
 
             if agent.value_norm is not None:
-                agent.value_norm.update(returns)
+                # Statistics from ACTIVE samples only (§16.6); identical to
+                # updating on everything when all are active (always in v1).
+                agent.value_norm.update(returns if bool(buf_t.active.all()) else returns[buf_t.active])
                 returns_n = agent.value_norm.normalize(returns)
             else:
                 returns_n = returns
@@ -228,12 +303,13 @@ def train(
                     idx = perm[start : start + minibatch_size]
                     idx_t = torch.as_tensor(idx, dtype=torch.long)
 
-                    dist, value_n = agent.evaluate(
-                        flat.obs_grid[idx_t],
-                        flat.obs_vec[idx_t],
-                        flat.mask[idx_t],
-                        CriticInputs(local_grid=flat.obs_grid[idx_t], local_vec=flat.obs_vec[idx_t]),
+                    mb_inputs = CriticInputs(
+                        local_grid=flat.obs_grid[idx_t],
+                        local_vec=flat.obs_vec[idx_t],
+                        state_grid=flat.state_grid[idx_t] if flat.state_grid is not None else None,
+                        state_vec=flat.state_vec[idx_t] if flat.state_vec is not None else None,
                     )
+                    dist, value_n = agent.evaluate(flat.obs_grid[idx_t], flat.obs_vec[idx_t], flat.mask[idx_t], mb_inputs)
                     actor_loss, critic_loss, diag = compute_update_losses(
                         dist,
                         flat.action[idx_t],
@@ -243,6 +319,7 @@ def train(
                         flat.returns[idx_t],
                         algo_cfg.ppo.entropy_coef,
                         algo_cfg.ppo.clip,
+                        active=flat.active[idx_t],
                     )
 
                     agent.opt_actor.zero_grad()
@@ -294,10 +371,17 @@ def train(
             agent,
             meta={"grid_size": grid_size, "hidden": algo_cfg.actor.hidden, "algo": algo_name, "level": level},
         )
+        manifest.data["eval_hashes_guarded"] = len(eval_hashes)
+        manifest.data["training_maps_rejected_as_eval"] = vec_env.rejected_maps
         manifest.finish("completed", final_val_metrics)
         status = "completed"
     except Exception:
         manifest.finish("failed", final_val_metrics)
+        raise
+    except BaseException:
+        # KeyboardInterrupt / SystemExit (e.g. SIGTERM in a study worker):
+        # `latest.pt` from the last finished update makes this resumable.
+        manifest.finish("interrupted", final_val_metrics)
         raise
     finally:
         metrics_logger.close()

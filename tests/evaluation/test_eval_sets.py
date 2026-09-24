@@ -104,3 +104,67 @@ def test_real_frozen_eval_sets_exist_for_all_levels():
         assert len(val) == 50
         assert len(test) == 100
         assert {m.content_hash for m in val}.isdisjoint({m.content_hash for m in test})
+
+
+# --- Phase 6: structured split (G2), map validation, file-level immutability ---
+
+
+def test_validate_map_spec_accepts_generated_maps_and_rejects_bad_ones():
+    from marl.envs.core.mapgen import validate_map_spec
+    from marl.envs.core.maps_io import MapSpec
+
+    cfg = _cfg()
+    for m in generate_validation_maps(cfg, n=5):
+        assert validate_map_spec(m, cfg) == []
+
+    rows = ["........"] * 8
+    good = MapSpec(id="g", width=8, height=8, terrain_rows=rows, robot_starts=[(0, 0), (0, 1)], targets=[(7, 7)])
+    assert validate_map_spec(good, cfg) == []
+
+    too_close = MapSpec(id="c", width=8, height=8, terrain_rows=rows, robot_starts=[(0, 0), (0, 1)], targets=[(0, 3)])
+    assert any("BFS distance" in p for p in validate_map_spec(too_close, cfg))
+
+    walled = ["........"] * 4 + ["########"] + ["........"] * 3
+    split = MapSpec(id="w", width=8, height=8, terrain_rows=walled, robot_starts=[(0, 0), (0, 1)], targets=[(7, 7)])
+    problems = validate_map_spec(split, cfg)
+    assert any("disconnected" in p for p in problems) and any("unreachable" in p for p in problems)
+
+    wrong_count = MapSpec(id="n", width=8, height=8, terrain_rows=rows, robot_starts=[(0, 0)], targets=[(7, 7)])
+    assert any("robot starts" in p for p in validate_map_spec(wrong_count, cfg))
+
+    on_wall = MapSpec(id="o", width=8, height=8, terrain_rows=walled, robot_starts=[(4, 0), (0, 1)], targets=[(7, 7)])
+    assert any("not a free cell" in p for p in validate_map_spec(on_wall, cfg))
+
+
+def test_frozen_structured_set_matches_its_txt_sources_and_is_valid():
+    """The committed structured/L2.json must be exactly what the .txt
+    sources produce today (no silent edits to either), and every map passes
+    the procedural generator's guarantees for L2."""
+    from marl.envs.core.config import LevelRegistry
+    from marl.evaluation.eval_sets import build_structured_set
+
+    cfg = LevelRegistry().get("L2")
+    rebuilt = build_structured_set(cfg, "L2")
+    frozen = load_eval_set("L2", "structured")
+    assert 10 <= len(frozen) <= 20  # §20.3
+    assert [m.content_hash for m in rebuilt] == [m.content_hash for m in frozen]
+    assert len({m.content_hash for m in frozen}) == len(frozen)
+
+
+def test_structured_maps_are_in_the_training_isolation_guard():
+    from marl.envs.core.config import LevelRegistry
+
+    guard = frozen_hash_manifest(LevelRegistry().available_levels())
+    assert all(m.content_hash in guard for m in load_eval_set("L2", "structured"))
+
+
+def test_frozen_map_files_match_committed_manifest():
+    """§33.4 eval-set immutability: every frozen JSON file's sha256 equals
+    the committed configs/maps/manifest.json (and nothing is missing/extra)."""
+    import json
+
+    from marl.evaluation.eval_sets import MANIFEST_NAME, compute_maps_manifest
+    from marl.utils.paths import MAPS_DIR
+
+    recorded = json.loads((MAPS_DIR / MANIFEST_NAME).read_text())
+    assert compute_maps_manifest() == recorded

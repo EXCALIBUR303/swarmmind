@@ -6,6 +6,7 @@ import torch
 
 from marl.algorithms.common.ppo_update import (
     explained_variance,
+    masked_mean,
     ppo_policy_loss,
     value_loss_fn,
 )
@@ -47,6 +48,35 @@ def test_approx_kl_zero_when_policies_identical():
     advantages = torch.ones(3)
     _, approx_kl, _ = ppo_policy_loss(new_logp, old_logp, advantages, clip=0.2)
     assert abs(float(approx_kl)) < 1e-6
+
+
+def test_masked_mean_is_exactly_plain_mean_when_all_active():
+    """Bitwise equality with the unmasked path — so v1 (all agents always
+    active) is numerically unaffected by agent-masking support."""
+    x = torch.randn(257)
+    assert torch.equal(masked_mean(x, torch.ones(257, dtype=torch.bool)), x.mean())
+    assert torch.equal(masked_mean(x, None), x.mean())
+
+
+def test_inactive_samples_contribute_no_policy_gradient():
+    """§16.6 with an artificial mask: an inactive sample with an enormous
+    advantage must not move the policy at all."""
+    old_logp = torch.zeros(2)
+    new_logp = torch.tensor([0.01, 0.01], requires_grad=True)
+    advantages = torch.tensor([1.0, 1e6])
+    active = torch.tensor([True, False])
+    loss, _, _ = ppo_policy_loss(new_logp, old_logp, advantages, clip=0.2, active=active)
+    loss.backward()
+    assert new_logp.grad is not None
+    assert float(new_logp.grad[1]) == 0.0
+    assert float(new_logp.grad[0]) != 0.0
+
+
+def test_inactive_samples_excluded_from_value_loss():
+    values = torch.tensor([1.0, 0.0])
+    targets = torch.tensor([1.0, 1000.0])  # huge error on the inactive sample only
+    active = torch.tensor([True, False])
+    assert float(value_loss_fn(values, targets, active)) == 0.0
 
 
 def test_value_loss_zero_when_predictions_match_targets():

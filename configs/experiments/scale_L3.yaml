@@ -1,0 +1,16 @@
+# Stretch (spec §2.2, §35): the same comparison on L3 (12x12, 4 robots,
+# 3 targets, shared map). First to be dropped if compute is short.
+study: scale_L3
+smoke: false
+description: IPPO vs MAPPO vs Random on L3; secondary level, run only after main_L2.
+levels: [L3]
+algos: [ippo, mappo]
+seeds: [0, 1, 2, 3, 4]
+total_env_steps: 6000000
+final_eval:
+  map_sets: [test]          # no structured set exists for L3
+  episodes_per_map: 2
+  stochastic: true
+  also_greedy: true
+  checkpoint: final
+evolution_replays: null

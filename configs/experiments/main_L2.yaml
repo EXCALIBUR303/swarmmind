@@ -1,0 +1,36 @@
+# Main pre-registered study (spec §4, Appendix A.3; frozen Phase 6 with
+# the user's D1-D4 decisions in docs/EXPERIMENTS.md §6). Frozen by
+# `scripts/run_study.py --freeze main_L2`; any later edit is detected by
+# hash and recorded as a deviation.
+study: main_L2
+smoke: false
+description: >
+  H1/H2/H4 on L2 (10x10, 3 robots, 2 targets, shared map): IPPO vs MAPPO
+  vs Random, 5 training seeds each, final checkpoint, held-out test and
+  structured (G2) maps, stochastic evaluation primary. Budget and H2
+  metric set from the Phase 6 validation-only pilot (docs/EXPERIMENTS.md
+  §4/§6, D1-D3): L2 saturates by ~125k steps, so 1M is used instead of the
+  spec's 3M, H2 is decided on censored steps rather than success (which
+  saturates for both algorithms), and the AUC window is the first 245,760
+  steps rather than the whole budget.
+levels: [L2]
+algos: [ippo, mappo]
+seeds: [0, 1, 2, 3, 4]
+total_env_steps: 1000000
+baselines:
+  random: { eval_seeds: [0, 1, 2, 3, 4] }
+  heuristic: { reference_only: true }
+final_eval:
+  map_sets: [test, structured]
+  episodes_per_map: 2
+  stochastic: true
+  also_greedy: true
+  checkpoint: final
+evolution_replays:
+  fractions: [0.0, 0.1, 0.5, 1.0]
+  n_maps: 5
+  split: structured
+  seeds: [0]
+analysis:
+  h2_primary_metric: censored_steps
+  auc_window_env_steps: 245760

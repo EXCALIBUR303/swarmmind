@@ -1,18 +1,25 @@
-# Smoke-test experiment (§33.3 learning smoke tests, Phase 4 gate).
-#
-# Not yet consumed by a study-runner script (that's Phase 6's
-# run_study.py) — this file documents the exact parameters the Phase 4
-# smoke tests use, so they can be reproduced from the CLI directly:
-#
-#   python scripts/train.py --level L1 --algo ippo --seed <seed> \
-#       --total-env-steps 200000 --study smoke
-#
+# Phase 6 dry run of the full study pipeline (train -> held-out eval ->
+# baselines -> aggregate -> RESULTS.md + figures). SMOKE: never evidence.
 study: smoke
+smoke: true
+description: >
+  Infrastructure dry run on L1 (2 seeds x 200k env steps per algorithm).
+  Exercises every stage end to end; its numbers are not a result.
 levels: [L1]
-algos: [ippo]
-seeds: [0, 1, 2]
+algos: [ippo, mappo]
+seeds: [0, 1]
 total_env_steps: 200000
-notes: >
-  Learning-gate thresholds derived in Phase 3 (docs/EXPERIMENTS.md):
-  final validation success >= 0.85, censored mean steps <= 50.0.
-  At least 2/3 seeds must clear both to pass the Phase 4 validation gate.
+baselines:
+  random: { eval_seeds: [0, 1, 2, 3, 4] }
+  heuristic: { reference_only: true }
+final_eval:
+  map_sets: [test]          # L1 has no structured (G2) set
+  episodes_per_map: 2
+  stochastic: true
+  also_greedy: true
+  checkpoint: final
+evolution_replays:
+  fractions: [0.0, 0.1, 0.5, 1.0]
+  n_maps: 2
+  split: test
+  seeds: [0]

@@ -127,6 +127,10 @@ def test_resume_equivalence_bitwise_on_parameters(tmp_path):
     algo_cfg.ppo.n_envs = 4
     algo_cfg.ppo.rollout_len = 16
     algo_cfg.eval.interval_updates = 1000
+    # Small but non-zero: the split run validates at points the straight run
+    # doesn't (after its first half's last update), so bitwise-equal
+    # parameters also show validation never perturbs the training RNG streams.
+    algo_cfg.eval.n_val_maps = 3
     algo_cfg.checkpoint.fractions = [0.0, 1.0]
 
     total_env_steps = 4 * 16 * 4  # 4 updates
@@ -159,3 +163,26 @@ def test_resume_equivalence_bitwise_on_parameters(tmp_path):
         assert torch.equal(ckpt_a["actor_state_dict"][key], ckpt_b["actor_state_dict"][key]), key
     for key in ckpt_a["critic_state_dict"]:
         assert torch.equal(ckpt_a["critic_state_dict"][key], ckpt_b["critic_state_dict"][key]), key
+
+
+def test_final_checkpoint_saved_when_budget_not_multiple_of_update(tmp_path):
+    """Regression (Phase 6): with a budget that isn't a multiple of E*T
+    (e.g. 3M / 2048), fraction 1.0 used to be measured against the nominal
+    budget, never reached, and the final checkpoint was never saved."""
+    import json
+
+    env_cfg = LevelRegistry().get("L1")
+    algo_cfg = AlgoConfig.model_validate(load_yaml(CONFIGS_DIR / "algo" / "ippo.yaml"))
+    algo_cfg.ppo.n_envs = 2
+    algo_cfg.ppo.rollout_len = 8
+    algo_cfg.eval.interval_updates = 1000
+    algo_cfg.eval.n_val_maps = 1
+    algo_cfg.checkpoint.fractions = [0.0, 0.5, 1.0]
+    run = tmp_path / "r"
+    (run / "checkpoints").mkdir(parents=True)
+    train(env_cfg, algo_cfg, IPPOAgent, run_seed=0, total_env_steps=16 * 4 + 5,  # 4 updates + remainder
+          run_dir=run, study="t", algo_name="ippo", level="L1")
+    manifest = json.loads((run / "manifest.json").read_text())
+    by_frac = {f: c["env_steps"] for c in manifest["checkpoints"] for f in c["fractions"]}
+    assert by_frac == {0.0: 0, 0.5: 32, 1.0: 64}
+    assert manifest["trained_env_steps"] == 64 and manifest["budget_env_steps"] == 69

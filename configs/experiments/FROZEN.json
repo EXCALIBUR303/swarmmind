@@ -1,0 +1,16 @@
+{
+  "main_L2": {
+    "frozen_at": "2026-09-24T09:00:17.567615+00:00",
+    "git": {
+      "commit": "26719ea45c69a02818d2823d14f4ea6f8a4a3885",
+      "dirty": true
+    },
+    "files": {
+      "configs/experiments/main_L2.yaml": "6170755114e69425a74fd4f67e07e1ee9baa114ade2c29eee34f6cdf2f4b4c9c",
+      "configs/algo/ippo.yaml": "beab5af2e3f6fb7f715b74383b9d194b7e813eb91615d15d5a7faf58b151637b",
+      "configs/algo/mappo.yaml": "f3f451a78a7212a13410d97eaf3e51753d032a87e9e0531538cecd4fbc1ac372",
+      "configs/maps/manifest.json": "ead22ad957a77fce08ac2c22e7d39b1e2ee336c2db1029169cf6b385d197b1ef",
+      "configs/env/L2.yaml": "d2efaf3ef68b09ec74aecd8b6e6dcc547ddfc823f8c4a413027509820d6d5bc7"
+    }
+  }
+}

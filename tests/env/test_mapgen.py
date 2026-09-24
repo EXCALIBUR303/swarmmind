@@ -157,6 +157,28 @@ def test_retry_determinism_same_seed_same_attempt_sequence():
     assert m1.terrain_rows == m2.terrain_rows
 
 
+def test_attempt_seed_derivation_is_full_width_and_near_collision_free():
+    """Regression (Phase 5): `_hash64` once computed `np.uint64 % int` in
+    float64, zeroing the low 11 bits of every attempt seed (only ~2^20
+    distinct maps per level) and letting training stumble onto frozen eval
+    maps. A uniform 31-bit hash over n inputs has ~n^2/2^32 collisions."""
+    from marl.envs.core.mapgen import _hash64
+
+    n = 200_000
+    outs = [_hash64(s, 0) for s in range(n)]
+    expected_collisions = n * n / 2**32  # ~9.3
+    assert n - len(set(outs)) < 10 * expected_collisions + 20
+    assert any(o % 2048 != 0 for o in outs[:100]), "low bits are being zeroed again"
+    assert all(0 <= o < 2**31 for o in outs[:1000])
+
+
+def test_generated_map_records_mapgen_version():
+    from marl.envs.core.mapgen import MAPGEN_VERSION
+
+    m = generate_map(_cfg(), seed=1)
+    assert m.generator["mapgen_version"] == MAPGEN_VERSION
+
+
 def test_scattered_spawn_mode_produces_distinct_starts():
     cfg = _cfg(spawn="scattered")
     m = generate_map(cfg, seed=3)

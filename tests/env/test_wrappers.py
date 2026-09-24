@@ -126,6 +126,66 @@ def test_vector_env_auto_reset_returns_new_episode_obs():
     assert set(batch.final.env_indices) == {0, 1}
 
 
+def test_vector_env_agent_state_off_by_default():
+    vec = SyncVectorSwarm(_cfg(), n_envs=2, root_seed=1)
+    batch = vec.reset()
+    assert batch.agent_state is None
+
+
+def test_vector_env_agent_state_matches_world_channels():
+    cfg = _cfg(n_robots=3)
+    vec = SyncVectorSwarm(cfg, n_envs=2, root_seed=1, include_agent_state=True)
+    batch = vec.reset()
+    assert batch.agent_state is not None
+    for e, w in enumerate(vec.worlds):
+        for i in range(cfg.n_robots):
+            assert np.array_equal(batch.agent_state[e, i], w.agent_state_channels(i))
+
+
+def test_vector_env_final_info_captures_pre_reset_agent_state():
+    """The truncation bootstrap needs the FINAL agent-specific state, not the
+    freshly reset episode's (§15.6)."""
+    cfg = _cfg(width=6, height=6, n_robots=1, n_targets=1, max_steps=2)
+    vec = SyncVectorSwarm(cfg, n_envs=1, root_seed=1, include_agent_state=True)
+    vec.reset()
+    vec.step(np.zeros((1, 1), dtype=np.int32))
+    world = vec.worlds[0]
+    assert world.state is not None
+    expected_final = world.agent_state_channels(0).copy()  # state just before the ending step (WAIT)
+    batch = vec.step(np.zeros((1, 1), dtype=np.int32))  # truncates -> auto-reset
+    assert batch.final is not None and batch.final.agent_state is not None
+    assert np.array_equal(batch.final.agent_state[0, 0, 0], expected_final[0])  # position unchanged by WAIT
+
+
+def test_vector_env_rejects_excluded_eval_maps():
+    """§20.3 isolation guard: if a training seed would produce a map whose
+    hash is in the excluded (frozen eval) set, a different map is used."""
+    from marl.envs.core.mapgen import generate_map
+
+    cfg = _cfg()
+    probe = SyncVectorSwarm(cfg, n_envs=1, root_seed=3)
+    first_seed = int(probe._seed_gens[0].integers(0, 2**31 - 1))
+    banned = generate_map(cfg, first_seed)
+
+    vec = SyncVectorSwarm(cfg, n_envs=1, root_seed=3, exclude_hashes=frozenset({banned.content_hash}))
+    vec.reset()
+    assert vec.worlds[0].state is not None
+    assert vec.worlds[0].state.map_id != banned.id
+    assert vec.rejected_maps == 1
+
+
+def test_vector_env_guard_is_transparent_without_collisions():
+    """With no hash hits, the guarded env produces exactly the same maps as
+    an unguarded one (so enabling the guard changes no trajectory)."""
+    cfg = _cfg()
+    plain = SyncVectorSwarm(cfg, n_envs=3, root_seed=9)
+    guarded = SyncVectorSwarm(cfg, n_envs=3, root_seed=9, exclude_hashes=frozenset({"not-a-real-hash"}))
+    plain.reset()
+    guarded.reset()
+    assert [w.state.map_id for w in plain.worlds] == [w.state.map_id for w in guarded.worlds]
+    assert guarded.rejected_maps == 0
+
+
 def test_vector_env_wrong_action_shape_raises():
     cfg = _cfg(n_robots=2)
     vec = SyncVectorSwarm(cfg, n_envs=3, root_seed=1)

@@ -34,6 +34,12 @@ class CriticInputs:
 
 
 class PPOAgent(ABC):
+    # Whether the trainer must collect, store and pass agent-specific global
+    # state (§9.3). False for IPPO; True for MAPPO. The trainer's data path
+    # is the ONLY thing this switches — it must never change the actor, the
+    # RNG streams, or the order of operations (IPPO/MAPPO parity, §16.3).
+    uses_global_state: bool = False
+
     def __init__(
         self,
         actor: ActorPolicy,
@@ -51,9 +57,9 @@ class PPOAgent(ABC):
 
     @abstractmethod
     def _critic_forward(self, inputs: CriticInputs) -> torch.Tensor:
-        """Raw (un-normalized-space... actually NORMALIZED-space, since the
-        critic head is trained to predict normalized values) value
-        prediction, shape [B]."""
+        """The critic head's raw output, shape [B]. When ValueNorm is on
+        this is in NORMALIZED space (the head is trained against
+        normalized targets, §16.4)."""
         raise NotImplementedError
 
     def critic_value_denormalized(self, inputs: CriticInputs) -> torch.Tensor:

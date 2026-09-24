@@ -113,20 +113,26 @@ def test_ippo_l1_gate_reduced_budget_shows_clear_improvement(tmp_path):
     actual Phase 4 gate level) that checks directional improvement rather
     than the full threshold, since the full threshold needs ~100k+ steps
     (verified separately at full scale, see docs/phase_reports/PHASE_4.md:
-    3/3 seeds reached success>=0.96 at 300k steps)."""
+    3/3 seeds reached success>=0.96 at 300k steps).
+
+    Budget sized from the clean Phase 5 IPPO curves: at ~30k env steps all
+    three seeds were at 0.84-0.96 vs ~0.6 untrained (at 20k one seed was
+    still at 0.66). The original 25 updates x 8 envs judged on 12 maps sat
+    below that and passed in Phase 4 only by luck of the (buggy, v1) map
+    stream — it failed once mapgen v2 changed which maps were drawn."""
     from marl.envs.core.config import LevelRegistry
 
     env_cfg = LevelRegistry().get("L1")
     algo_cfg = AlgoConfig.model_validate({"name": "ippo", "critic": {"input": "local"}})
-    algo_cfg.ppo.n_envs = 8
+    algo_cfg.ppo.n_envs = 16
     algo_cfg.ppo.rollout_len = 64
     algo_cfg.eval.interval_updates = 1000
-    algo_cfg.eval.n_val_maps = 12
+    algo_cfg.eval.n_val_maps = 25
     algo_cfg.checkpoint.fractions = [0.0, 1.0]
 
     run_dir = tmp_path / "run"
     (run_dir / "checkpoints").mkdir(parents=True)
-    total_env_steps = 8 * 64 * 25  # ~13k env steps
+    total_env_steps = 16 * 64 * 30  # ~30k env steps
 
     result = train(
         env_cfg, algo_cfg, IPPOAgent, run_seed=0, total_env_steps=total_env_steps,
@@ -141,6 +147,6 @@ def test_ippo_l1_gate_reduced_budget_shows_clear_improvement(tmp_path):
     ckpt0 = load_checkpoint(run_dir / "checkpoints" / "step_0.pt")
     actor0 = ActorPolicy(grid_size=11, hidden=256)
     actor0.load_state_dict(ckpt0["actor_state_dict"])
-    untrained = evaluate_on_validation(env_cfg, actor0, "L1", n_maps=12, stochastic=True)
+    untrained = evaluate_on_validation(env_cfg, actor0, "L1", n_maps=25, stochastic=True)
 
     assert result.final_val_metrics["success_rate"] > untrained["success_rate"]

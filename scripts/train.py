@@ -45,6 +45,10 @@ def main() -> None:
     parser.add_argument("--run-dir", default=None, help="required with --resume: the existing run directory to continue writing into")
     args = parser.parse_args()
 
+    from marl.experiments.workers import _raise_on_sigterm
+
+    _raise_on_sigterm()
+
     env_cfg = LevelRegistry().get(args.level)
     algo_raw = load_yaml(CONFIGS_DIR / "algo" / f"{args.algo}.yaml")
     if args.overrides:

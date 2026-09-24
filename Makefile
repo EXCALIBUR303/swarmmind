@@ -12,7 +12,7 @@ setup:
 
 lint:
 	$(VENV)/bin/ruff check marl backend tests scripts
-	$(VENV)/bin/mypy marl/utils marl/envs marl/algorithms marl/evaluation marl/analysis marl/replay marl/networks marl/buffers marl/training
+	$(VENV)/bin/mypy marl/utils marl/envs marl/algorithms marl/evaluation marl/analysis marl/replay marl/networks marl/buffers marl/training marl/experiments
 
 test:
 	$(VENV)/bin/pytest -m "not slow" --cov=marl --cov=backend --cov-report=term-missing
@@ -26,8 +26,10 @@ dev-backend:
 dev-frontend:
 	cd frontend && npm run dev
 
+PARALLEL ?= 4
+
 study:
-	$(PY) scripts/run_study.py --study $(STUDY)
+	$(PY) scripts/run_study.py --study $(STUDY) --parallel $(PARALLEL)
 
 report:
 	$(PY) scripts/aggregate_results.py --study $(STUDY)

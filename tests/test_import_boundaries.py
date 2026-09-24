@@ -27,6 +27,12 @@ FORBIDDEN_IMPORTS: dict[str, list[str]] = {
     "marl.envs.vector": ["marl.algorithms"],
     "marl.networks.actor": ["marl.envs.core.global_state", "marl.networks.critics"],
     "marl.algorithms": ["backend"],
+    # §5.2: evaluation/analysis/replay never reach into training internals or
+    # the study orchestration layer above them (Phase 6).
+    "marl.evaluation": ["backend", "marl.training", "marl.experiments"],
+    "marl.analysis": ["backend", "marl.training", "marl.experiments"],
+    "marl.replay": ["backend", "marl.training", "marl.experiments"],
+    "marl.experiments": ["backend"],
     "backend": [],  # backend may import marl.* freely; see policy.py rule below
 }
 

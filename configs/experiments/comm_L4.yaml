@@ -1,0 +1,17 @@
+# Stretch H5 (spec §4): L4 = L3 without communication (mode A). The
+# MAPPO-IPPO gap here vs. in scale_L3 (mode B) is the H5 interaction.
+# Only meaningful if scale_L3 is also run with identical seeds/budget.
+study: comm_L4
+smoke: false
+description: IPPO vs MAPPO vs Random on L4 (no communication), paired with scale_L3 for H5.
+levels: [L4]
+algos: [ippo, mappo]
+seeds: [0, 1, 2, 3, 4]
+total_env_steps: 6000000
+final_eval:
+  map_sets: [test]
+  episodes_per_map: 2
+  stochastic: true
+  also_greedy: true
+  checkpoint: final
+evolution_replays: null

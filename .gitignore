@@ -14,9 +14,14 @@ node_modules/
 dist/
 .vite/
 
-# Results & models (large, regenerable)
+# Results & models (large, regenerable). docs/RESULTS.md and docs/figures/
+# are the committed, human-readable deliverables generated FROM these.
 results/runs/
 results/replays/
+results/pilot_logs/
+results/superseded/
+results/studies/
+results/heldout_access_log.jsonl
 models/*.pt
 *.pt
 

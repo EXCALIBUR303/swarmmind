@@ -83,7 +83,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--level", required=True)
     parser.add_argument("--policy", choices=list(POLICIES), required=True)
-    parser.add_argument("--split", default="validation", choices=["validation", "test"])
+    parser.add_argument("--split", default="validation", choices=["validation", "test", "structured"])
     parser.add_argument("--episodes-per-map", type=int, default=1)
     parser.add_argument("--json", action="store_true", help="print raw JSON instead of a summary line")
     args = parser.parse_args()

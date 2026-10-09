@@ -18,6 +18,8 @@ interface UiState {
   railTab: RailTab;
   railOpen: boolean;
   drawerOpen: boolean;
+  showCoords: boolean;
+  setShowCoords: (v: boolean) => void;
   toggleLayer: (k: LayerKey) => void;
   setRailTab: (t: RailTab) => void;
   setRailOpen: (open: boolean) => void;
@@ -29,6 +31,11 @@ export const useUiStore = create<UiState>((set, get) => ({
   railTab: "robots",
   railOpen: true,
   drawerOpen: false,
+  showCoords: loadPref<boolean>("showCoords", false),
+  setShowCoords: (showCoords) => {
+    savePref("showCoords", showCoords);
+    set({ showCoords });
+  },
   toggleLayer: (k) => {
     const layers = { ...get().layers, [k]: !get().layers[k] };
     savePref("layers", layers);

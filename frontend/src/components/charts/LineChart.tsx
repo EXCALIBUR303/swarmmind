@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { fmtNum, linear, niceTicks } from "../../lib/stats";
+import { useWidth } from "../../lib/useWidth";
 
 export interface Pt {
   x: number;
@@ -31,12 +32,12 @@ interface Props {
   compact?: boolean;
 }
 
-const W = 640;
 const M = { l: 64, r: 96, t: 10, b: 38 };
 
 /** One y-axis, thin marks (2px lines, 1px per-seed), CI bands, crosshair + one tooltip listing every series (§30.8). */
 export function LineChart({ series, xLabel, yLabel, xFormat = (x) => fmtNum(x, 0), yFormat = (y) => fmtNum(y, 3), xDomain, yDomain, height = 240, ariaLabel, compact }: Props) {
   const [hover, setHover] = useState<number | null>(null);
+  const [wrapRef, W] = useWidth<HTMLDivElement>(640);
   const H = height;
   const dom = useMemo(() => {
     const xs = series.flatMap((s) => s.points.map((p) => p.x));
@@ -79,7 +80,7 @@ export function LineChart({ series, xLabel, yLabel, xFormat = (x) => fmtNum(x, 0
   const valueAt = (s: LineSeries, x: number) => s.points.reduce((a, p) => (Math.abs(p.x - x) < Math.abs(a.x - x) ? p : a), s.points[0]);
 
   return (
-    <div className="sm-chart-plot" style={{ position: "relative", maxWidth: 820 }}>
+    <div ref={wrapRef} className="sm-chart-plot" style={{ position: "relative", maxWidth: "var(--sm-measure)" }}>
       <svg
         viewBox={`0 0 ${W} ${H}`}
         role="img"
@@ -142,7 +143,7 @@ export function LineChart({ series, xLabel, yLabel, xFormat = (x) => fmtNum(x, 0
         )}
       </svg>
       {hx !== null && (
-        <div className="sm-chart-tip" role="status" style={{ left: `${(sx(hx) / W) * 100}%`, top: 0, transform: sx(hx) > W * 0.6 ? "translateX(-105%)" : "translateX(8px)" }}>
+        <div className="sm-chart-tip" role="status" style={{ left: `${(sx(hx) / W) * 100}%`, top: 0, transform: sx(hx) > W * 0.6 ? "translateX(-105%)" : "translateX(var(--sm-tip-offset))" }}>
           <div className="sm-chart-tip-head">{xLabel}: {xFormat(hx)}</div>
           {series.map((s) => (
             <div className="sm-chart-tip-row" key={s.id}>

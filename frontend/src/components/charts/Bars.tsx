@@ -1,4 +1,5 @@
 import { fmtNum, linear } from "../../lib/stats";
+import { useWidth } from "../../lib/useWidth";
 
 export interface BarDatum {
   label: string;
@@ -15,15 +16,16 @@ interface Props {
   annotation?: string; // e.g. "Gini 0.014"
 }
 
-const W = 520;
 const ROW = 30;
 const M = { l: 56, r: 56, t: 6, b: 30 };
 
 /** Horizontal bars from a zero baseline, value labels at the bar end (the table view carries the same numbers). */
 export function Bars({ data, domain, format = (v) => fmtNum(v, 2), ariaLabel, xLabel, annotation }: Props) {
+  const [wrapRef, W] = useWidth<HTMLDivElement>(520, 280, 640);
   const H = M.t + data.length * ROW + M.b;
   const sx = linear(domain, [M.l, W - M.r]);
   return (
+    <div ref={wrapRef}>
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={ariaLabel}>
       <g className="sm-chart-axis">
         <line x1={M.l} x2={M.l} y1={M.t} y2={H - M.b} stroke="var(--sm-text-muted)" />
@@ -45,5 +47,6 @@ export function Bars({ data, domain, format = (v) => fmtNum(v, 2), ariaLabel, xL
       })}
       {annotation && <text x={W - M.r} y={M.t + 10} textAnchor="end" className="sm-chart-axis-title" style={{ fill: "var(--sm-text)" }}>{annotation}</text>}
     </svg>
+    </div>
   );
 }

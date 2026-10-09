@@ -61,7 +61,7 @@ export function Heatmap({ counts, obstacles, ariaLabel, unit, max: maxProp }: Pr
         ))}
       </svg>
       {hover && (
-        <div className="sm-chart-tip" role="status" style={{ left: `${((pad + hover.x * cell) / vbW) * 100}%`, top: `${((pad + hover.y * cell) / vbH) * 100}%`, transform: "translate(40px, 0)" }}>
+        <div className="sm-chart-tip" role="status" style={{ left: `${((pad + hover.x * cell) / vbW) * 100}%`, top: `${((pad + hover.y * cell) / vbH) * 100}%`, transform: "translate(var(--sm-tip-offset-lg), 0)" }}>
           <div className="sm-chart-tip-head">row {hover.y}, col {hover.x}</div>
           <div className="sm-chart-tip-row">
             <span>{obstacles[hover.y][hover.x] ? "obstacle" : unit}</span>

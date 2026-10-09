@@ -8,7 +8,8 @@ export interface ViewInput {
   timeline: Timeline;
   playhead: number; // replay: fractional step; live: ignored (follows the latest frame)
   live: boolean;
-  alpha: number; // 0..1 progress of the current step (already time-derived)
+  alpha: number; // 0..1 movement-tween progress (already time-derived)
+  sinceMs?: number; // ms since this step became current; omitted = settled
   layers: Layers;
   focused: number | null;
   reducedMotion: boolean;
@@ -30,6 +31,6 @@ export function buildRenderView(i: ViewInput): RenderView {
     layers: i.layers,
     focused: i.focused,
     lastFrame: state.lastFrame,
-    stepProgress: i.reducedMotion ? 1 : Math.min(Math.max(alpha, 0), 1),
+    sinceMs: i.reducedMotion ? Infinity : (i.sinceMs ?? Infinity),
   };
 }

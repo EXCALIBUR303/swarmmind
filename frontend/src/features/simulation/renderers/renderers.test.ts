@@ -129,11 +129,11 @@ describe("renderers (mock canvas)", () => {
   it("a blocked move gets a ✕ glyph (two strokes) and a collision ring while the step animates", () => {
     const tl = timelineOf(REAL_FAIL);
     const t = [...Array(tl.maxT + 1).keys()].find((k) => tl.stateAt(k).lastFrame?.blocked_by_robot.some(Boolean))!;
-    const base = buildRenderView({ timeline: tl, playhead: t, live: false, alpha: 0.5, layers: { ...DEFAULT_LAYERS }, focused: null, reducedMotion: false });
+    const base = buildRenderView({ timeline: tl, playhead: t, live: false, alpha: 0.5, sinceMs: 100, layers: { ...DEFAULT_LAYERS }, focused: null, reducedMotion: false });
     const animating = mockCtx();
     drawRobots(animating.ctx, base, vp, tk);
     const settled = mockCtx();
-    drawRobots(settled.ctx, { ...base, stepProgress: 1 }, vp, tk);
+    drawRobots(settled.ctx, { ...base, sinceMs: Infinity }, vp, tk);
     const blocked = base.lastFrame!.blocked_by_robot.filter(Boolean).length;
     expect(animating.calls.arc.length).toBe(settled.calls.arc.length + blocked); // one expanding ring per blocked robot
     expect(settled.calls.lineTo.length).toBeGreaterThanOrEqual(2); // the ✕
@@ -181,5 +181,70 @@ describe("buildRenderView", () => {
     expect(nopaths.trails).toEqual([]);
     const paths = buildRenderView({ timeline: tl, playhead: 9, live: false, alpha: 1, layers: DEFAULT_LAYERS, focused: null, reducedMotion: false });
     expect(paths.trails[0]).toHaveLength(10);
+  });
+});
+
+
+describe("micro-interaction timings (spec §30.7, design/motion.ts)", () => {
+  const firstWith = (tl: ReturnType<typeof timelineOf>, pick: (f: NonNullable<ReturnType<typeof timelineOf>["frames"][number]>) => boolean) =>
+    tl.frames.findIndex(pick) + 1;
+
+  it("movement tween = min(80% of the step interval, 160 ms)", async () => {
+    const { moveDurationMs } = await import("../../../design/motion");
+    expect(moveDurationMs(250)).toBe(160); // 1x: capped
+    expect(moveDurationMs(100)).toBeCloseTo(80); // fast playback: shorter than the cap
+  });
+
+  it("collision ring lasts 400 ms, discovery pulse 500 ms, rescue fade 800 ms", () => {
+    const fail = timelineOf(REAL_FAIL);
+    const tc = firstWith(fail, (f) => f.blocked_by_robot.some(Boolean));
+    const arcs = (draw: typeof drawRobots, v: RenderView) => {
+      const m = mockCtx();
+      draw(m.ctx, v, vp, tk);
+      return (m.calls.arc ?? []).length;
+    };
+    const vc = buildRenderView({ timeline: fail, playhead: tc, live: false, alpha: 1, layers: { ...DEFAULT_LAYERS }, focused: null, reducedMotion: false });
+    const settled = arcs(drawRobots, { ...vc, sinceMs: Infinity });
+    expect(arcs(drawRobots, { ...vc, sinceMs: 399 })).toBeGreaterThan(settled);
+    expect(arcs(drawRobots, { ...vc, sinceMs: 400 })).toBe(settled);
+
+    const ok = timelineOf(REAL_SUCCESS);
+    const td = firstWith(ok, (f) => (f.discovered ?? []).length > 0);
+    const vd = buildRenderView({ timeline: ok, playhead: td, live: false, alpha: 1, layers: { ...DEFAULT_LAYERS }, focused: null, reducedMotion: false });
+    const ringArcs = (since: number) => { const m = mockCtx(); drawTargets(m.ctx, { ...vd, sinceMs: since }, vp, tk); return (m.calls.arc ?? []).length; };
+    expect(ringArcs(499)).toBeGreaterThan(ringArcs(Infinity)); // the pulse ring
+    expect(ringArcs(500)).toBe(ringArcs(Infinity));
+  });
+
+  it("a blocked robot is nudged 2px toward the attempted direction (and returns), only while the nudge runs", () => {
+    const fail = timelineOf(REAL_FAIL);
+    const t = firstWith(fail, (f) => f.blocked_by_robot.some(Boolean) && f.action.some((a, i) => f.blocked_by_robot[i] && a !== 0));
+    const v = buildRenderView({ timeline: fail, playhead: t, live: false, alpha: 1, layers: { ...DEFAULT_LAYERS }, focused: null, reducedMotion: false });
+    const i = v.lastFrame!.blocked_by_robot.findIndex((b, k) => b && v.lastFrame!.action[k] !== 0);
+    const centre = (since: number) => { const m = mockCtx(); drawRobots(m.ctx, { ...v, sinceMs: since }, vp, tk); return (m.calls.arc as number[][]).filter((a) => a[2] === vp.cell * 0.3)[i].slice(0, 2); };
+    const rest = centre(Infinity);
+    const mid = centre(60); // halfway through 120 ms: peak displacement
+    const end = centre(120);
+    expect(Math.hypot(mid[0] - rest[0], mid[1] - rest[1])).toBeCloseTo(2, 5);
+    expect(end).toEqual(rest);
+  });
+
+  it("reduced motion: every effect is static (settled), glyphs remain", () => {
+    const fail = timelineOf(REAL_FAIL);
+    const t = firstWith(fail, (f) => f.blocked_by_robot.some(Boolean));
+    const v = buildRenderView({ timeline: fail, playhead: t, live: false, alpha: 0, sinceMs: 10, layers: { ...DEFAULT_LAYERS }, focused: null, reducedMotion: true });
+    expect(v.sinceMs).toBe(Infinity);
+    const m = mockCtx();
+    drawRobots(m.ctx, v, vp, tk);
+    expect((m.calls.lineTo ?? []).length).toBeGreaterThanOrEqual(2); // the static ✕
+  });
+
+  it("comm links pulse once (300 ms) then hold", () => {
+    const v = view({ layers: { ...DEFAULT_LAYERS, commLinks: true } });
+    const withEdges = { ...v, lastFrame: { ...v.lastFrame!, comm_edges: [[0, 1]] } };
+    const alphaAt = (since: number) => { const m = mockCtx(); let a = -1; Object.defineProperty(m.ctx, "globalAlpha", { set: (x) => { a = x; }, get: () => a }); drawComm(m.ctx, { ...withEdges, sinceMs: since }, vp, tk); return a; };
+    expect(alphaAt(150)).toBeCloseTo(1, 5); // peak of the pulse
+    expect(alphaAt(0)).toBeCloseTo(0.45, 5);
+    expect(alphaAt(300)).toBe(1);
   });
 });

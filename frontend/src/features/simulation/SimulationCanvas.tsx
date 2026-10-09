@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
+import { cellAt } from "./viewport";
 import { prefersReducedMotion } from "../../lib/prefs";
 import { useSimStore, BASE_STEPS_PER_SECOND, MAX_STEPS_PER_SECOND } from "../../stores/simStore";
 import { useUiStore } from "../../stores/uiStore";
+import { MOTION, moveDurationMs } from "../../design/motion";
 import { recordAnimatedFrame } from "./perf";
 import { RENDER_ORDER } from "./renderers";
 import { readTokens, type RenderTokens } from "./tokens";
@@ -20,6 +22,8 @@ export function SimulationCanvas() {
   const tokensRef = useRef<RenderTokens | null>(null);
   const lastDrawPos = useRef<[number, number][]>([]);
   const dirty = useRef(true);
+  const coordRef = useRef<HTMLDivElement>(null);
+  const showCoords = useUiStore((s) => s.showCoords);
 
   const meta = useSimStore((s) => s.meta);
   const nRobots = meta?.nRobots ?? 0;
@@ -62,6 +66,9 @@ export function SimulationCanvas() {
     let raf = 0;
     let prevNow = performance.now();
     let lastSig = "";
+    let shownT = -1;
+    let shownTl: unknown = null;
+    let changedAt = performance.now();
     const loop = (now: number) => {
       raf = requestAnimationFrame(loop);
       const dt = Math.min((now - prevNow) / 1000, 0.1);
@@ -76,19 +83,25 @@ export function SimulationCanvas() {
       sim.advance(dt);
       const live = sim.mode === "live";
       const rate = Math.min(MAX_STEPS_PER_SECOND, BASE_STEPS_PER_SECOND * sim.speed);
-      const alpha = live
-        ? sim.live && sim.live.lastFrameAt > 0
-          ? Math.min((now - sim.live.lastFrameAt) / (1000 / rate), 1)
-          : 1
-        : sim.playhead - Math.floor(sim.playhead);
-      const animating = (live ? alpha < 1 : sim.playing) && !reduced;
-      const sig = `${sim.version}|${live ? "L" : Math.floor(sim.playhead)}|${animating ? Math.round(alpha * 60) : "s"}|${JSON.stringify(ui.layers)}|${sim.focusedRobot}|${vp.cssWidth}x${vp.cssHeight}`;
+      // One clock for every effect: ms since the displayed step became current (spec §30.7 durations).
+      const curT = live ? tl.maxT : Math.min(Math.max(Math.floor(sim.playhead), tl.startT), tl.maxT);
+      if (curT !== shownT || tl !== shownTl) {
+        changedAt = now;
+        shownT = curT;
+        shownTl = tl;
+      }
+      const rawSince = now - changedAt;
+      const sinceMs = reduced ? Infinity : rawSince;
+      const animating = !reduced && rawSince < MOTION.rescueMs; // the longest effect
+      const moveMs = moveDurationMs(1000 / rate);
+      const alpha = animating ? Math.min(rawSince / moveMs, 1) : 1;
+      const sig = `${sim.version}|${curT}|${animating ? Math.round(rawSince / 16) : "s"}|${JSON.stringify(ui.layers)}|${sim.focusedRobot}|${vp.cssWidth}x${vp.cssHeight}`;
       if (!dirty.current && sig === lastSig && !animating) return;
       lastSig = sig;
       dirty.current = false;
 
       const t0 = performance.now();
-      const view = buildRenderView({ timeline: tl, playhead: sim.playhead, live, alpha: animating ? alpha : 1, layers: ui.layers, focused: sim.focusedRobot, reducedMotion: reduced });
+      const view = buildRenderView({ timeline: tl, playhead: sim.playhead, live, alpha, sinceMs: animating ? sinceMs : Infinity, layers: ui.layers, focused: sim.focusedRobot, reducedMotion: reduced });
       lastDrawPos.current = view.drawPos;
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
@@ -110,9 +123,19 @@ export function SimulationCanvas() {
     else if (st.focusedRobot !== null) st.focus(null);
   }, []);
 
+  const onPointerMove = useCallback((e: React.PointerEvent<HTMLCanvasElement>) => {
+    const vp = vpRef.current;
+    const el = coordRef.current;
+    if (!vp || !el) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const c = cellAt(vp, e.clientX - rect.left, e.clientY - rect.top);
+    el.textContent = c ? `row ${c[0]}, col ${c[1]}` : "";
+  }, []);
+
   return (
     <div ref={wrapRef} className="sm-canvas-wrap">
-      <canvas ref={canvasRef} role="img" aria-label={label} onPointerDown={onPointerDown} className="sm-canvas" />
+      <canvas ref={canvasRef} role="img" aria-label={label} onPointerDown={onPointerDown} onPointerMove={showCoords ? onPointerMove : undefined} onPointerLeave={() => { if (coordRef.current) coordRef.current.textContent = ""; }} className="sm-canvas" />
+      {showCoords && <div ref={coordRef} className="sm-coord" aria-hidden="true" />}
     </div>
   );
 }

@@ -16,10 +16,23 @@ export function savePref(key: string, value: unknown): void {
   }
 }
 
+export type MotionPref = "system" | "reduce" | "full";
+
+/** The user's override wins; "system" follows the OS `prefers-reduced-motion` (spec §30.9). */
 export function prefersReducedMotion(): boolean {
+  const pref = loadPref<MotionPref>("motion", "system");
+  if (pref === "reduce") return true;
+  if (pref === "full") return false;
   try {
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   } catch {
     return false;
   }
+}
+
+/** Mirror the override onto <html> so CSS animations/transitions obey it too. */
+export function applyMotionPref(pref: MotionPref = loadPref<MotionPref>("motion", "system")): void {
+  const el = document.documentElement;
+  if (pref === "reduce") el.setAttribute("data-motion", "reduce");
+  else el.removeAttribute("data-motion");
 }

@@ -21,6 +21,9 @@ export function normalizeFrame(f: ReplayFrame): Frame {
 }
 
 export type TargetStatus = 0 | 1 | 2; // hidden | discovered | rescued (backend constants)
+/** (dy, dx) of each action index: WAIT, UP, DOWN, LEFT, RIGHT (backend ACTION_DELTAS). */
+export const ACTION_DELTA: readonly [number, number][] = [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]];
+
 export const HIDDEN = 0;
 export const DISCOVERED = 1;
 export const RESCUED = 2;

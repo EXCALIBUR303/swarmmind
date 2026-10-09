@@ -60,8 +60,8 @@
   --sm-accent: #2563eb;
   --sm-accent-hover: #1d4ed8;
   --sm-accent-2: #0e7490;
-  --sm-success: #15803d;
-  --sm-warning: #b45309;
+  --sm-success: #166534; /* Phase 13: darkened from #15803d, which was 4.43:1 on --sm-bg-sunken (AA needs 4.5) */
+  --sm-warning: #92400e; /* Phase 13: darkened from #b45309 (4.43:1 on sunken) */
   --sm-danger: #b91c1c;
   --sm-info: #0369a1;
 
@@ -128,8 +128,47 @@
   --sm-target-outline: #7a5a00;
   --sm-comm-link: #64748b;
 
+  /* Layout and control sizes (Phase 13: every px outside this file reads one of these). */
+  --sm-control-h: 32px;          /* minimum toolbar/button hit target (WCAG 2.5.8 target size) */
+  --sm-hit-min: 40px;            /* list rows and tabs */
+  --sm-page-max: 1280px;
+  --sm-measure: 820px;           /* readable line length for notes */
+  --sm-measure-narrow: 420px;
+  --sm-card-min: 400px;
+  --sm-card-wide-min: 480px;
+  --sm-evo-max: 720px;
+  --sm-form-w: 320px;
+  --sm-rail-w-md: 300px;
+  --sm-rail-max-h-sm: 240px;
+  --sm-log-max-h: 240px;
+  --sm-fixed-bar-h: 64px;
+  --sm-select-max-w: 220px;
+  --sm-skeleton-h: 180px;
+  --sm-table-max-h: 320px;
+  --sm-tip-min-w: 120px;
+  --sm-dot: 8px;
+  --sm-swatch: 12px;
+  --sm-check: 18px;
+  --sm-marker-h: 18px;
+  --sm-glyph: 12px;
+  --sm-nudge: 2px;
+  --sm-slide: 12px;
+  --sm-tip-offset: 8px;
+  --sm-tip-offset-lg: 40px;
+  --sm-bg-nav-deep: #0a1420;
+  --sm-nav-hover: rgba(255, 255, 255, 0.06);
+  --sm-ramp-start: #eff4fc;      /* sequential heatmap ramp: light end ... */
+  --sm-ramp-end: #1d4ed8;        /* ... dark end (= --sm-accent-hover) */
+
   --sm-nav-width-expanded: 220px;
   --sm-nav-width-collapsed: 64px;
   --sm-right-rail-width: 320px;
   --sm-cell-size-min-gridlines: 14px;
+}
+
+/* Motion override from Settings (html[data-motion="reduce"]): one global rule, in addition to the
+ * per-component @media (prefers-reduced-motion) rules. */
+:root[data-motion="reduce"] *, :root[data-motion="reduce"] *::before, :root[data-motion="reduce"] *::after {
+  animation: none !important;
+  transition: none !important;
 }

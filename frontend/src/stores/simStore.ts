@@ -5,6 +5,7 @@
  * subscribe to slow-changing slices (`version` bumps once per step).
  */
 import { create } from "zustand";
+import { loadPref } from "../lib/prefs";
 import type { ReplayInfoLite } from "./types";
 import { createInitialState, stateFromSnapshot } from "../features/simulation/frameReducer";
 import { envMeta, normalizeFrame, type Frame, type SimMeta } from "../features/simulation/model";
@@ -130,7 +131,7 @@ export const useSimStore = create<SimStore>((set, get) => {
     version: 0,
     playhead: 0,
     playing: false,
-    speed: 1,
+    speed: loadPref<number>("defaultSpeed", 1),
     focusedRobot: null,
     live: null,
 

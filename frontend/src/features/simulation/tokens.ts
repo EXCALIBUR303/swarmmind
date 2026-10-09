@@ -1,5 +1,7 @@
 /** Canvas can't use CSS variables, so resolve the design tokens once (spec §30.3:
  * tokens.css stays the single source of raw colours). */
+import { CANVAS_FALLBACK } from "../../design/ramp";
+
 export interface RenderTokens {
   robots: string[];
   free: string;
@@ -20,22 +22,22 @@ export interface RenderTokens {
 
 export function readTokens(el: Element = document.documentElement): RenderTokens {
   const cs = getComputedStyle(el);
-  const v = (name: string, fallback: string) => cs.getPropertyValue(name).trim() || fallback;
+  const v = (name: string) => cs.getPropertyValue(name).trim() || (CANVAS_FALLBACK[name] ?? CANVAS_FALLBACK["--sm-robot-1"]);
   return {
-    robots: [1, 2, 3, 4, 5, 6].map((i) => v(`--sm-robot-${i}`, "#0072b2")),
-    free: v("--sm-cell-free", "#ffffff"),
-    unknown: v("--sm-cell-unknown", "#cbd2db"),
-    unknownHatch: v("--sm-cell-unknown-hatch", "#bcc4cf"),
-    obstacle: v("--sm-cell-obstacle", "#374151"),
-    visitedTeam: v("--sm-cell-visited-team", "#e3edfb"),
-    gridLine: v("--sm-grid-line", "#e5e7eb"),
-    targetFill: v("--sm-target-fill", "#f2b600"),
-    targetOutline: v("--sm-target-outline", "#7a5a00"),
-    commLink: v("--sm-comm-link", "#64748b"),
-    success: v("--sm-success", "#15803d"),
-    danger: v("--sm-danger", "#b91c1c"),
-    accent: v("--sm-accent", "#2563eb"),
-    surface: v("--sm-bg-sunken", "#eef1f5"),
-    fontUi: v("--sm-font-ui", "system-ui, sans-serif"),
+    robots: [1, 2, 3, 4, 5, 6].map((i) => v(`--sm-robot-${i}`)),
+    free: v("--sm-cell-free"),
+    unknown: v("--sm-cell-unknown"),
+    unknownHatch: v("--sm-cell-unknown-hatch"),
+    obstacle: v("--sm-cell-obstacle"),
+    visitedTeam: v("--sm-cell-visited-team"),
+    gridLine: v("--sm-grid-line"),
+    targetFill: v("--sm-target-fill"),
+    targetOutline: v("--sm-target-outline"),
+    commLink: v("--sm-comm-link"),
+    success: v("--sm-success"),
+    danger: v("--sm-danger"),
+    accent: v("--sm-accent"),
+    surface: v("--sm-bg-sunken"),
+    fontUi: cs.getPropertyValue("--sm-font-ui").trim() || "system-ui, sans-serif",
   };
 }

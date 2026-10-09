@@ -60,10 +60,4 @@ export function rollingMean(values: number[], window: number): number[] {
   return out;
 }
 
-/** Sequential single-hue ramp: white -> accent, t in [0,1] (lightness decreases monotonically). */
-export function sequential(t: number): string {
-  const c = Math.min(Math.max(t, 0), 1);
-  const from = [239, 244, 252]; // very light tint of the accent hue
-  const to = [29, 78, 216]; // --sm-accent-hover (#1d4ed8) as the dark end
-  return `rgb(${from.map((f, i) => Math.round(f + (to[i] - f) * c)).join(",")})`;
-}
+export { sequential } from "../design/ramp";

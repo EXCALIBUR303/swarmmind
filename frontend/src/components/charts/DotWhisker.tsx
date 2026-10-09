@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { fmtNum, linear, niceTicks } from "../../lib/stats";
+import { useWidth } from "../../lib/useWidth";
 
 export interface DotRow {
   id: string;
@@ -20,12 +21,12 @@ interface Props {
   ariaLabel: string;
 }
 
-const W = 440;
 const ROW = 34;
 const M = { l: 84, r: 20, t: 14, b: 34 };
 
 /** Per-seed dots + mean (black diamond) + CI whisker, matching figures.plot_heldout_dots. */
 export function DotWhisker({ rows, reference, xLabel, format = (v) => fmtNum(v, 3), domain, ariaLabel }: Props) {
+  const [wrapRef, W] = useWidth<HTMLDivElement>(440);
   const [tip, setTip] = useState<{ x: number; y: number; row: DotRow } | null>(null);
   const all = [...rows.flatMap((r) => [...r.perSeed, r.mean, ...(r.lo != null && r.hi != null ? [r.lo, r.hi] : [])]), ...(reference ? [reference.value] : [])];
   const lo = domain?.[0] ?? Math.min(...all);
@@ -36,7 +37,7 @@ export function DotWhisker({ rows, reference, xLabel, format = (v) => fmtNum(v, 
   const sx = linear(dom, [M.l, W - M.r]);
   const ticks = niceTicks(dom[0], dom[1], 5);
   return (
-    <div style={{ position: "relative" }}>
+    <div ref={wrapRef} style={{ position: "relative" }}>
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={ariaLabel} onPointerLeave={() => setTip(null)}>
         <g className="sm-chart-axis">
           {ticks.map((t) => (
@@ -70,7 +71,7 @@ export function DotWhisker({ rows, reference, xLabel, format = (v) => fmtNum(v, 
         })}
       </svg>
       {tip && (
-        <div className="sm-chart-tip" role="status" style={{ left: `${Math.min(tip.x, 70)}%`, top: `${tip.y}%`, transform: "translate(8px, -50%)" }}>
+        <div className="sm-chart-tip" role="status" style={{ left: `${Math.min(tip.x, 70)}%`, top: `${tip.y}%`, transform: "translate(var(--sm-tip-offset), -50%)" }}>
           <div className="sm-chart-tip-head">{tip.row.label} · n={tip.row.perSeed.length}</div>
           <div className="sm-chart-tip-row"><span>mean</span><b>{format(tip.row.mean)}</b></div>
           {tip.row.lo != null && tip.row.hi != null && <div className="sm-chart-tip-row"><span>95% CI</span><b>[{format(tip.row.lo)}, {format(tip.row.hi)}]</b></div>}

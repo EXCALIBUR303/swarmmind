@@ -1,4 +1,5 @@
 import { linear, niceTicks } from "../../lib/stats";
+import { useWidth } from "../../lib/useWidth";
 
 export interface DiscoveryRow {
   target: number;
@@ -13,15 +14,16 @@ interface Props {
   ariaLabel: string;
 }
 
-const W = 560;
 const ROW = 34;
 const M = { l: 80, r: 24, t: 8, b: 34 };
 
 /** One row per target: ◆ discovered, ★ rescued (shape carries the meaning), connecting bar = time to rescue. */
 export function DiscoveryTimeline({ rows, maxT, ariaLabel }: Props) {
+  const [wrapRef, W] = useWidth<HTMLDivElement>(560, 280, 720);
   const H = M.t + rows.length * ROW + M.b;
   const sx = linear([0, maxT], [M.l, W - M.r]);
   return (
+    <div ref={wrapRef}>
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={ariaLabel}>
       <g className="sm-chart-axis">
         {niceTicks(0, maxT, 5).map((t) => (
@@ -54,5 +56,6 @@ export function DiscoveryTimeline({ rows, maxT, ariaLabel }: Props) {
         );
       })}
     </svg>
+    </div>
   );
 }

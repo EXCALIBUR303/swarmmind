@@ -3,8 +3,15 @@
  * Base URL defaults to the local backend; override with VITE_API_BASE_URL.
  */
 
-export const API_BASE_URL: string =
+import { loadPref } from "../lib/prefs";
+
+export const DEFAULT_API_BASE_URL: string =
   (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "http://127.0.0.1:8000";
+
+/** The saved override (Settings page) or the build-time default. */
+export function apiBase(): string {
+  return loadPref<string>("apiBase", DEFAULT_API_BASE_URL).replace(/\/+$/, "");
+}
 
 export class ApiError extends Error {
   status: number;
@@ -16,7 +23,7 @@ export class ApiError extends Error {
 }
 
 export function wsUrl(path: string): string {
-  return API_BASE_URL.replace(/^http/, "ws") + path;
+  return apiBase().replace(/^http/, "ws") + path;
 }
 
 async function errorMessage(res: Response, path: string): Promise<string> {
@@ -36,10 +43,10 @@ async function errorMessage(res: Response, path: string): Promise<string> {
 export async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let res: Response;
   try {
-    res = await fetch(`${API_BASE_URL}${path}`, init);
+    res = await fetch(`${apiBase()}${path}`, init);
   } catch (err) {
     console.error("backend unreachable", err);
-    throw new ApiError(`cannot reach the backend at ${API_BASE_URL}`, 0);
+    throw new ApiError(`cannot reach the backend at ${apiBase()}`, 0);
   }
   if (!res.ok) throw new ApiError(await errorMessage(res, path), res.status);
   if (res.status === 204) return undefined as T;

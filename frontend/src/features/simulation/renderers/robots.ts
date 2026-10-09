@@ -1,3 +1,5 @@
+import { MOTION, progress } from "../../../design/motion";
+import { ACTION_DELTA } from "../model";
 import { cellCenter, cellOrigin } from "../viewport";
 import type { Renderer } from "./types";
 
@@ -19,24 +21,34 @@ export const drawFocusWindow: Renderer = (ctx, { meta, drawPos, focused }, vp, t
   ctx.restore();
 };
 
-export const drawRobots: Renderer = (ctx, { drawPos, focused, lastFrame, stepProgress }, vp, tk) => {
+export const drawRobots: Renderer = (ctx, { drawPos, focused, lastFrame, sinceMs }, vp, tk) => {
   drawPos.forEach(([y, x], i) => {
-    const { px, py } = cellCenter(vp, y, x);
+    const c0 = cellCenter(vp, y, x);
+    let px = c0.px;
+    let py = c0.py;
     const dim = focused !== null && focused !== i;
     ctx.save();
     ctx.globalAlpha = dim ? 0.4 : 1;
     const r = vp.cell * 0.3;
     const collided = !!lastFrame && lastFrame.blocked_by_robot[i];
-    if (collided && stepProgress < 1) {
+    const pColl = progress(sinceMs, MOTION.collisionMs);
+    if (collided && pColl < 1) {
       // Collision: a danger ring expands 0 -> 0.6 cell and fades (400 ms in the spec).
       ctx.save();
-      ctx.globalAlpha = (dim ? 0.4 : 1) * (1 - stepProgress);
+      ctx.globalAlpha = (dim ? 0.4 : 1) * (1 - pColl);
       ctx.strokeStyle = tk.danger;
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.arc(px, py, r + vp.cell * 0.6 * stepProgress, 0, Math.PI * 2);
+      ctx.arc(px, py, r + vp.cell * 0.6 * pColl, 0, Math.PI * 2);
       ctx.stroke();
       ctx.restore();
+    }
+    if (lastFrame && (lastFrame.blocked_by_robot[i] || lastFrame.bumped_wall[i])) {
+      // Blocked move: nudge 2px toward the attempted direction and back (120 ms, §30.7).
+      const [dy, dx] = ACTION_DELTA[lastFrame.action[i]] ?? [0, 0];
+      const n = Math.sin(Math.PI * progress(sinceMs, MOTION.nudgeMs)) * MOTION.nudgePx;
+      px += dx * n;
+      py += dy * n;
     }
     ctx.beginPath();
     ctx.arc(px, py, r, 0, Math.PI * 2);

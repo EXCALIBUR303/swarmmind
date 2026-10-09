@@ -246,6 +246,7 @@ export function SwarmLab() {
 
   return (
     <div className="sm-lab">
+      <h1 className="sm-lab-sr-only">Swarm Lab</h1>
       <div className="sm-lab-main">
         <Toolbar
           mode={sc.mode}

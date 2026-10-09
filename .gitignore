@@ -24,6 +24,8 @@ results/studies/
 results/heldout_access_log.jsonl
 models/*.pt
 *.pt
+# ...except the real, hash-pinned demo actors (scripts/make_demo_bundle.py)
+!demo_data/results/runs/**/actor.pt
 
 # OS
 .DS_Store

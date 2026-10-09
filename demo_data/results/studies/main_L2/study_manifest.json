@@ -1,0 +1,367 @@
+{
+  "study": "main_L2",
+  "created": "2026-09-24T09:07:08.099272+00:00",
+  "jobs": {
+    "train/ippo/L2/s0": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T14:01:17.738682+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s0-20260924T090709Z-33bf6a2b",
+      "error": null,
+      "config_hash": "33bf6a2b",
+      "action": "new"
+    },
+    "train/mappo/L2/s0": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T15:34:16.635724+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s0-20260924T090709Z-db4b31b9",
+      "error": null,
+      "config_hash": "db4b31b9",
+      "action": "new"
+    },
+    "train/ippo/L2/s1": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T14:01:11.972308+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s1-20260924T090709Z-7722b73a",
+      "error": null,
+      "config_hash": "7722b73a",
+      "action": "new"
+    },
+    "train/mappo/L2/s1": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T15:33:55.133862+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s1-20260924T090709Z-36d3acc5",
+      "error": null,
+      "config_hash": "36d3acc5",
+      "action": "new"
+    },
+    "train/ippo/L2/s2": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T14:00:53.193317+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s2-20260924T090709Z-c855b835",
+      "error": null,
+      "config_hash": "c855b835",
+      "action": "new"
+    },
+    "train/mappo/L2/s2": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T15:33:30.806896+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s2-20260924T090709Z-52468ee1",
+      "error": null,
+      "config_hash": "52468ee1",
+      "action": "new"
+    },
+    "train/ippo/L2/s3": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T14:01:07.181141+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s3-20260924T090709Z-6b96342a",
+      "error": null,
+      "config_hash": "6b96342a",
+      "action": "new"
+    },
+    "train/mappo/L2/s3": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T15:34:20.716502+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s3-20260924T090709Z-56a79db1",
+      "error": null,
+      "config_hash": "56a79db1",
+      "action": "new"
+    },
+    "train/ippo/L2/s4": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T14:00:56.604665+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s4-20260924T090709Z-2722c0e1",
+      "error": null,
+      "config_hash": "2722c0e1",
+      "action": "new"
+    },
+    "train/mappo/L2/s4": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T17:02:25.720669+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s4-20260924T140053Z-6f756841",
+      "error": null,
+      "config_hash": "6f756841",
+      "action": "new"
+    },
+    "eval/ippo/L2/s2-20260924T090709Z-c855b835": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T14:01:15.019683+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s2-20260924T090709Z-c855b835",
+      "error": null,
+      "written": [
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s2-20260924T090709Z-c855b835/eval/test_L2.json",
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s2-20260924T090709Z-c855b835/eval/structured_L2.json"
+      ],
+      "skipped": []
+    },
+    "eval/ippo/L2/s4-20260924T090709Z-2722c0e1": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T14:01:23.375440+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s4-20260924T090709Z-2722c0e1",
+      "error": null,
+      "written": [
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s4-20260924T090709Z-2722c0e1/eval/test_L2.json",
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s4-20260924T090709Z-2722c0e1/eval/structured_L2.json"
+      ],
+      "skipped": []
+    },
+    "eval/ippo/L2/s3-20260924T090709Z-6b96342a": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T14:01:29.172070+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s3-20260924T090709Z-6b96342a",
+      "error": null,
+      "written": [
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s3-20260924T090709Z-6b96342a/eval/test_L2.json",
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s3-20260924T090709Z-6b96342a/eval/structured_L2.json"
+      ],
+      "skipped": []
+    },
+    "eval/ippo/L2/s1-20260924T090709Z-7722b73a": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T14:01:32.342619+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s1-20260924T090709Z-7722b73a",
+      "error": null,
+      "written": [
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s1-20260924T090709Z-7722b73a/eval/test_L2.json",
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s1-20260924T090709Z-7722b73a/eval/structured_L2.json"
+      ],
+      "skipped": []
+    },
+    "eval/ippo/L2/s0-20260924T090709Z-33bf6a2b": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T14:01:35.455996+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s0-20260924T090709Z-33bf6a2b",
+      "error": null,
+      "written": [
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s0-20260924T090709Z-33bf6a2b/eval/test_L2.json",
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s0-20260924T090709Z-33bf6a2b/eval/structured_L2.json"
+      ],
+      "skipped": []
+    },
+    "eval/mappo/L2/s2-20260924T090709Z-52468ee1": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T15:33:48.089216+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s2-20260924T090709Z-52468ee1",
+      "error": null,
+      "written": [
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s2-20260924T090709Z-52468ee1/eval/test_L2.json",
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s2-20260924T090709Z-52468ee1/eval/structured_L2.json"
+      ],
+      "skipped": []
+    },
+    "eval/mappo/L2/s1-20260924T090709Z-36d3acc5": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T15:34:09.096276+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s1-20260924T090709Z-36d3acc5",
+      "error": null,
+      "written": [
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s1-20260924T090709Z-36d3acc5/eval/test_L2.json",
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s1-20260924T090709Z-36d3acc5/eval/structured_L2.json"
+      ],
+      "skipped": []
+    },
+    "eval/mappo/L2/s0-20260924T090709Z-db4b31b9": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T15:34:26.827160+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s0-20260924T090709Z-db4b31b9",
+      "error": null,
+      "written": [
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s0-20260924T090709Z-db4b31b9/eval/test_L2.json",
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s0-20260924T090709Z-db4b31b9/eval/structured_L2.json"
+      ],
+      "skipped": []
+    },
+    "eval/mappo/L2/s3-20260924T090709Z-56a79db1": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T15:34:30.450189+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s3-20260924T090709Z-56a79db1",
+      "error": null,
+      "written": [
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s3-20260924T090709Z-56a79db1/eval/test_L2.json",
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s3-20260924T090709Z-56a79db1/eval/structured_L2.json"
+      ],
+      "skipped": []
+    },
+    "eval/mappo/L2/s4-20260924T140053Z-6f756841": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T17:02:30.089302+00:00",
+      "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s4-20260924T140053Z-6f756841",
+      "error": null,
+      "written": [
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s4-20260924T140053Z-6f756841/eval/test_L2.json",
+        "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s4-20260924T140053Z-6f756841/eval/structured_L2.json"
+      ],
+      "skipped": []
+    },
+    "baseline/random/L2/s0": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T17:02:50.462014+00:00",
+      "error": null,
+      "written": [
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s0/validation.json",
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s0/test.json",
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s0/structured.json"
+      ]
+    },
+    "baseline/random/L2/s1": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T17:02:50.318820+00:00",
+      "error": null,
+      "written": [
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s1/validation.json",
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s1/test.json",
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s1/structured.json"
+      ]
+    },
+    "baseline/random/L2/s2": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T17:02:50.381265+00:00",
+      "error": null,
+      "written": [
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s2/validation.json",
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s2/test.json",
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s2/structured.json"
+      ]
+    },
+    "baseline/random/L2/s3": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T17:02:50.823306+00:00",
+      "error": null,
+      "written": [
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s3/validation.json",
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s3/test.json",
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s3/structured.json"
+      ]
+    },
+    "baseline/random/L2/s4": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T17:02:50.244794+00:00",
+      "error": null,
+      "written": [
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s4/validation.json",
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s4/test.json",
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s4/structured.json"
+      ]
+    },
+    "baseline/heuristic/L2/ref": {
+      "attempts": 1,
+      "status": "completed",
+      "updated": "2026-09-24T17:02:37.759815+00:00",
+      "error": null,
+      "written": [
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/heuristic/L2/ref/validation.json",
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/heuristic/L2/ref/test.json",
+        "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/heuristic/L2/ref/structured.json"
+      ]
+    }
+  },
+  "started": "2026-09-24T09:07:08.099393+00:00",
+  "code_fingerprint": "5510d0a88d4f",
+  "config": {
+    "study": "main_L2",
+    "smoke": false,
+    "description": "H1/H2/H4 on L2 (10x10, 3 robots, 2 targets, shared map): IPPO vs MAPPO vs Random, 5 training seeds each, final checkpoint, held-out test and structured (G2) maps, stochastic evaluation primary. Budget and H2 metric set from the Phase 6 validation-only pilot (docs/EXPERIMENTS.md \u00a74/\u00a76, D1-D3): L2 saturates by ~125k steps, so 1M is used instead of the spec's 3M, H2 is decided on censored steps rather than success (which saturates for both algorithms), and the AUC window is the first 245,760 steps rather than the whole budget.\n",
+    "levels": [
+      "L2"
+    ],
+    "algos": [
+      "ippo",
+      "mappo"
+    ],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "total_env_steps": 1000000,
+    "algo_overrides": {},
+    "baselines": {
+      "random": {
+        "eval_seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "heuristic": {
+        "reference_only": true
+      }
+    },
+    "final_eval": {
+      "map_sets": [
+        "test",
+        "structured"
+      ],
+      "episodes_per_map": 2,
+      "stochastic": true,
+      "also_greedy": true,
+      "checkpoint": "final"
+    },
+    "evolution_replays": {
+      "fractions": [
+        0.0,
+        0.1,
+        0.5,
+        1.0
+      ],
+      "n_maps": 5,
+      "split": "structured",
+      "seeds": [
+        0
+      ]
+    },
+    "analysis": {
+      "h2_primary_metric": "censored_steps",
+      "auc_window_env_steps": 245760
+    }
+  },
+  "smoke": false,
+  "inputs_sha256": {
+    "configs/experiments/main_L2.yaml": "6170755114e69425a74fd4f67e07e1ee9baa114ade2c29eee34f6cdf2f4b4c9c",
+    "configs/algo/ippo.yaml": "beab5af2e3f6fb7f715b74383b9d194b7e813eb91615d15d5a7faf58b151637b",
+    "configs/algo/mappo.yaml": "f3f451a78a7212a13410d97eaf3e51753d032a87e9e0531538cecd4fbc1ac372",
+    "configs/maps/manifest.json": "ead22ad957a77fce08ac2c22e7d39b1e2ee336c2db1029169cf6b385d197b1ef",
+    "configs/env/L2.yaml": "d2efaf3ef68b09ec74aecd8b6e6dcc547ddfc823f8c4a413027509820d6d5bc7"
+  },
+  "git": {
+    "commit": "84ea223dd3a948b4024856c6593be9d95546eb35",
+    "dirty": false
+  },
+  "deviations": [],
+  "stages": [
+    "train",
+    "eval",
+    "baselines"
+  ],
+  "parallel": 9,
+  "updated": "2026-09-24T17:02:52.535085+00:00",
+  "finished": "2026-09-24T17:02:52.535032+00:00"
+}

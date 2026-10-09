@@ -1,0 +1,202 @@
+{
+  "ippo_s0": {
+    "baseline": {
+      "success_rate": 1.0,
+      "coverage": 0.7866946943512965,
+      "visited_coverage": 0.35330697859111354,
+      "collisions": 0.1
+    },
+    "ch5_visited_known_zeroed": {
+      "success_rate": 0.98,
+      "coverage": 0.7853119139767086,
+      "visited_coverage": 0.3451778089672041,
+      "collisions": 0.16
+    },
+    "ch6_teammate_zeroed": {
+      "success_rate": 0.92,
+      "coverage": 0.8024788847521879,
+      "visited_coverage": 0.366256475917273,
+      "collisions": 29.06
+    }
+  },
+  "ippo_s1": {
+    "baseline": {
+      "success_rate": 1.0,
+      "coverage": 0.7984625778990627,
+      "visited_coverage": 0.35072389774220164,
+      "collisions": 0.1
+    },
+    "ch5_visited_known_zeroed": {
+      "success_rate": 0.9,
+      "coverage": 0.7624187763943859,
+      "visited_coverage": 0.34747315696459113,
+      "collisions": 0.26
+    },
+    "ch6_teammate_zeroed": {
+      "success_rate": 1.0,
+      "coverage": 0.7957704241551986,
+      "visited_coverage": 0.34536483218747505,
+      "collisions": 3.64
+    }
+  },
+  "ippo_s2": {
+    "baseline": {
+      "success_rate": 1.0,
+      "coverage": 0.8119226808447435,
+      "visited_coverage": 0.372160631575759,
+      "collisions": 1.58
+    },
+    "ch5_visited_known_zeroed": {
+      "success_rate": 0.9,
+      "coverage": 0.7920204538125339,
+      "visited_coverage": 0.3602149021822963,
+      "collisions": 0.06
+    },
+    "ch6_teammate_zeroed": {
+      "success_rate": 0.92,
+      "coverage": 0.7707344195904308,
+      "visited_coverage": 0.34468055036845713,
+      "collisions": 31.9
+    }
+  },
+  "ippo_s3": {
+    "baseline": {
+      "success_rate": 1.0,
+      "coverage": 0.8146670905059574,
+      "visited_coverage": 0.36698729970222793,
+      "collisions": 0.06
+    },
+    "ch5_visited_known_zeroed": {
+      "success_rate": 1.0,
+      "coverage": 0.7992389303200527,
+      "visited_coverage": 0.35325356948241854,
+      "collisions": 0.04
+    },
+    "ch6_teammate_zeroed": {
+      "success_rate": 0.98,
+      "coverage": 0.8430755940849951,
+      "visited_coverage": 0.3888805305472763,
+      "collisions": 26.74
+    }
+  },
+  "ippo_s4": {
+    "baseline": {
+      "success_rate": 1.0,
+      "coverage": 0.7994017917081906,
+      "visited_coverage": 0.34727561616483343,
+      "collisions": 0.1
+    },
+    "ch5_visited_known_zeroed": {
+      "success_rate": 1.0,
+      "coverage": 0.8175280434043429,
+      "visited_coverage": 0.3740034941863087,
+      "collisions": 0.3
+    },
+    "ch6_teammate_zeroed": {
+      "success_rate": 0.94,
+      "coverage": 0.7916788227699775,
+      "visited_coverage": 0.3456159406319063,
+      "collisions": 21.8
+    }
+  },
+  "mappo_s0": {
+    "baseline": {
+      "success_rate": 1.0,
+      "coverage": 0.7818353445081505,
+      "visited_coverage": 0.3390142946169324,
+      "collisions": 0.18
+    },
+    "ch5_visited_known_zeroed": {
+      "success_rate": 0.98,
+      "coverage": 0.805982722802278,
+      "visited_coverage": 0.3565069605194429,
+      "collisions": 0.1
+    },
+    "ch6_teammate_zeroed": {
+      "success_rate": 1.0,
+      "coverage": 0.7928724801710351,
+      "visited_coverage": 0.34106819811959643,
+      "collisions": 2.66
+    }
+  },
+  "mappo_s1": {
+    "baseline": {
+      "success_rate": 1.0,
+      "coverage": 0.7940990894507357,
+      "visited_coverage": 0.33788237212065814,
+      "collisions": 0.14
+    },
+    "ch5_visited_known_zeroed": {
+      "success_rate": 0.98,
+      "coverage": 0.7723734202174323,
+      "visited_coverage": 0.332659067598035,
+      "collisions": 0.24
+    },
+    "ch6_teammate_zeroed": {
+      "success_rate": 0.9,
+      "coverage": 0.7966881228542186,
+      "visited_coverage": 0.34625621454803146,
+      "collisions": 38.12
+    }
+  },
+  "mappo_s2": {
+    "baseline": {
+      "success_rate": 1.0,
+      "coverage": 0.7995113627834566,
+      "visited_coverage": 0.347559759574903,
+      "collisions": 0.06
+    },
+    "ch5_visited_known_zeroed": {
+      "success_rate": 0.92,
+      "coverage": 0.7661184292439244,
+      "visited_coverage": 0.32429891612168293,
+      "collisions": 0.1
+    },
+    "ch6_teammate_zeroed": {
+      "success_rate": 0.94,
+      "coverage": 0.7866819206737884,
+      "visited_coverage": 0.3348860334809794,
+      "collisions": 29.82
+    }
+  },
+  "mappo_s3": {
+    "baseline": {
+      "success_rate": 1.0,
+      "coverage": 0.796614713286014,
+      "visited_coverage": 0.34830416110546575,
+      "collisions": 0.0
+    },
+    "ch5_visited_known_zeroed": {
+      "success_rate": 0.86,
+      "coverage": 0.7708207928709959,
+      "visited_coverage": 0.3389340875032023,
+      "collisions": 0.14
+    },
+    "ch6_teammate_zeroed": {
+      "success_rate": 0.96,
+      "coverage": 0.7850713731665928,
+      "visited_coverage": 0.3435115440372792,
+      "collisions": 22.14
+    }
+  },
+  "mappo_s4": {
+    "baseline": {
+      "success_rate": 1.0,
+      "coverage": 0.8136678116460332,
+      "visited_coverage": 0.34668771363546946,
+      "collisions": 0.04
+    },
+    "ch5_visited_known_zeroed": {
+      "success_rate": 0.94,
+      "coverage": 0.7921281203279296,
+      "visited_coverage": 0.3556892346901138,
+      "collisions": 0.3
+    },
+    "ch6_teammate_zeroed": {
+      "success_rate": 0.96,
+      "coverage": 0.8171999661239466,
+      "visited_coverage": 0.3480195833676796,
+      "collisions": 15.76
+    }
+  }
+}

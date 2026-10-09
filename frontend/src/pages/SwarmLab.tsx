@@ -12,6 +12,7 @@ import { SimulationCanvas } from "../features/simulation/SimulationCanvas";
 import { Toolbar } from "../features/simulation/Toolbar";
 import { startLive, stopLive } from "../features/simulation/liveController";
 import { PerfOverlay } from "../features/simulation/PerfOverlay";
+import { controlsEnabled } from "../features/simulation/controls";
 import { algoLabel, kSteps } from "../lib/format";
 import { useAsync } from "../lib/useAsync";
 import { useScenario, toSessionCreate, type MapSet, type Scenario } from "../stores/scenarioStore";
@@ -220,7 +221,7 @@ export function SwarmLab() {
   const playback = {
     playing,
     speed,
-    enabled: mode !== "none" && load === "ready",
+    enabled: controlsEnabled(mode, load, live?.connection),
     canStep: !!tl && (replayMode ? st.playhead < tl.maxT : !live?.done),
     canStepBack: replayMode && !!tl && st.playhead > tl.startT,
     onToggle: st.togglePlay,

@@ -1,0 +1,202 @@
+[
+  {
+    "replay_id": "L2-struct-bottleneck_horizontal_mappo_s0_step0_eval0",
+    "map_id": "L2-struct-bottleneck_horizontal",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 0.0,
+    "checkpoint_step": 0,
+    "success": false,
+    "steps": 150
+  },
+  {
+    "replay_id": "L2-struct-bottleneck_vertical_mappo_s0_step0_eval0",
+    "map_id": "L2-struct-bottleneck_vertical",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 0.0,
+    "checkpoint_step": 0,
+    "success": false,
+    "steps": 150
+  },
+  {
+    "replay_id": "L2-struct-corridor_lattice_mappo_s0_step0_eval0",
+    "map_id": "L2-struct-corridor_lattice",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 0.0,
+    "checkpoint_step": 0,
+    "success": true,
+    "steps": 87
+  },
+  {
+    "replay_id": "L2-struct-corridor_serpentine_mappo_s0_step0_eval0",
+    "map_id": "L2-struct-corridor_serpentine",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 0.0,
+    "checkpoint_step": 0,
+    "success": false,
+    "steps": 150
+  },
+  {
+    "replay_id": "L2-struct-maze_branching_mappo_s0_step0_eval0",
+    "map_id": "L2-struct-maze_branching",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 0.0,
+    "checkpoint_step": 0,
+    "success": false,
+    "steps": 150
+  },
+  {
+    "replay_id": "L2-struct-bottleneck_horizontal_mappo_s0_step100352_eval0",
+    "map_id": "L2-struct-bottleneck_horizontal",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 0.1,
+    "checkpoint_step": 100352,
+    "success": true,
+    "steps": 23
+  },
+  {
+    "replay_id": "L2-struct-bottleneck_vertical_mappo_s0_step100352_eval0",
+    "map_id": "L2-struct-bottleneck_vertical",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 0.1,
+    "checkpoint_step": 100352,
+    "success": true,
+    "steps": 25
+  },
+  {
+    "replay_id": "L2-struct-corridor_lattice_mappo_s0_step100352_eval0",
+    "map_id": "L2-struct-corridor_lattice",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 0.1,
+    "checkpoint_step": 100352,
+    "success": true,
+    "steps": 11
+  },
+  {
+    "replay_id": "L2-struct-corridor_serpentine_mappo_s0_step100352_eval0",
+    "map_id": "L2-struct-corridor_serpentine",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 0.1,
+    "checkpoint_step": 100352,
+    "success": false,
+    "steps": 150
+  },
+  {
+    "replay_id": "L2-struct-maze_branching_mappo_s0_step100352_eval0",
+    "map_id": "L2-struct-maze_branching",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 0.1,
+    "checkpoint_step": 100352,
+    "success": true,
+    "steps": 141
+  },
+  {
+    "replay_id": "L2-struct-bottleneck_horizontal_mappo_s0_step499712_eval0",
+    "map_id": "L2-struct-bottleneck_horizontal",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 0.5,
+    "checkpoint_step": 499712,
+    "success": true,
+    "steps": 20
+  },
+  {
+    "replay_id": "L2-struct-bottleneck_vertical_mappo_s0_step499712_eval0",
+    "map_id": "L2-struct-bottleneck_vertical",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 0.5,
+    "checkpoint_step": 499712,
+    "success": true,
+    "steps": 20
+  },
+  {
+    "replay_id": "L2-struct-corridor_lattice_mappo_s0_step499712_eval0",
+    "map_id": "L2-struct-corridor_lattice",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 0.5,
+    "checkpoint_step": 499712,
+    "success": true,
+    "steps": 35
+  },
+  {
+    "replay_id": "L2-struct-corridor_serpentine_mappo_s0_step499712_eval0",
+    "map_id": "L2-struct-corridor_serpentine",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 0.5,
+    "checkpoint_step": 499712,
+    "success": false,
+    "steps": 150
+  },
+  {
+    "replay_id": "L2-struct-maze_branching_mappo_s0_step499712_eval0",
+    "map_id": "L2-struct-maze_branching",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 0.5,
+    "checkpoint_step": 499712,
+    "success": true,
+    "steps": 30
+  },
+  {
+    "replay_id": "L2-struct-bottleneck_horizontal_mappo_s0_step999424_eval0",
+    "map_id": "L2-struct-bottleneck_horizontal",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 1.0,
+    "checkpoint_step": 999424,
+    "success": true,
+    "steps": 21
+  },
+  {
+    "replay_id": "L2-struct-bottleneck_vertical_mappo_s0_step999424_eval0",
+    "map_id": "L2-struct-bottleneck_vertical",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 1.0,
+    "checkpoint_step": 999424,
+    "success": true,
+    "steps": 25
+  },
+  {
+    "replay_id": "L2-struct-corridor_lattice_mappo_s0_step999424_eval0",
+    "map_id": "L2-struct-corridor_lattice",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 1.0,
+    "checkpoint_step": 999424,
+    "success": true,
+    "steps": 16
+  },
+  {
+    "replay_id": "L2-struct-corridor_serpentine_mappo_s0_step999424_eval0",
+    "map_id": "L2-struct-corridor_serpentine",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 1.0,
+    "checkpoint_step": 999424,
+    "success": false,
+    "steps": 150
+  },
+  {
+    "replay_id": "L2-struct-maze_branching_mappo_s0_step999424_eval0",
+    "map_id": "L2-struct-maze_branching",
+    "algo": "mappo",
+    "seed": 0,
+    "fraction": 1.0,
+    "checkpoint_step": 999424,
+    "success": false,
+    "steps": 150
+  }
+]

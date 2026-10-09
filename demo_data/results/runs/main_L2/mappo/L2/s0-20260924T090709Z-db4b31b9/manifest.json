@@ -1,0 +1,203 @@
+{
+  "run_id": "s0-20260924T090709Z-db4b31b9",
+  "study": "main_L2",
+  "algo": "mappo",
+  "level": "L2",
+  "seed": 0,
+  "env_config": {
+    "name": "L2",
+    "width": 10,
+    "height": 10,
+    "n_robots": 3,
+    "n_targets": 2,
+    "obstacle_density": 0.15,
+    "max_steps": 150,
+    "sensor_radius": 2.0,
+    "obs_radius": 5,
+    "comm_mode": "shared_map",
+    "comm_radius": 4.0,
+    "spawn": "clustered",
+    "target_min_dist": 3,
+    "action_masking": true,
+    "sensing": {
+      "occlusion": false
+    },
+    "reward": {
+      "explore_total": 1.0,
+      "discover": 0.25,
+      "rescue": 1.0,
+      "complete": 2.0,
+      "time_cost": 0.01,
+      "collision": 0.05,
+      "team_share": 1.0
+    },
+    "obs": {
+      "agent_id_onehot": false
+    }
+  },
+  "algo_config": {
+    "name": "mappo",
+    "critic": {
+      "input": "agent_specific_global"
+    },
+    "actor": {
+      "encoder": "local_cnn_v1",
+      "hidden": 256
+    },
+    "ppo": {
+      "n_envs": 16,
+      "rollout_len": 128,
+      "epochs": 5,
+      "minibatches": 4,
+      "clip": 0.2,
+      "gamma": 0.99,
+      "gae_lambda": 0.95,
+      "lr_actor": 0.0003,
+      "lr_critic": 0.0003,
+      "adam_eps": 1e-05,
+      "entropy_coef": 0.01,
+      "max_grad_norm": 0.5,
+      "value_norm": true,
+      "value_clip": false,
+      "target_kl": null,
+      "lr_schedule": "constant"
+    },
+    "eval": {
+      "interval_updates": 20,
+      "n_val_maps": 50,
+      "stochastic": true
+    },
+    "checkpoint": {
+      "fractions": [
+        0.0,
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9,
+        1.0
+      ]
+    },
+    "device": "auto",
+    "deterministic": false
+  },
+  "total_env_steps": 999424,
+  "total_agent_steps": 2998272,
+  "updates": 488,
+  "start_time": "2026-09-24T09:07:10.403856+00:00",
+  "end_time": "2026-09-24T15:34:16.633683+00:00",
+  "wall_time_seconds": 23226.229827,
+  "versions": {
+    "python": "3.11.16",
+    "platform": "macOS-27.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "packages": {
+      "numpy": "1.26.4",
+      "torch": "2.14.0",
+      "pettingzoo": "1.24.3",
+      "gymnasium": "0.29.1",
+      "pydantic": "2.13.5",
+      "fastapi": "0.141.1",
+      "scipy": "1.17.1",
+      "pandas": "2.3.3"
+    },
+    "git_commit": "84ea223dd3a948b4024856c6593be9d95546eb35",
+    "git_dirty": false
+  },
+  "config_hash": "db4b31b9",
+  "checkpoints": [
+    {
+      "fractions": [
+        0.0
+      ],
+      "env_steps": 0,
+      "path": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s0-20260924T090709Z-db4b31b9/checkpoints/step_0.pt"
+    },
+    {
+      "fractions": [
+        0.1
+      ],
+      "env_steps": 100352,
+      "path": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s0-20260924T090709Z-db4b31b9/checkpoints/step_100352.pt"
+    },
+    {
+      "fractions": [
+        0.2
+      ],
+      "env_steps": 200704,
+      "path": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s0-20260924T090709Z-db4b31b9/checkpoints/step_200704.pt"
+    },
+    {
+      "fractions": [
+        0.3
+      ],
+      "env_steps": 301056,
+      "path": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s0-20260924T090709Z-db4b31b9/checkpoints/step_301056.pt"
+    },
+    {
+      "fractions": [
+        0.4
+      ],
+      "env_steps": 401408,
+      "path": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s0-20260924T090709Z-db4b31b9/checkpoints/step_401408.pt"
+    },
+    {
+      "fractions": [
+        0.5
+      ],
+      "env_steps": 499712,
+      "path": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s0-20260924T090709Z-db4b31b9/checkpoints/step_499712.pt"
+    },
+    {
+      "fractions": [
+        0.6
+      ],
+      "env_steps": 600064,
+      "path": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s0-20260924T090709Z-db4b31b9/checkpoints/step_600064.pt"
+    },
+    {
+      "fractions": [
+        0.7
+      ],
+      "env_steps": 700416,
+      "path": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s0-20260924T090709Z-db4b31b9/checkpoints/step_700416.pt"
+    },
+    {
+      "fractions": [
+        0.8
+      ],
+      "env_steps": 800768,
+      "path": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s0-20260924T090709Z-db4b31b9/checkpoints/step_800768.pt"
+    },
+    {
+      "fractions": [
+        0.9
+      ],
+      "env_steps": 901120,
+      "path": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s0-20260924T090709Z-db4b31b9/checkpoints/step_901120.pt"
+    },
+    {
+      "fractions": [
+        1.0
+      ],
+      "env_steps": 999424,
+      "path": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s0-20260924T090709Z-db4b31b9/checkpoints/step_999424.pt"
+    }
+  ],
+  "final_val_metrics": {
+    "success_rate": 1.0,
+    "mean_return": 5.204431104660034,
+    "mean_coverage": 0.803409230848504,
+    "mean_steps_on_success": 10.8,
+    "censored_mean_steps": 10.8
+  },
+  "status": "completed",
+  "budget_env_steps": 1000000,
+  "trained_env_steps": 999424,
+  "eval_hashes_guarded": 462,
+  "training_maps_rejected_as_eval": 0
+}

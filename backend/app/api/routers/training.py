@@ -2,13 +2,20 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from fastapi import APIRouter, Depends
 
 from backend.app.api.deps import SafeId, get_services
 from backend.app.container import Services
-from backend.app.schemas.training import JobStatus, TrainRequest
+from backend.app.schemas.training import JobStatus, TrainRequest, train_schema
 
 router = APIRouter(tags=["training"])
+
+
+@router.get("/training/schema")
+def schema(svc: Services = Depends(get_services)) -> dict[str, Any]:
+    return train_schema(svc.settings.max_ui_train_env_steps)
 
 
 @router.post("/training/jobs", response_model=JobStatus, status_code=202)

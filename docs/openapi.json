@@ -188,6 +188,20 @@
             "title": "Job Id",
             "type": "string"
           },
+          "log_tail": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Log Tail"
+          },
           "progress": {
             "anyOf": [
               {
@@ -1642,6 +1656,30 @@
         ]
       }
     },
+    "/api/preregistration": {
+      "get": {
+        "description": "Frozen decision rules (H1-H5) quoted verbatim from docs/EXPERIMENTS.md.",
+        "operationId": "preregistration_api_preregistration_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Preregistration Api Preregistration Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Preregistration",
+        "tags": [
+          "studies"
+        ]
+      }
+    },
     "/api/replays": {
       "get": {
         "operationId": "list_replays_api_replays_get",
@@ -2145,6 +2183,60 @@
         ]
       }
     },
+    "/api/studies/{study_id}/analysis/{name}": {
+      "get": {
+        "description": "A precomputed analysis JSON by file stem, e.g. `L2_coordination`, `L2_mappo_example_episode`\n(names are listed in `GET /studies/{id}` -> `analysis_files`).",
+        "operationId": "analysis_file_api_studies__study_id__analysis__name__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "study_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Study Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Analysis File Api Studies  Study Id  Analysis  Name  Get"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Analysis File",
+        "tags": [
+          "studies"
+        ]
+      }
+    },
     "/api/training/jobs": {
       "get": {
         "operationId": "list_jobs_api_training_jobs_get",
@@ -2290,6 +2382,29 @@
           }
         },
         "summary": "Cancel",
+        "tags": [
+          "training"
+        ]
+      }
+    },
+    "/api/training/schema": {
+      "get": {
+        "operationId": "schema_api_training_schema_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Schema Api Training Schema Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Schema",
         "tags": [
           "training"
         ]

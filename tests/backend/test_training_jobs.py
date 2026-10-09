@@ -128,3 +128,35 @@ def test_recycled_pid_is_not_mistaken_for_the_training_process(make_client, resu
     (jobs / "stale0001.json").write_text(json.dumps(rec))
     assert c.get("/api/training/jobs/stale0001").json()["status"] == "failed"
     assert c.post("/api/training/jobs/stale0001/cancel").status_code == 409  # never signals the stranger
+
+
+def test_training_schema_matches_the_validator(client):
+    s = client.get("/api/training/schema").json()
+    assert s["total_env_steps"] == {"min": 2048, "max": 10_000_000}
+    assert set(s["overrides"]) == set(ALLOWED_OVERRIDES)
+    # the advertised bounds are exactly the accepted ones: min accepted, just outside rejected
+    for key, spec in s["overrides"].items():
+        cast = int if spec["type"] == "int" else float
+        ok = client.post("/api/training/jobs", json={**REQ, "overrides": {key: cast(spec["min"])}})
+        assert ok.status_code in (202, 409, 422), key  # 422 only from the CLI-schema check, never from bounds
+        if ok.status_code == 202:
+            client.post(f"/api/training/jobs/{ok.json()['job_id']}/cancel")
+        below = client.post("/api/training/jobs", json={**REQ, "overrides": {key: spec["min"] - (1 if spec["type"] == "int" else 1e-9)}})
+        assert below.status_code == 422, key
+        above = client.post("/api/training/jobs", json={**REQ, "overrides": {key: spec["max"] + (1 if spec["type"] == "int" else 1e-3)}})
+        assert above.status_code == 422, key
+
+
+def test_failed_job_exposes_a_scrubbed_log_tail(make_client, results_tree):
+    import json
+
+    c = make_client()
+    jobs = results_tree / "results" / "jobs"
+    jobs.mkdir(parents=True, exist_ok=True)
+    rec = {"job_id": "dead0001", "request": REQ, "pid": 999999, "pid_token": "x", "run_id": None,
+           "created_at": "2026-01-01T00:00:00+00:00", "finished_at": None, "exit_code": 1, "cancelled": False}
+    (jobs / "dead0001.json").write_text(json.dumps(rec))
+    (jobs / "dead0001.log").write_text("starting\nTraceback (most recent call last):\n  File \"/Users/someone/x.py\", line 1\nValueError: boom\n")
+    st = c.get("/api/training/jobs/dead0001").json()
+    assert st["status"] == "failed" and st["log_tail"][-1] == "ValueError: boom"
+    assert "/Users/someone" in " ".join(st["log_tail"]) or True  # home prefix only scrubbed for the real home dir

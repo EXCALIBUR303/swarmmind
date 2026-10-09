@@ -117,3 +117,19 @@ def test_replay_initial_recorded_and_derived_agree(client, results_tree):
     assert derived["source"] == "derived"
     assert sorted(map(tuple, derived["known_team"])) == sorted(map(tuple, recorded["known_team"]))
     assert client.get("/api/replays/missing/initial").status_code == 404
+
+
+def test_analysis_file_endpoint(client):
+    assert client.get("/api/studies/demo/analysis/L1_ippo_L1-m1_heatmap").json()["visit_counts"] == [[3]]
+    assert client.get("/api/studies/demo/analysis/nope").status_code == 404
+    assert client.get("/api/studies/demo/analysis/%2e%2e").status_code in (404, 422)
+    assert client.get("/api/studies/missing/analysis/x").status_code == 404
+
+
+def test_preregistration_rules_are_quoted_from_the_frozen_doc(client):
+    body = client.get("/api/preregistration").json()
+    ids = [r["id"] for r in body["rules"]]
+    assert ids[:4] == ["H1", "H2", "H3", "H4"]
+    doc = (__import__("pathlib").Path(__file__).resolve().parents[2] / "docs" / "EXPERIMENTS.md").read_text()
+    for r in body["rules"]:
+        assert r["text"] in doc  # verbatim substring, not a paraphrase

@@ -42,6 +42,7 @@ export type CreatedAt = string;
 export type ExitCode = number | null;
 export type FinishedAt = string | null;
 export type JobId = string;
+export type LogTail = string[] | null;
 export type Progress = {
   [k: string]: unknown;
 } | null;
@@ -234,6 +235,7 @@ export interface JobStatus {
   exit_code?: ExitCode;
   finished_at?: FinishedAt;
   job_id: JobId;
+  log_tail?: LogTail;
   progress?: Progress;
   request: TrainRequest;
   run_id?: RunId;

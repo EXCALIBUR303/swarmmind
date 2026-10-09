@@ -58,3 +58,15 @@ class JobStatus(BaseModel):
     exit_code: int | None = None
     run_status: str | None = None
     progress: dict[str, Any] | None = None
+    log_tail: list[str] | None = None  # last lines of the job's output; only for failed/cancelled jobs
+
+
+def train_schema(max_env_steps: int) -> dict[str, Any]:
+    """The form's bounds, from the same constants the validator uses (never duplicated by hand)."""
+    return {
+        "levels": ["L1", "L2", "L3", "L4"],
+        "algos": ["ippo", "mappo"],
+        "seed": {"min": 0, "max": 2**31 - 1},
+        "total_env_steps": {"min": MIN_UI_ENV_STEPS, "max": max_env_steps},
+        "overrides": {k: {"type": t.__name__, "min": lo, "max": hi} for k, (t, lo, hi) in ALLOWED_OVERRIDES.items()},
+    }

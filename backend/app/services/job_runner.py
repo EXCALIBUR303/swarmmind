@@ -21,7 +21,7 @@ from typing import Any
 
 from backend.app.schemas.training import JobStatus, TrainRequest
 from backend.app.services.errors import ConflictError, NotFoundError, ValidationFailed
-from backend.app.services.jsonio import read_json, read_jsonl
+from backend.app.services.jsonio import read_json, read_jsonl, scrub
 from marl.algorithms.common.config import AlgoConfig
 from marl.utils.config_loader import apply_overrides, load_yaml
 from marl.utils.paths import CONFIGS_DIR, REPO_ROOT, is_safe_id
@@ -207,6 +207,13 @@ class JobRunner:
                 last = rows[-1]
                 progress = {"update": last.get("update"), "env_steps": last.get("env_steps"),
                             "total_env_steps": rec["request"]["total_env_steps"]}
+        tail = None
+        if status in ("failed", "cancelled"):
+            try:
+                lines = (self.jobs_dir / f"{job_id}.log").read_text(errors="replace").splitlines()[-30:]
+                tail = [scrub(line) for line in lines]
+            except OSError:
+                tail = []
         return JobStatus(
             job_id=job_id,
             status=status,
@@ -217,6 +224,7 @@ class JobRunner:
             exit_code=exit_code,
             run_status=run_status,
             progress=progress,
+            log_tail=tail,
         )
 
     @staticmethod

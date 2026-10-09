@@ -1,0 +1,18 @@
+
+.sm-evo-controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sm-space-4); margin-bottom: var(--sm-space-4); }
+.sm-evo-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sm-space-4); max-width: 720px; }
+.sm-evo-grid.single { grid-template-columns: minmax(0, 1fr); max-width: 480px; }
+.sm-evo-panel { padding: var(--sm-space-3); }
+.sm-evo-mission { display: flex; flex-wrap: wrap; gap: var(--sm-space-2) var(--sm-space-4); margin-top: var(--sm-space-3); font: var(--sm-font-xs); font-family: var(--sm-font-mono); color: var(--sm-text); }
+.sm-train-layout { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: var(--sm-space-6); margin-top: var(--sm-space-5); align-items: start; }
+.sm-train-form { display: grid; gap: var(--sm-space-4); background: var(--sm-bg-panel); border: 1px solid var(--sm-border); border-radius: var(--sm-radius-panel); padding: var(--sm-space-4); }
+.sm-train-form small { color: var(--sm-text-muted); font: var(--sm-font-xs); }
+.sm-train-adv { border: 1px solid var(--sm-border); border-radius: var(--sm-radius-control); display: grid; gap: var(--sm-space-3); padding: var(--sm-space-3); }
+.sm-train-adv legend { font: var(--sm-font-xs); color: var(--sm-text-muted); padding: 0 var(--sm-space-2); }
+.sm-field-error { color: var(--sm-danger); font: var(--sm-font-xs); }
+.sm-log { max-height: 240px; overflow: auto; background: var(--sm-bg-nav); color: var(--sm-text-on-dark); padding: var(--sm-space-3); border-radius: var(--sm-radius-control); font: var(--sm-font-xs); font-family: var(--sm-font-mono); white-space: pre-wrap; }
+@media (max-width: 1023px) { .sm-train-layout { grid-template-columns: minmax(0, 1fr); } }
+.sm-cardlist { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--sm-space-3); }
+.sm-facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--sm-space-2) var(--sm-space-5); font: var(--sm-font-sm); margin: 0 0 var(--sm-space-4); }
+.sm-facts dt { color: var(--sm-text-muted); }
+.sm-facts dd { margin: 0; font-family: var(--sm-font-mono); overflow-wrap: anywhere; }

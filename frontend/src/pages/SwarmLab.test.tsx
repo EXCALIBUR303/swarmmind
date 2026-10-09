@@ -3,7 +3,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { REAL_FAIL, REAL_SUCCESS } from "../features/simulation/fixtures";
 import { DEFAULT_SCENARIO, useScenario } from "../stores/scenarioStore";
 import { useSimStore } from "../stores/simStore";
-import { SwarmLab } from "./SwarmLab";
+import { MemoryRouter } from "react-router-dom";
+import { SwarmLab as Page } from "./SwarmLab";
+
+const SwarmLab = ({ at = "/" }: { at?: string }) => <MemoryRouter initialEntries={[at]}><Page /></MemoryRouter>;
 
 const entry = (r: typeof REAL_SUCCESS, run: string, step: number, frac: number) => ({
   replay_id: r.replay_id, map_id: r.map.id, algo: r.policy.kind, seed: 0, fraction: frac, checkpoint_step: step,
@@ -189,5 +192,15 @@ describe("SwarmLab page (real replay fixtures behind a stubbed API)", () => {
     expect(await screen.findByText("Could not load the simulation")).toBeInTheDocument();
     expect(screen.getByText(/not found/)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Play/ })).toBeDisabled();
+  });
+});
+
+
+describe("deep link", () => {
+  it("/?replay=<id> opens that recorded replay (used by Experiment History)", async () => {
+    installFetch();
+    render(<SwarmLab at={`/?replay=${REAL_FAIL.replay_id}`} />);
+    await waitFor(() => expect(useSimStore.getState().replayInfo?.id).toBe(REAL_FAIL.replay_id));
+    expect(useSimStore.getState().mode).toBe("replay");
   });
 });

@@ -14,12 +14,14 @@ from pydantic import ValidationError
 
 from backend.app.api.deps import ID_RE
 from backend.app.api.ws.common import (
-    reject as _reject,
     CLOSE_FORBIDDEN,
     CLOSE_NOT_FOUND,
     CLOSE_REPLACED,
     origin_allowed,
     send_model,
+)
+from backend.app.api.ws.common import (
+    reject as _reject,
 )
 from backend.app.schemas.sessions import (
     SessionReset,

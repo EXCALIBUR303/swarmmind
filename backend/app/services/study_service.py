@@ -8,7 +8,7 @@ from typing import Any
 
 from backend.app.services.errors import NotFoundError, ValidationFailed
 from backend.app.services.jsonio import read_json, scrub
-from marl.utils.paths import UnsafePathError, is_safe_id, safe_join
+from marl.utils.paths import DOCS_DIR, UnsafePathError, is_safe_id, safe_join
 
 HEATMAP_KINDS = {"visits": "visit_counts", "collisions": "collision_counts"}
 
@@ -82,3 +82,35 @@ class StudyService:
             "obstacles": data.get("obstacles"),
             "counts": data.get(HEATMAP_KINDS[kind]),
         }
+
+    def analysis_file(self, study_id: str, name: str) -> Any:
+        """One precomputed `analysis/<name>.json` (coordination, example episodes, heatmaps)."""
+        d = self._dir(study_id)
+        if not is_safe_id(name):
+            raise ValidationFailed("invalid identifier")
+        data = read_json(d / "analysis" / f"{name}.json")
+        if data is None:
+            raise NotFoundError(f"analysis '{name}' not found in study '{study_id}'")
+        return scrub(data)
+
+
+def preregistration_rules(doc: Path | None = None) -> dict[str, Any]:
+    """The frozen decision rules, quoted line for line from docs/EXPERIMENTS.md (never paraphrased)."""
+    path = doc or DOCS_DIR / "EXPERIMENTS.md"
+    rules: list[dict[str, str]] = []
+    try:
+        lines = path.read_text().splitlines()
+    except OSError:
+        return {"source": "docs/EXPERIMENTS.md", "rules": []}
+    inside = False
+    for line in lines:
+        if "**Decision rules**" in line:
+            inside = True
+            continue
+        if inside:
+            if line.startswith("  - **"):
+                key = line.split("**")[1]
+                rules.append({"id": key, "text": line.strip()[2:].strip()})
+            elif line.strip() and not line.startswith("  "):
+                break
+    return {"source": "docs/EXPERIMENTS.md", "rules": rules}

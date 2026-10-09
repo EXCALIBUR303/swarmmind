@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { catalogApi, type ReplayIndexEntry } from "../api/endpoints/catalog";
 import { EmptyState } from "../components/EmptyState";
 import { ErrorState, LoadingState } from "../components/StateViews";
@@ -27,6 +28,8 @@ function defaultReplay(list: ReplayIndexEntry[]): ReplayIndexEntry | undefined {
 
 export function SwarmLab() {
   const sc = useScenario();
+  const [params] = useSearchParams();
+  const deepLink = params.get("replay");
   const mode = useSimStore((s) => s.mode);
   const load = useSimStore((s) => s.load);
   const storeError = useSimStore((s) => s.error);
@@ -75,13 +78,18 @@ export function SwarmLab() {
     setBootstrapped(true);
     if (replays.error) return;
     const s = useScenario.getState();
+    if (deepLink && replayList.some((r) => r.replay_id === deepLink)) {
+      s.patch({ mode: "replay", replayId: deepLink });
+      void loadReplayById(deepLink); // /?replay=<id>, e.g. from Experiment History
+      return;
+    }
     if (s.mode === "live") {
       void startLiveNow();
       return;
     }
     const pick = replayList.find((r) => r.replay_id === s.replayId) ?? defaultReplay(replayList);
     if (pick) void loadReplayById(pick.replay_id);
-  }, [bootstrapped, replays.loading, replays.error, replayList, loadReplayById, startLiveNow]);
+  }, [bootstrapped, replays.loading, replays.error, replayList, loadReplayById, startLiveNow, deepLink]);
 
   useEffect(
     () => () => {

@@ -209,8 +209,10 @@ Parameters: `session_id` (path, required)
 | Method | Path | Summary | Success |
 |---|---|---|---|
 | GET | `/api/analysis/{study_id}/heatmap` | Heatmap | 200 |
+| GET | `/api/preregistration` | Preregistration | 200 |
 | GET | `/api/studies` | List Studies | 200 |
 | GET | `/api/studies/{study_id}` | Get Study | 200 |
+| GET | `/api/studies/{study_id}/analysis/{name}` | Analysis File | 200 |
 
 ### `GET /api/analysis/{study_id}/heatmap`
 
@@ -219,9 +221,21 @@ Heatmaps were precomputed per (study, level, algo, map), aggregated over that st
 Parameters: `study_id` (path, required), `map_id` (query, required), `algo` (query, required), `level` (query), `kind` (query)
 
 
+### `GET /api/preregistration`
+
+Frozen decision rules (H1-H5) quoted verbatim from docs/EXPERIMENTS.md.
+
+
 ### `GET /api/studies/{study_id}`
 
 Parameters: `study_id` (path, required)
+
+
+### `GET /api/studies/{study_id}/analysis/{name}`
+
+A precomputed analysis JSON by file stem, e.g. `L2_coordination`, `L2_mappo_example_episode` (names are listed in `GET /studies/{id}` -> `analysis_files`).
+
+Parameters: `study_id` (path, required), `name` (path, required)
 
 
 ## training
@@ -232,6 +246,7 @@ Parameters: `study_id` (path, required)
 | POST | `/api/training/jobs` | Launch | 202 |
 | GET | `/api/training/jobs/{job_id}` | Job Status | 200 |
 | POST | `/api/training/jobs/{job_id}/cancel` | Cancel | 200 |
+| GET | `/api/training/schema` | Schema | 200 |
 
 ### `GET /api/training/jobs/{job_id}`
 

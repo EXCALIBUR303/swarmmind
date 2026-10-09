@@ -1,0 +1,26 @@
+.sm-chart { margin: 0; background: var(--sm-bg-panel); border: 1px solid var(--sm-border); border-radius: var(--sm-radius-panel); padding: var(--sm-space-4); min-width: 0; }
+.sm-chart-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sm-space-3); }
+.sm-chart-title { margin: 0; font: var(--sm-font-lg); color: var(--sm-text); }
+.sm-chart-caption { font: var(--sm-font-xs); color: var(--sm-text-muted); margin-top: var(--sm-space-1); }
+.sm-chart-toggle { font: var(--sm-font-xs); color: var(--sm-accent); background: none; border: 1px solid var(--sm-border); border-radius: var(--sm-radius-control); min-height: 28px; padding: 0 var(--sm-space-3); cursor: pointer; }
+.sm-chart-toggle:focus-visible, .sm-chart svg:focus-visible { outline: 2px solid var(--sm-accent); outline-offset: 1px; }
+.sm-chart-legend { list-style: none; display: flex; flex-wrap: wrap; gap: var(--sm-space-2) var(--sm-space-5); margin: var(--sm-space-3) 0 0; padding: 0; font: var(--sm-font-sm); color: var(--sm-text); }
+.sm-chart-legend li { display: inline-flex; align-items: center; gap: var(--sm-space-2); }
+.sm-chart-body { position: relative; margin-top: var(--sm-space-3); }
+.sm-chart-skeleton { height: 180px; border-radius: var(--sm-radius-control); background: var(--sm-bg-sunken); }
+.sm-chart-msg { padding: var(--sm-space-6); text-align: center; color: var(--sm-text-muted); font: var(--sm-font-sm); background: var(--sm-bg-sunken); border-radius: var(--sm-radius-control); }
+.sm-chart-msg.error { color: var(--sm-danger); }
+.sm-chart-tablewrap { overflow: auto; max-height: 320px; }
+.sm-chart-table { width: 100%; border-collapse: collapse; font: var(--sm-font-xs); font-variant-numeric: tabular-nums; }
+.sm-chart-table th, .sm-chart-table td { text-align: right; padding: var(--sm-space-2) var(--sm-space-3); border-bottom: 1px solid var(--sm-border); white-space: nowrap; }
+.sm-chart-table th:first-child, .sm-chart-table td:first-child { text-align: left; }
+.sm-chart-table th { color: var(--sm-text-muted); font-weight: 600; position: sticky; top: 0; background: var(--sm-bg-panel); }
+.sm-chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.sm-chart-axis text { font: var(--sm-font-xs); fill: var(--sm-text-muted); }
+.sm-chart-axis-title { font: var(--sm-font-xs); fill: var(--sm-text-muted); }
+.sm-chart-grid { stroke: var(--sm-border); stroke-width: 1; }
+.sm-chart-tip { position: absolute; z-index: 5; pointer-events: none; background: var(--sm-bg-panel); border: 1px solid var(--sm-border); border-radius: var(--sm-radius-control); box-shadow: var(--sm-elev-2); padding: var(--sm-space-2) var(--sm-space-3); font: var(--sm-font-xs); min-width: 120px; }
+.sm-chart-tip-head { color: var(--sm-text-muted); margin-bottom: var(--sm-space-1); }
+.sm-chart-tip-row { display: flex; align-items: center; gap: var(--sm-space-2); justify-content: space-between; }
+.sm-chart-tip-row b { font-family: var(--sm-font-mono); color: var(--sm-text); font-weight: 600; font-variant-numeric: tabular-nums; }
+.sm-chart-tip-row span { color: var(--sm-text-muted); display: inline-flex; align-items: center; gap: var(--sm-space-2); }

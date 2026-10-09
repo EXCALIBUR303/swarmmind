@@ -90,7 +90,7 @@ Interactive docs while the server runs: `/docs`.
 ## WebSocket: simulation — `WS /ws/sessions/{session_id}`
 
 The server owns the clock. At 1× it advances 4 steps/s; `speed` ∈ [0.25, 8]; never more than 30 steps/s.
-A browser `Origin` other than the configured dev origin is refused (`4403`); an unknown/expired session closes `4404`.
+A browser `Origin` other than the configured dev origin is refused (`4403`); an unknown/expired session closes `4404` (the socket is accepted and then closed with that code, because a refusal before the handshake reaches a browser only as `1006`).
 On connect the server sends a `state` message so a reconnecting client can resync.
 One connection drives a session at a time: a new connection takes over and the previous one is closed with `4409`.
 REST `POST /sessions/{id}/step` is for clients that do not use the WebSocket; mixing it with a playing

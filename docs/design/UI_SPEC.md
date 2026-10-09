@@ -40,11 +40,13 @@ fills the remainder.
 **Purpose.** The flagship live + replay simulator (§30.4).
 
 **Data sources (Phase 10 endpoints, per §28.2):**
-- `POST /api/sessions` (start a live or replay session), `GET/DELETE /api/sessions/{id}`
-- `WS /api/sessions/{id}/stream` (live frame stream)
-- `GET /api/replays`, `GET /api/replays/{id}` (Phase 3/7 recorded replays)
-- `GET /api/models` (checkpoints available for the Policy selector)
-- `GET /api/maps/{level}/{split}` (map selector)
+- `POST /api/sessions` (live sessions), `GET/DELETE /api/sessions/{id}`, `POST /api/sessions/{id}/reset`
+- `WS /ws/sessions/{id}` (live frame stream; the server owns the clock)
+- `GET /api/replays`, `GET /api/replays/{id}`, `GET /api/replays/{id}/initial` (recorded replays and their reset-time known cells)
+- `GET /api/models?level=` (learned policies for the Policy selector), `GET /api/levels`
+- `GET /api/maps?set=validation|test|structured&level=` (map selector)
+
+*(Phase 11 correction: this list originally named endpoint paths from before the backend existed; the above are the real ones, see `docs/API.md`.)*
 
 **Layout.** Exactly §30.4's ASCII diagram: Toolbar → Mission Strip → Canvas
 → Timeline (replay mode only), with a 320px Right Rail. See

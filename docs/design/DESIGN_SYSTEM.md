@@ -230,6 +230,10 @@ entirely (items render at their settled state, zero duration) under
 unmount so it never runs a second time or leaks. `docs/design/screens/*`
 were re-captured after this change; nothing else in the layout moved.
 
+## 5.3 Prototype promoted (Phase 11)
+
+The static prototype (`frontend/src/pages/_prototype/`, route `/_prototype/swarm-lab`) was removed once the real Swarm Lab reached parity; its layout, tokens and nav styling live on in `pages/SwarmLab.*` and `app/AppShell.*`. Screenshots of the real page at the four breakpoints: `docs/design/screens/phase11-swarm-lab-*.png`. The prototype's reset-time fog bug (start area never revealed) was a replay-format gap, fixed in Phase 10/11 via `GET /replays/{id}/initial`.
+
 ## 6. Approval (granted)
 
 Per §30.10, Phase 11 (React simulator) does not start until the user

@@ -15,6 +15,7 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
 from backend.app.api.deps import ID_RE
 from backend.app.api.ws.common import CLOSE_FORBIDDEN, CLOSE_NOT_FOUND, origin_allowed
+from backend.app.api.ws.common import reject as _reject
 from backend.app.services.errors import ServiceError
 from backend.app.services.jsonio import read_json
 
@@ -57,15 +58,15 @@ class JsonlTail:
 async def train_ws(websocket: WebSocket, run_id: str, from_update: int = 0) -> None:
     svc = websocket.app.state.services
     if not origin_allowed(websocket, svc.settings.cors_origin):
-        await websocket.close(code=CLOSE_FORBIDDEN)
+        await _reject(websocket, CLOSE_FORBIDDEN)
         return
     if not _ID.match(run_id):
-        await websocket.close(code=CLOSE_NOT_FOUND)
+        await _reject(websocket, CLOSE_NOT_FOUND)
         return
     try:
         run_dir = svc.runs.run_dir(run_id)
     except ServiceError:
-        await websocket.close(code=CLOSE_NOT_FOUND)
+        await _reject(websocket, CLOSE_NOT_FOUND)
         return
 
     await websocket.accept()

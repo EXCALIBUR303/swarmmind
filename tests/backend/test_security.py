@@ -78,8 +78,9 @@ def test_security_headers(client):
 
 def test_ws_rejects_foreign_origin(client):
     sid = client.post("/api/sessions", json={"level": "L1", "policy": {"kind": "random"}}).json()["session_id"]
-    with pytest.raises(WebSocketDisconnect) as e, client.websocket_connect(f"/ws/sessions/{sid}", headers={"origin": "http://evil.example"}):
-        pass
+    # accepted only to be closed with a code a browser can see; no session data is ever sent
+    with client.websocket_connect(f"/ws/sessions/{sid}", headers={"origin": "http://evil.example"}) as ws, pytest.raises(WebSocketDisconnect) as e:
+        ws.receive_json()
     assert e.value.code == 4403
     with client.websocket_connect(f"/ws/sessions/{sid}", headers={"origin": ORIGIN}) as ws:
         assert ws.receive_json()["type"] == "state"

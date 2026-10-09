@@ -132,8 +132,8 @@ def test_step_while_playing_is_refused(client):
 
 def test_unknown_or_malformed_session_closes_4404(client):
     for sid in ("deadbeef", ".hidden"):
-        with pytest.raises(WebSocketDisconnect) as e, client.websocket_connect(f"/ws/sessions/{sid}"):
-            pass
+        with client.websocket_connect(f"/ws/sessions/{sid}") as ws, pytest.raises(WebSocketDisconnect) as e:
+            ws.receive_json()
         assert e.value.code == 4404
 
 

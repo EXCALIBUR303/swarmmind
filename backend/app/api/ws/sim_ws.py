@@ -14,6 +14,7 @@ from pydantic import ValidationError
 
 from backend.app.api.deps import ID_RE
 from backend.app.api.ws.common import (
+    reject as _reject,
     CLOSE_FORBIDDEN,
     CLOSE_NOT_FOUND,
     CLOSE_REPLACED,
@@ -117,15 +118,15 @@ async def sim_ws(websocket: WebSocket, session_id: str) -> None:
     svc = websocket.app.state.services
     cfg = svc.settings
     if not origin_allowed(websocket, cfg.cors_origin):
-        await websocket.close(code=CLOSE_FORBIDDEN)
+        await _reject(websocket, CLOSE_FORBIDDEN)
         return
     if not _ID.match(session_id):
-        await websocket.close(code=CLOSE_NOT_FOUND)
+        await _reject(websocket, CLOSE_NOT_FOUND)
         return
     try:
         session = svc.sessions.get(session_id)
     except ServiceError:
-        await websocket.close(code=CLOSE_NOT_FOUND)
+        await _reject(websocket, CLOSE_NOT_FOUND)
         return
 
     await websocket.accept()

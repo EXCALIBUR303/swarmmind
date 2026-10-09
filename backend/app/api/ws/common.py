@@ -25,3 +25,12 @@ def origin_allowed(ws: WebSocket, allowed_origin: str) -> bool:
 async def send_model(ws: WebSocket, msg: BaseModel) -> None:
     """Send with a timeout so a stalled client cannot pin the server (backpressure)."""
     await asyncio.wait_for(ws.send_text(msg.model_dump_json()), timeout=SEND_TIMEOUT_SECONDS)
+
+
+async def reject(ws: WebSocket, code: int) -> None:
+    """Refuse a connection with an application close code the browser can SEE.
+    Closing before `accept` becomes an HTTP 403 handshake failure, which a browser
+    reports only as code 1006 (indistinguishable from a network drop), so a client
+    could not tell "session expired" from "backend down". Nothing else is sent."""
+    await ws.accept()
+    await ws.close(code=code)

@@ -72,8 +72,8 @@ def test_live_tail_pushes_new_lines_and_status_changes(client, results_tree):
 
 def test_unknown_or_unsafe_run_closes_4404(client):
     for rid in ("missing", ".hidden"):
-        with pytest.raises(WebSocketDisconnect) as e, client.websocket_connect(f"/ws/training/{rid}"):
-            pass
+        with client.websocket_connect(f"/ws/training/{rid}") as ws, pytest.raises(WebSocketDisconnect) as e:
+            ws.receive_json()
         assert e.value.code == 4404
 
 

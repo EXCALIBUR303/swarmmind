@@ -2,8 +2,14 @@
  * values (spec §30.3). Every component reads these variables; no raw hex
  * or px literals are allowed outside this file (enforced in Phase 13).
  *
- * Phase 1 scope: baseline tokens needed for the app shell only. The full
- * simulation-layer and chart tokens are added in Phase 9 (design phase).
+ * Phase 9: full token set. Every categorical colour below is validated
+ * with the dataviz skill's `validate_palette.js` (OKLCH lightness band,
+ * chroma floor, CVD separation under Machado-Oliveira-Fernandes 2009,
+ * a normal-vision floor, and contrast vs. surface) and WCAG 2.2 text/
+ * graphical contrast; see docs/design/DESIGN_SYSTEM.md §3 for the exact
+ * commands and results, including the two fixes made to the spec's
+ * §30.3 defaults and the one open limitation (documented, not silently
+ * accepted) for a 5th/6th robot.
  */
 
 :root {
@@ -50,7 +56,7 @@
   --sm-text-muted: #5b6576;
   --sm-text-on-dark: #e6eaf0;
 
-  /* Accent / semantic */
+  /* Accent / semantic (all pass WCAG AA text contrast, verified Phase 9) */
   --sm-accent: #2563eb;
   --sm-accent-hover: #1d4ed8;
   --sm-accent-2: #0e7490;
@@ -59,21 +65,71 @@
   --sm-danger: #b91c1c;
   --sm-info: #0369a1;
 
-  /* Algorithm colours (charts) */
+  /* Algorithm colours (charts). Random and the Heuristic reference are
+   * NEUTRAL REFERENCE LINES, not categorical series — they are always
+   * rendered in ink/grey with a distinct dash pattern (never a hue slot),
+   * per dataviz's own scoping rule ("these checks validate a categorical
+   * palette; a lone reference/status colour takes a WCAG contrast check
+   * instead"). The only real 2-slot categorical pair is IPPO vs MAPPO.
+   *
+   * FIX (Phase 9): spec §30.3's --sm-algo-ippo (#0E7490) fails the
+   * dataviz chroma floor (0.094 < 0.10 — reads as grey, does no identity
+   * work) — this was flagged in Phase 5 and confirmed here. Snapped one
+   * step up the same teal/cyan hue family to #0891B2 (Tailwind cyan-600):
+   * `node validate_palette.js "#0891B2,#2563EB" --mode light --pairs all`
+   * → ALL CHECKS PASS (chroma 0.10+, CVD ΔE 14.7 protan/deutan worst,
+   * normal-vision floor 16.3). MAPPO is unchanged (identical to
+   * --sm-accent by the spec's own design — flagged as a minor, accepted
+   * ambiguity in DESIGN_SYSTEM.md §3, not a hard failure: legends and
+   * direct labels are mandatory on every chart, §30.8).
+   */
   --sm-algo-random: #6b7280;
-  --sm-algo-ippo: #0e7490;
+  --sm-algo-ippo: #0891b2;
   --sm-algo-mappo: #2563eb;
   --sm-algo-heuristic: #111827;
 
-  /* Robot identity colours (Okabe-Ito derived, CVD-safe) */
+  /* Robot identity colours (Okabe-Ito derived, CVD-safe). Validated
+   * `--pairs all` (any two robots can be simultaneously adjacent on the
+   * canvas) for the actual robot counts every shipped level uses (L1=2,
+   * L2=3, L3/L4=4 — the full 4-slot set passes or is in the CVD 6-8 WARN
+   * band, legal because robots are ALWAYS labelled, §30.1/§30.9).
+   *
+   * FIX (Phase 9): robot 5 (#56B4E9) failed the graphical (non-text)
+   * 3:1 contrast floor against a free (white) cell at 2.31:1 — genuinely
+   * hard to see, not just a CVD-pairing issue. Darkened along the same
+   * hue to #2E93CB (3.41:1, PASS).
+   *
+   * OPEN LIMITATION (disclosed, not silently accepted): robots 5-6 exist
+   * only for a hypothetical n_robots>4 config (no shipped level uses
+   * one). At 6 slots, `--pairs all` cannot clear the CVD normal-vision
+   * floor (robot 6 vs. robot 1, ΔE 13.7 < 15) — this matches the dataviz
+   * skill's own documented finding that no ordering of even its curated
+   * 8-hue reference palette clears an all-pairs floor of 15 past 3
+   * slots. Mandatory robot labels (R1…R6, always visible) remain the
+   * unconditional disambiguator for a 5-6 robot config; if such a level
+   * is ever shipped, add a secondary per-robot shape/pattern encoding
+   * (e.g. a numeral badge) rather than trying to force a 6th safe hue.
+   */
   --sm-robot-1: #0072b2;
   --sm-robot-2: #d55e00;
   --sm-robot-3: #009e73;
   --sm-robot-4: #cc79a7;
-  --sm-robot-5: #56b4e9;
+  --sm-robot-5: #2e93cb;
   --sm-robot-6: #7a5195;
+
+  /* Simulation layer (§30.3) */
+  --sm-cell-free: #ffffff;
+  --sm-cell-unknown: #cbd2db;
+  --sm-cell-unknown-hatch: #bcc4cf;
+  --sm-cell-obstacle: #374151;
+  --sm-cell-visited-team: #e3edfb;
+  --sm-grid-line: #e5e7eb;
+  --sm-target-fill: #f2b600;
+  --sm-target-outline: #7a5a00;
+  --sm-comm-link: #64748b;
 
   --sm-nav-width-expanded: 220px;
   --sm-nav-width-collapsed: 64px;
   --sm-right-rail-width: 320px;
+  --sm-cell-size-min-gridlines: 14px;
 }

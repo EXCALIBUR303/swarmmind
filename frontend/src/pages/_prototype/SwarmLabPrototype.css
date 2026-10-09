@@ -1,0 +1,200 @@
+/* Static design prototype only (Phase 9, spec §30.4). Removed or promoted
+ * to real components in Phase 11 — this file is never imported by the
+ * production route table (see routes.tsx). Responsive rules mirror §30.5
+ * exactly. */
+
+.sm-proto {
+  --sm-proto-nav-w: var(--sm-nav-width-expanded);
+  --sm-proto-rail-w: var(--sm-right-rail-width);
+  display: grid;
+  grid-template-columns: var(--sm-proto-nav-w) 1fr var(--sm-proto-rail-w);
+  height: 100vh;
+  width: 100%;
+  background: var(--sm-bg-app);
+  font: var(--sm-font-md);
+  color: var(--sm-text);
+}
+
+.sm-proto-nav {
+  /* Colour grading: the flat --sm-bg-nav navy deepens toward the bottom
+   * and picks up a faint --sm-accent tint at the top — built from the two
+   * tokens already in the system (nav surface + accent), not a new
+   * arbitrary colour, so it stays inside the validated palette (§3,
+   * DESIGN_SYSTEM.md). */
+  background: linear-gradient(180deg, color-mix(in srgb, var(--sm-bg-nav) 88%, var(--sm-accent) 12%) 0%, var(--sm-bg-nav) 45%, #0a1420 100%);
+  color: var(--sm-text-on-dark);
+  padding: var(--sm-space-5) var(--sm-space-3);
+  display: flex;
+  flex-direction: column;
+}
+.sm-proto-nav-title {
+  font: var(--sm-font-xl);
+  letter-spacing: 0.02em;
+  padding: 0 var(--sm-space-3) var(--sm-space-6);
+  background: linear-gradient(90deg, #fff, var(--sm-accent) 130%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0; /* animated in by anime.js on mount; see the component's entrance effect */
+}
+@media (prefers-reduced-motion: reduce) {
+  .sm-proto-nav-title { opacity: 1; }
+}
+.sm-proto-nav-item {
+  display: flex; align-items: center; gap: var(--sm-space-4);
+  padding: var(--sm-space-4); border-radius: var(--sm-radius-control);
+  font: var(--sm-font-lg); white-space: nowrap; overflow: hidden;
+  color: var(--sm-text-on-dark);
+  position: relative;
+  border-left: 3px solid transparent;
+  opacity: 0; /* animated in by anime.js on mount (entrance stagger) */
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+.sm-proto-nav-item svg { flex-shrink: 0; transition: transform 200ms ease; }
+.sm-proto-nav-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  transform: translateX(2px);
+}
+.sm-proto-nav-item:hover svg { transform: scale(1.12); }
+.sm-proto-nav-item.active {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--sm-accent) 28%, transparent), color-mix(in srgb, var(--sm-accent) 8%, transparent));
+  border-left-color: var(--sm-accent);
+  color: #fff;
+  font-weight: 600;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sm-proto-nav-item, .sm-proto-nav-item svg { transition: none; }
+  .sm-proto-nav-item:hover { transform: none; }
+  .sm-proto-nav-item:hover svg { transform: none; }
+  .sm-proto-nav-item { opacity: 1; }
+}
+
+.sm-proto-main { display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+
+.sm-proto-toolbar {
+  display: flex; align-items: center; gap: var(--sm-space-5);
+  padding: var(--sm-space-3) var(--sm-space-5); background: var(--sm-bg-panel);
+  border-bottom: 1px solid var(--sm-border); flex-wrap: wrap;
+}
+.sm-proto-toolbar-group { display: flex; align-items: center; gap: var(--sm-space-2); font: var(--sm-font-sm); color: var(--sm-text-muted); }
+.sm-proto-select {
+  font: var(--sm-font-sm); color: var(--sm-text); background: var(--sm-bg-sunken);
+  border: 1px solid var(--sm-border); border-radius: var(--sm-radius-control);
+  padding: var(--sm-space-2) var(--sm-space-3); min-height: 32px;
+}
+.sm-proto-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 32px; min-height: 32px; border-radius: var(--sm-radius-control);
+  border: 1px solid var(--sm-border); background: var(--sm-bg-panel); color: var(--sm-text);
+  cursor: pointer; font: var(--sm-font-sm);
+}
+.sm-proto-btn.primary { background: var(--sm-accent); border-color: var(--sm-accent); color: #fff; }
+.sm-proto-btn.primary:hover { background: var(--sm-accent-hover); }
+.sm-proto-btn:focus-visible, .sm-proto-select:focus-visible, .sm-proto-robot-row:focus-visible {
+  outline: 2px solid var(--sm-accent); outline-offset: 1px;
+}
+
+.sm-proto-mission {
+  display: flex; align-items: center; gap: var(--sm-space-7);
+  padding: var(--sm-space-3) var(--sm-space-5); background: var(--sm-bg-sunken);
+  border-bottom: 1px solid var(--sm-border); font: var(--sm-font-sm);
+}
+.sm-proto-mission-stat { display: flex; align-items: baseline; gap: var(--sm-space-2); }
+.sm-proto-mission-stat .value { font: var(--sm-font-lg); font-family: var(--sm-font-mono); }
+.sm-proto-status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.sm-proto-status-dot.running { background: var(--sm-success); animation: sm-pulse 1.5s ease-in-out infinite; }
+.sm-proto-status-dot.success { background: var(--sm-success); }
+@keyframes sm-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+@media (prefers-reduced-motion: reduce) { .sm-proto-status-dot.running { animation: none; } }
+
+.sm-proto-canvas-wrap {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  padding: var(--sm-space-6); min-height: 0; min-width: 0; background: var(--sm-bg-app);
+}
+.sm-proto-canvas-frame {
+  background: var(--sm-bg-sunken); border: 1px solid var(--sm-border);
+  border-radius: var(--sm-radius-panel); padding: var(--sm-space-4);
+  max-width: 100%; min-width: 0; box-sizing: border-box;
+}
+.sm-proto-canvas-frame svg { min-width: 0; }
+
+.sm-proto-timeline { padding: var(--sm-space-3) var(--sm-space-5); background: var(--sm-bg-panel); border-top: 1px solid var(--sm-border); }
+.sm-proto-scrub { width: 100%; accent-color: var(--sm-accent); }
+
+.sm-proto-rail { background: var(--sm-bg-panel); border-left: 1px solid var(--sm-border); display: flex; flex-direction: column; overflow: hidden; }
+.sm-proto-rail-tabs { display: flex; border-bottom: 1px solid var(--sm-border); }
+.sm-proto-rail-tab {
+  flex: 1; padding: var(--sm-space-3); text-align: center; font: var(--sm-font-sm);
+  color: var(--sm-text-muted); border-bottom: 2px solid transparent; cursor: pointer; background: none; border-left: none; border-right: none; border-top: none;
+}
+.sm-proto-rail-tab.active { color: var(--sm-accent); border-bottom-color: var(--sm-accent); font-weight: 600; }
+.sm-proto-rail-body { padding: var(--sm-space-4); overflow: auto; flex: 1; }
+
+.sm-proto-robot-row {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center;
+  gap: var(--sm-space-3); padding: var(--sm-space-3); border-radius: var(--sm-radius-control);
+  cursor: pointer; border: 1px solid transparent; background: none; width: 100%; text-align: left;
+}
+.sm-proto-robot-row:hover { background: var(--sm-bg-sunken); }
+.sm-proto-robot-row.focused { border-color: var(--sm-accent); background: var(--sm-bg-sunken); }
+.sm-proto-swatch { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+.sm-proto-layer-row { display: flex; align-items: center; justify-content: space-between; padding: var(--sm-space-3) 0; border-bottom: 1px solid var(--sm-border); }
+.sm-proto-layer-row:last-child { border-bottom: none; }
+
+.sm-proto-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--sm-text-muted); gap: var(--sm-space-3); text-align: center; padding: var(--sm-space-6); }
+
+/* ---- Responsive (§30.5) ---- */
+@media (max-width: 1439px) {
+  .sm-proto { grid-template-columns: var(--sm-nav-width-collapsed) 1fr 300px; }
+  .sm-proto-nav-item span.label { display: none; }
+}
+@media (max-width: 1023px) {
+  .sm-proto { grid-template-columns: var(--sm-nav-width-collapsed) 1fr; grid-template-rows: 1fr auto; }
+  .sm-proto-rail { grid-column: 1 / -1; grid-row: 2; border-left: none; border-top: 1px solid var(--sm-border); max-height: 240px; }
+  .sm-proto-toolbar { flex-wrap: wrap; }
+}
+@media (max-width: 767px) {
+  .sm-proto { grid-template-columns: 1fr; align-content: start; }
+  .sm-proto-nav { display: none; }
+  .sm-proto-rail { max-height: 200px; }
+  .sm-proto-main {
+    /* A fixed bottom bar (below) needs its own scroll container above it,
+     * rather than the flex `order` + `position: sticky` combination this
+     * replaced — that combination clipped the top of the page instead of
+     * scrolling, because `overflow: hidden` on this flex column has no
+     * scrollbar to reveal the content sticky positioning pushed out of
+     * view. Verified by direct rendering at 375px (§30.5), not asserted. */
+    overflow-y: auto;
+    padding-bottom: 56px; /* room for the fixed toolbar below */
+  }
+  .sm-proto-toolbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    background: var(--sm-bg-panel);
+    box-shadow: var(--sm-elev-1);
+    flex-wrap: wrap;
+    gap: var(--sm-space-2);
+    padding: var(--sm-space-2) var(--sm-space-3);
+  }
+  .sm-proto-toolbar-group { flex-wrap: wrap; }
+  .sm-proto-select { max-width: 40vw; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+  .sm-proto-mission { flex-wrap: wrap; gap: var(--sm-space-3) var(--sm-space-5); }
+  .sm-proto-canvas-wrap {
+    /* Desktop lets this flex:1 cell grow to fill leftover vertical space
+     * (centering the canvas nicely between the mission strip and the
+     * timeline). At mobile, main+rail stack in one CSS Grid column whose
+     * "main" row stretches to fill 100vh by default — flex:1 inside that
+     * tall row then centers the canvas with large, confusing gaps above
+     * and below it instead of sitting right under the mission strip.
+     * Removing the grow here makes the canvas size to content and the
+     * page simply stack-and-scroll, matching "canvas full-width square"
+     * (§30.5) rather than "canvas vertically centered in the viewport". */
+    flex: none;
+    padding: var(--sm-space-3);
+  }
+}

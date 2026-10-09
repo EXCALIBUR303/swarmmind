@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
-from marl.utils.paths import MODELS_DIR, RUNS_DIR
+from backend.app.api.deps import get_services
+from backend.app.container import Services
 from marl.utils.versions import collect_versions
 
 router = APIRouter(tags=["health"])
@@ -21,23 +22,16 @@ def _torch_device() -> str:
         return "unknown"
 
 
-def _count_dirs(path: object) -> int:
-    from pathlib import Path
-
-    p = Path(path)  # type: ignore[arg-type]
-    if not p.is_dir():
-        return 0
-    return sum(1 for child in p.iterdir() if child.is_dir())
-
-
 @router.get("/health")
-def health() -> dict[str, object]:
+def health(svc: Services = Depends(get_services)) -> dict[str, object]:
     return {
         "status": "ok",
         "versions": collect_versions(),
         "device": _torch_device(),
         "counts": {
-            "runs": _count_dirs(RUNS_DIR),
-            "models": _count_dirs(MODELS_DIR),
+            "runs": len(svc.runs.list_runs()),
+            "models": len(svc.models.list()),
+            "replays": len(svc.replays.list()),
+            "live_sessions": svc.sessions.count(),
         },
     }

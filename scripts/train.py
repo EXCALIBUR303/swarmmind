@@ -41,6 +41,7 @@ def main() -> None:
     parser.add_argument("--total-env-steps", type=int, required=True)
     parser.add_argument("--study", default="adhoc")
     parser.add_argument("--set", dest="overrides", nargs="*", default=[])
+    parser.add_argument("--runs-dir", default=None, help="parent directory for new run dirs (default: results/runs)")
     parser.add_argument("--resume", default=None, help="path to a checkpoint (e.g. .../checkpoints/latest.pt) to resume from")
     parser.add_argument("--run-dir", default=None, help="required with --resume: the existing run directory to continue writing into")
     args = parser.parse_args()
@@ -65,7 +66,10 @@ def main() -> None:
         run_dir = _Path(args.run_dir)
     else:
         resolved = {"env": env_cfg.model_dump(), "algo": algo_cfg.model_dump(), "run_seed": args.seed}
-        run_dir = make_run_dir(args.study, args.algo, args.level, args.seed, resolved)
+        run_dir = make_run_dir(
+            args.study, args.algo, args.level, args.seed, resolved,
+            base_dir=_Path(args.runs_dir) if args.runs_dir else None,
+        )
     print(f"run_dir: {run_dir}")
 
     result = train(

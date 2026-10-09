@@ -1,0 +1,572 @@
+{
+  "$defs": {
+    "LiveMetrics": {
+      "properties": {
+        "coverage": {
+          "title": "Coverage",
+          "type": "number"
+        },
+        "done": {
+          "title": "Done",
+          "type": "boolean"
+        },
+        "n_collisions": {
+          "title": "N Collisions",
+          "type": "integer"
+        },
+        "n_discovered": {
+          "title": "N Discovered",
+          "type": "integer"
+        },
+        "n_rescued": {
+          "title": "N Rescued",
+          "type": "integer"
+        },
+        "return_mean": {
+          "title": "Return Mean",
+          "type": "number"
+        },
+        "success": {
+          "title": "Success",
+          "type": "boolean"
+        },
+        "t": {
+          "title": "T",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "t",
+        "coverage",
+        "n_discovered",
+        "n_rescued",
+        "n_collisions",
+        "return_mean",
+        "success",
+        "done"
+      ],
+      "title": "LiveMetrics",
+      "type": "object"
+    },
+    "ReplayFrame": {
+      "description": "One step's delta (\u00a727.2). `t` is the POST-step index (1-based).",
+      "properties": {
+        "action": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Action",
+          "type": "array"
+        },
+        "blocked_by_robot": {
+          "items": {
+            "type": "boolean"
+          },
+          "title": "Blocked By Robot",
+          "type": "array"
+        },
+        "bumped_wall": {
+          "items": {
+            "type": "boolean"
+          },
+          "title": "Bumped Wall",
+          "type": "array"
+        },
+        "comm_edges": {
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "Comm Edges",
+          "type": "array"
+        },
+        "discovered": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Discovered",
+          "type": "array"
+        },
+        "moved": {
+          "items": {
+            "type": "boolean"
+          },
+          "title": "Moved",
+          "type": "array"
+        },
+        "newly_known": {
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "Newly Known",
+          "type": "array"
+        },
+        "pos": {
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "Pos",
+          "type": "array"
+        },
+        "rescued": {
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "Rescued",
+          "type": "array"
+        },
+        "reward": {
+          "items": {
+            "type": "number"
+          },
+          "title": "Reward",
+          "type": "array"
+        },
+        "reward_components": {
+          "additionalProperties": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "title": "Reward Components",
+          "type": "object"
+        },
+        "t": {
+          "title": "T",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "t",
+        "pos",
+        "action",
+        "moved",
+        "blocked_by_robot",
+        "bumped_wall",
+        "reward",
+        "reward_components"
+      ],
+      "title": "ReplayFrame",
+      "type": "object"
+    },
+    "ReplayMapInfo": {
+      "properties": {
+        "hash": {
+          "title": "Hash",
+          "type": "string"
+        },
+        "height": {
+          "title": "Height",
+          "type": "integer"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "robot_starts": {
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "Robot Starts",
+          "type": "array"
+        },
+        "targets": {
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "Targets",
+          "type": "array"
+        },
+        "terrain": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Terrain",
+          "type": "array"
+        },
+        "width": {
+          "title": "Width",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "hash",
+        "width",
+        "height",
+        "terrain",
+        "robot_starts",
+        "targets"
+      ],
+      "title": "ReplayMapInfo",
+      "type": "object"
+    },
+    "ReplayPolicyInfo": {
+      "properties": {
+        "checkpoint_step": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Checkpoint Step"
+        },
+        "eval_seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Eval Seed"
+        },
+        "kind": {
+          "enum": [
+            "random",
+            "heuristic",
+            "ippo",
+            "mappo"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "run_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Run Id"
+        },
+        "stochastic": {
+          "default": true,
+          "title": "Stochastic",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "ReplayPolicyInfo",
+      "type": "object"
+    },
+    "SessionInitial": {
+      "properties": {
+        "known_team": {
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "Known Team",
+          "type": "array"
+        },
+        "pos": {
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "Pos",
+          "type": "array"
+        }
+      },
+      "required": [
+        "pos",
+        "known_team"
+      ],
+      "title": "SessionInitial",
+      "type": "object"
+    },
+    "SessionSnapshot": {
+      "properties": {
+        "current_known_team": {
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "Current Known Team",
+          "type": "array"
+        },
+        "current_pos": {
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "Current Pos",
+          "type": "array"
+        },
+        "done": {
+          "title": "Done",
+          "type": "boolean"
+        },
+        "env": {
+          "additionalProperties": true,
+          "title": "Env",
+          "type": "object"
+        },
+        "final_metrics": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Final Metrics"
+        },
+        "initial": {
+          "$ref": "#/$defs/SessionInitial"
+        },
+        "last_frame": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReplayFrame"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "map": {
+          "$ref": "#/$defs/ReplayMapInfo"
+        },
+        "metrics": {
+          "$ref": "#/$defs/LiveMetrics"
+        },
+        "policy": {
+          "$ref": "#/$defs/ReplayPolicyInfo"
+        },
+        "seed": {
+          "title": "Seed",
+          "type": "integer"
+        },
+        "session_id": {
+          "title": "Session Id",
+          "type": "string"
+        },
+        "step_index": {
+          "title": "Step Index",
+          "type": "integer"
+        },
+        "stochastic": {
+          "title": "Stochastic",
+          "type": "boolean"
+        },
+        "target_status": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Target Status",
+          "type": "array"
+        }
+      },
+      "required": [
+        "session_id",
+        "step_index",
+        "done",
+        "stochastic",
+        "seed",
+        "env",
+        "map",
+        "policy",
+        "initial",
+        "current_pos",
+        "current_known_team",
+        "target_status",
+        "last_frame",
+        "metrics"
+      ],
+      "title": "SessionSnapshot",
+      "type": "object"
+    },
+    "WsCommand": {
+      "properties": {
+        "cmd": {
+          "enum": [
+            "play",
+            "pause",
+            "step",
+            "reset",
+            "speed"
+          ],
+          "title": "Cmd",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "cmd"
+      ],
+      "title": "WsCommand",
+      "type": "object"
+    },
+    "WsEpisodeEnd": {
+      "properties": {
+        "metrics": {
+          "additionalProperties": true,
+          "title": "Metrics",
+          "type": "object"
+        },
+        "steps": {
+          "title": "Steps",
+          "type": "integer"
+        },
+        "success": {
+          "title": "Success",
+          "type": "boolean"
+        },
+        "type": {
+          "const": "episode_end",
+          "default": "episode_end",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "metrics",
+        "success",
+        "steps"
+      ],
+      "title": "WsEpisodeEnd",
+      "type": "object"
+    },
+    "WsError": {
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "type": {
+          "const": "error",
+          "default": "error",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "WsError",
+      "type": "object"
+    },
+    "WsFrameMessage": {
+      "properties": {
+        "frame": {
+          "$ref": "#/$defs/ReplayFrame"
+        },
+        "metrics": {
+          "$ref": "#/$defs/LiveMetrics"
+        },
+        "step_index": {
+          "title": "Step Index",
+          "type": "integer"
+        },
+        "type": {
+          "const": "frame",
+          "default": "frame",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "frame",
+        "step_index",
+        "metrics"
+      ],
+      "title": "WsFrameMessage",
+      "type": "object"
+    },
+    "WsStateMessage": {
+      "properties": {
+        "playing": {
+          "title": "Playing",
+          "type": "boolean"
+        },
+        "snapshot": {
+          "$ref": "#/$defs/SessionSnapshot"
+        },
+        "speed": {
+          "title": "Speed",
+          "type": "number"
+        },
+        "type": {
+          "const": "state",
+          "default": "state",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "playing",
+        "speed",
+        "snapshot"
+      ],
+      "title": "WsStateMessage",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SWARMMIND WebSocket messages"
+}

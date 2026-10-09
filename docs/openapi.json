@@ -1,0 +1,2299 @@
+{
+  "components": {
+    "schemas": {
+      "EnvConfig": {
+        "description": "Full episode/environment configuration (\u00a76.6).\n\nA named level (L1-L4, \u00a76.7) is simply a frozen instance of this model,\nloaded from configs/env/<Level>.yaml.",
+        "properties": {
+          "action_masking": {
+            "default": true,
+            "title": "Action Masking",
+            "type": "boolean"
+          },
+          "comm_mode": {
+            "default": "shared_map",
+            "enum": [
+              "none",
+              "shared_map",
+              "limited_range"
+            ],
+            "title": "Comm Mode",
+            "type": "string"
+          },
+          "comm_radius": {
+            "default": 4.0,
+            "minimum": 0.0,
+            "title": "Comm Radius",
+            "type": "number"
+          },
+          "height": {
+            "maximum": 20.0,
+            "minimum": 6.0,
+            "title": "Height",
+            "type": "integer"
+          },
+          "max_steps": {
+            "minimum": 1.0,
+            "title": "Max Steps",
+            "type": "integer"
+          },
+          "n_robots": {
+            "maximum": 6.0,
+            "minimum": 1.0,
+            "title": "N Robots",
+            "type": "integer"
+          },
+          "n_targets": {
+            "maximum": 5.0,
+            "minimum": 1.0,
+            "title": "N Targets",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "obs": {
+            "$ref": "#/components/schemas/ObsConfig"
+          },
+          "obs_radius": {
+            "default": 5,
+            "minimum": 1.0,
+            "title": "Obs Radius",
+            "type": "integer"
+          },
+          "obstacle_density": {
+            "maximum": 0.35,
+            "minimum": 0.0,
+            "title": "Obstacle Density",
+            "type": "number"
+          },
+          "reward": {
+            "$ref": "#/components/schemas/RewardConfig"
+          },
+          "sensing": {
+            "$ref": "#/components/schemas/SensingConfig"
+          },
+          "sensor_radius": {
+            "minimum": 1.0,
+            "title": "Sensor Radius",
+            "type": "number"
+          },
+          "spawn": {
+            "default": "clustered",
+            "enum": [
+              "clustered",
+              "scattered"
+            ],
+            "title": "Spawn",
+            "type": "string"
+          },
+          "target_min_dist": {
+            "default": 3,
+            "minimum": 0.0,
+            "title": "Target Min Dist",
+            "type": "integer"
+          },
+          "width": {
+            "maximum": 20.0,
+            "minimum": 6.0,
+            "title": "Width",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "width",
+          "height",
+          "n_robots",
+          "n_targets",
+          "obstacle_density",
+          "max_steps",
+          "sensor_radius"
+        ],
+        "title": "EnvConfig",
+        "type": "object"
+      },
+      "FixedMap": {
+        "properties": {
+          "id": {
+            "pattern": "^[A-Za-z0-9._-]{1,128}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "const": "fixed",
+            "default": "fixed",
+            "title": "Kind",
+            "type": "string"
+          },
+          "set": {
+            "enum": [
+              "validation",
+              "test",
+              "structured"
+            ],
+            "title": "Set",
+            "type": "string"
+          }
+        },
+        "required": [
+          "set",
+          "id"
+        ],
+        "title": "FixedMap",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "JobStatus": {
+        "properties": {
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "exit_code": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exit Code"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "job_id": {
+            "title": "Job Id",
+            "type": "string"
+          },
+          "progress": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Progress"
+          },
+          "request": {
+            "$ref": "#/components/schemas/TrainRequest"
+          },
+          "run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run Id"
+          },
+          "run_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run Status"
+          },
+          "status": {
+            "enum": [
+              "starting",
+              "running",
+              "completed",
+              "failed",
+              "cancelled"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "job_id",
+          "status",
+          "request",
+          "created_at"
+        ],
+        "title": "JobStatus",
+        "type": "object"
+      },
+      "LiveMetrics": {
+        "properties": {
+          "coverage": {
+            "title": "Coverage",
+            "type": "number"
+          },
+          "done": {
+            "title": "Done",
+            "type": "boolean"
+          },
+          "n_collisions": {
+            "title": "N Collisions",
+            "type": "integer"
+          },
+          "n_discovered": {
+            "title": "N Discovered",
+            "type": "integer"
+          },
+          "n_rescued": {
+            "title": "N Rescued",
+            "type": "integer"
+          },
+          "return_mean": {
+            "title": "Return Mean",
+            "type": "number"
+          },
+          "success": {
+            "title": "Success",
+            "type": "boolean"
+          },
+          "t": {
+            "title": "T",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "t",
+          "coverage",
+          "n_discovered",
+          "n_rescued",
+          "n_collisions",
+          "return_mean",
+          "success",
+          "done"
+        ],
+        "title": "LiveMetrics",
+        "type": "object"
+      },
+      "ObsConfig": {
+        "properties": {
+          "agent_id_onehot": {
+            "default": false,
+            "description": "Ablation only; default excludes agent identity",
+            "title": "Agent Id Onehot",
+            "type": "boolean"
+          }
+        },
+        "title": "ObsConfig",
+        "type": "object"
+      },
+      "PolicyChoice": {
+        "properties": {
+          "kind": {
+            "enum": [
+              "random",
+              "heuristic",
+              "ippo",
+              "mappo"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "model_id": {
+            "anyOf": [
+              {
+                "pattern": "^[A-Za-z0-9._-]{1,128}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Id"
+          }
+        },
+        "required": [
+          "kind"
+        ],
+        "title": "PolicyChoice",
+        "type": "object"
+      },
+      "ProceduralMap": {
+        "properties": {
+          "kind": {
+            "const": "procedural",
+            "default": "procedural",
+            "title": "Kind",
+            "type": "string"
+          }
+        },
+        "title": "ProceduralMap",
+        "type": "object"
+      },
+      "ReplayFrame": {
+        "description": "One step's delta (\u00a727.2). `t` is the POST-step index (1-based).",
+        "properties": {
+          "action": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Action",
+            "type": "array"
+          },
+          "blocked_by_robot": {
+            "items": {
+              "type": "boolean"
+            },
+            "title": "Blocked By Robot",
+            "type": "array"
+          },
+          "bumped_wall": {
+            "items": {
+              "type": "boolean"
+            },
+            "title": "Bumped Wall",
+            "type": "array"
+          },
+          "comm_edges": {
+            "items": {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "title": "Comm Edges",
+            "type": "array"
+          },
+          "discovered": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Discovered",
+            "type": "array"
+          },
+          "moved": {
+            "items": {
+              "type": "boolean"
+            },
+            "title": "Moved",
+            "type": "array"
+          },
+          "newly_known": {
+            "items": {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "title": "Newly Known",
+            "type": "array"
+          },
+          "pos": {
+            "items": {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "title": "Pos",
+            "type": "array"
+          },
+          "rescued": {
+            "items": {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "title": "Rescued",
+            "type": "array"
+          },
+          "reward": {
+            "items": {
+              "type": "number"
+            },
+            "title": "Reward",
+            "type": "array"
+          },
+          "reward_components": {
+            "additionalProperties": {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            "title": "Reward Components",
+            "type": "object"
+          },
+          "t": {
+            "title": "T",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "t",
+          "pos",
+          "action",
+          "moved",
+          "blocked_by_robot",
+          "bumped_wall",
+          "reward",
+          "reward_components"
+        ],
+        "title": "ReplayFrame",
+        "type": "object"
+      },
+      "ReplayMapInfo": {
+        "properties": {
+          "hash": {
+            "title": "Hash",
+            "type": "string"
+          },
+          "height": {
+            "title": "Height",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "robot_starts": {
+            "items": {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "title": "Robot Starts",
+            "type": "array"
+          },
+          "targets": {
+            "items": {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "title": "Targets",
+            "type": "array"
+          },
+          "terrain": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Terrain",
+            "type": "array"
+          },
+          "width": {
+            "title": "Width",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "hash",
+          "width",
+          "height",
+          "terrain",
+          "robot_starts",
+          "targets"
+        ],
+        "title": "ReplayMapInfo",
+        "type": "object"
+      },
+      "ReplayPolicyInfo": {
+        "properties": {
+          "checkpoint_step": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Checkpoint Step"
+          },
+          "eval_seed": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eval Seed"
+          },
+          "kind": {
+            "enum": [
+              "random",
+              "heuristic",
+              "ippo",
+              "mappo"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run Id"
+          },
+          "stochastic": {
+            "default": true,
+            "title": "Stochastic",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "kind"
+        ],
+        "title": "ReplayPolicyInfo",
+        "type": "object"
+      },
+      "RewardConfig": {
+        "description": "Weights for the reward function (\u00a713.2).",
+        "properties": {
+          "collision": {
+            "default": 0.05,
+            "minimum": 0.0,
+            "title": "Collision",
+            "type": "number"
+          },
+          "complete": {
+            "default": 2.0,
+            "minimum": 0.0,
+            "title": "Complete",
+            "type": "number"
+          },
+          "discover": {
+            "default": 0.25,
+            "minimum": 0.0,
+            "title": "Discover",
+            "type": "number"
+          },
+          "explore_total": {
+            "default": 1.0,
+            "description": "w_x total budget (w_x = explore_total/|G|)",
+            "minimum": 0.0,
+            "title": "Explore Total",
+            "type": "number"
+          },
+          "rescue": {
+            "default": 1.0,
+            "minimum": 0.0,
+            "title": "Rescue",
+            "type": "number"
+          },
+          "team_share": {
+            "default": 1.0,
+            "description": "\u03b2: fraction of positive reward shared",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Team Share",
+            "type": "number"
+          },
+          "time_cost": {
+            "default": 0.01,
+            "minimum": 0.0,
+            "title": "Time Cost",
+            "type": "number"
+          }
+        },
+        "title": "RewardConfig",
+        "type": "object"
+      },
+      "SensingConfig": {
+        "properties": {
+          "occlusion": {
+            "default": false,
+            "title": "Occlusion",
+            "type": "boolean"
+          }
+        },
+        "title": "SensingConfig",
+        "type": "object"
+      },
+      "SessionCreate": {
+        "description": "Exactly one of `level` / `env_config`. `seed` generates the map when\nit is procedural and ALWAYS seeds the policy's sampling stream, exactly\nlike `eval_seed` in the batch evaluator (\u00a728.4).",
+        "properties": {
+          "env_config": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EnvConfig"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "level": {
+            "anyOf": [
+              {
+                "pattern": "^[A-Za-z0-9._-]{1,128}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Level"
+          },
+          "map": {
+            "discriminator": {
+              "mapping": {
+                "fixed": "#/components/schemas/FixedMap",
+                "procedural": "#/components/schemas/ProceduralMap"
+              },
+              "propertyName": "kind"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ProceduralMap"
+              },
+              {
+                "$ref": "#/components/schemas/FixedMap"
+              }
+            ],
+            "title": "Map"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/PolicyChoice"
+          },
+          "seed": {
+            "default": 0,
+            "maximum": 2147483647.0,
+            "minimum": 0.0,
+            "title": "Seed",
+            "type": "integer"
+          },
+          "stochastic": {
+            "default": true,
+            "title": "Stochastic",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "policy"
+        ],
+        "title": "SessionCreate",
+        "type": "object"
+      },
+      "SessionInitial": {
+        "properties": {
+          "known_team": {
+            "items": {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "title": "Known Team",
+            "type": "array"
+          },
+          "pos": {
+            "items": {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "title": "Pos",
+            "type": "array"
+          }
+        },
+        "required": [
+          "pos",
+          "known_team"
+        ],
+        "title": "SessionInitial",
+        "type": "object"
+      },
+      "SessionReset": {
+        "properties": {
+          "map": {
+            "anyOf": [
+              {
+                "discriminator": {
+                  "mapping": {
+                    "fixed": "#/components/schemas/FixedMap",
+                    "procedural": "#/components/schemas/ProceduralMap"
+                  },
+                  "propertyName": "kind"
+                },
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/ProceduralMap"
+                  },
+                  {
+                    "$ref": "#/components/schemas/FixedMap"
+                  }
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Map"
+          },
+          "seed": {
+            "anyOf": [
+              {
+                "maximum": 2147483647.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seed"
+          }
+        },
+        "title": "SessionReset",
+        "type": "object"
+      },
+      "SessionSnapshot": {
+        "properties": {
+          "current_known_team": {
+            "items": {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "title": "Current Known Team",
+            "type": "array"
+          },
+          "current_pos": {
+            "items": {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "title": "Current Pos",
+            "type": "array"
+          },
+          "done": {
+            "title": "Done",
+            "type": "boolean"
+          },
+          "env": {
+            "additionalProperties": true,
+            "title": "Env",
+            "type": "object"
+          },
+          "final_metrics": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Final Metrics"
+          },
+          "initial": {
+            "$ref": "#/components/schemas/SessionInitial"
+          },
+          "last_frame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReplayFrame"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "map": {
+            "$ref": "#/components/schemas/ReplayMapInfo"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/LiveMetrics"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/ReplayPolicyInfo"
+          },
+          "seed": {
+            "title": "Seed",
+            "type": "integer"
+          },
+          "session_id": {
+            "title": "Session Id",
+            "type": "string"
+          },
+          "step_index": {
+            "title": "Step Index",
+            "type": "integer"
+          },
+          "stochastic": {
+            "title": "Stochastic",
+            "type": "boolean"
+          },
+          "target_status": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Target Status",
+            "type": "array"
+          }
+        },
+        "required": [
+          "session_id",
+          "step_index",
+          "done",
+          "stochastic",
+          "seed",
+          "env",
+          "map",
+          "policy",
+          "initial",
+          "current_pos",
+          "current_known_team",
+          "target_status",
+          "last_frame",
+          "metrics"
+        ],
+        "title": "SessionSnapshot",
+        "type": "object"
+      },
+      "StepRequest": {
+        "properties": {
+          "n": {
+            "default": 1,
+            "minimum": 1.0,
+            "title": "N",
+            "type": "integer"
+          }
+        },
+        "title": "StepRequest",
+        "type": "object"
+      },
+      "StepResponse": {
+        "properties": {
+          "done": {
+            "title": "Done",
+            "type": "boolean"
+          },
+          "final_metrics": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Final Metrics"
+          },
+          "frames": {
+            "items": {
+              "$ref": "#/components/schemas/ReplayFrame"
+            },
+            "title": "Frames",
+            "type": "array"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/LiveMetrics"
+          },
+          "session_id": {
+            "title": "Session Id",
+            "type": "string"
+          },
+          "step_index": {
+            "title": "Step Index",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "session_id",
+          "frames",
+          "step_index",
+          "done",
+          "metrics"
+        ],
+        "title": "StepResponse",
+        "type": "object"
+      },
+      "TrainRequest": {
+        "properties": {
+          "algo": {
+            "enum": [
+              "ippo",
+              "mappo"
+            ],
+            "title": "Algo",
+            "type": "string"
+          },
+          "level": {
+            "enum": [
+              "L1",
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "title": "Level",
+            "type": "string"
+          },
+          "overrides": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Overrides",
+            "type": "object"
+          },
+          "seed": {
+            "maximum": 2147483647.0,
+            "minimum": 0.0,
+            "title": "Seed",
+            "type": "integer"
+          },
+          "total_env_steps": {
+            "maximum": 10000000.0,
+            "minimum": 2048.0,
+            "title": "Total Env Steps",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "level",
+          "algo",
+          "seed",
+          "total_env_steps"
+        ],
+        "title": "TrainRequest",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "SWARMMIND API",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/analysis/{study_id}/heatmap": {
+      "get": {
+        "description": "Heatmaps were precomputed per (study, level, algo, map), aggregated over\nthat study's seeds \u2014 not per run \u2014 so the spec's `/analysis/{run_id}/\u2026`\nis keyed by study here.",
+        "operationId": "heatmap_api_analysis__study_id__heatmap_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "study_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Study Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "map_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Map Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "algo",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Algo",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "level",
+            "required": false,
+            "schema": {
+              "default": "L2",
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Level",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "default": "visits",
+              "enum": [
+                "visits",
+                "collisions"
+              ],
+              "title": "Kind",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Heatmap Api Analysis  Study Id  Heatmap Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Heatmap",
+        "tags": [
+          "studies"
+        ]
+      }
+    },
+    "/api/experiments": {
+      "get": {
+        "operationId": "list_runs_api_experiments_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "study",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Study"
+            }
+          },
+          {
+            "in": "query",
+            "name": "algo",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Algo"
+            }
+          },
+          {
+            "in": "query",
+            "name": "level",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Level"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response List Runs Api Experiments Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Runs",
+        "tags": [
+          "experiments"
+        ]
+      }
+    },
+    "/api/experiments/{run_id}": {
+      "get": {
+        "operationId": "get_run_api_experiments__run_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Run Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Get Run Api Experiments  Run Id  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Run",
+        "tags": [
+          "experiments"
+        ]
+      }
+    },
+    "/api/experiments/{run_id}/eval": {
+      "get": {
+        "operationId": "run_eval_api_experiments__run_id__eval_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Run Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "episodes",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Episodes",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Run Eval Api Experiments  Run Id  Eval Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Run Eval",
+        "tags": [
+          "experiments"
+        ]
+      }
+    },
+    "/api/experiments/{run_id}/metrics": {
+      "get": {
+        "operationId": "run_metrics_api_experiments__run_id__metrics_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Run Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "from_update",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "From Update",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response Run Metrics Api Experiments  Run Id  Metrics Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Run Metrics",
+        "tags": [
+          "experiments"
+        ]
+      }
+    },
+    "/api/health": {
+      "get": {
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Health Api Health Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/levels": {
+      "get": {
+        "operationId": "levels_api_levels_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response Levels Api Levels Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Levels",
+        "tags": [
+          "env"
+        ]
+      }
+    },
+    "/api/maps": {
+      "get": {
+        "operationId": "maps_api_maps_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "set",
+            "required": false,
+            "schema": {
+              "default": "validation",
+              "enum": [
+                "validation",
+                "test",
+                "structured"
+              ],
+              "title": "Set",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "level",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Level"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response Maps Api Maps Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Maps",
+        "tags": [
+          "env"
+        ]
+      }
+    },
+    "/api/models": {
+      "get": {
+        "operationId": "list_models_api_models_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "algo",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Algo"
+            }
+          },
+          {
+            "in": "query",
+            "name": "level",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Level"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response List Models Api Models Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Models",
+        "tags": [
+          "models"
+        ]
+      }
+    },
+    "/api/models/{model_id}": {
+      "get": {
+        "operationId": "get_model_api_models__model_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "model_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Model Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Get Model Api Models  Model Id  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Model",
+        "tags": [
+          "models"
+        ]
+      }
+    },
+    "/api/replays": {
+      "get": {
+        "operationId": "list_replays_api_replays_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "run_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Run Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "map_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Map Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "study",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Study"
+            }
+          },
+          {
+            "in": "query",
+            "name": "algo",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Algo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response List Replays Api Replays Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Replays",
+        "tags": [
+          "replays"
+        ]
+      }
+    },
+    "/api/replays/{replay_id}": {
+      "get": {
+        "description": "The stored `.json.gz` is served as-is (`Content-Encoding: gzip`); the\nbrowser decompresses it. Nothing is re-simulated or re-encoded.",
+        "operationId": "get_replay_api_replays__replay_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "replay_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Replay Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Replay",
+        "tags": [
+          "replays"
+        ]
+      }
+    },
+    "/api/replays/{replay_id}/initial": {
+      "get": {
+        "description": "Cells known right after reset \u2014 not part of any frame delta (see `ReplayInitial`).",
+        "operationId": "get_replay_initial_api_replays__replay_id__initial_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "replay_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Replay Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Get Replay Initial Api Replays  Replay Id  Initial Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Replay Initial",
+        "tags": [
+          "replays"
+        ]
+      }
+    },
+    "/api/sessions": {
+      "post": {
+        "operationId": "create_session_api_sessions_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionSnapshot"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Session",
+        "tags": [
+          "sessions"
+        ]
+      }
+    },
+    "/api/sessions/{session_id}": {
+      "delete": {
+        "operationId": "delete_session_api_sessions__session_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Session",
+        "tags": [
+          "sessions"
+        ]
+      },
+      "get": {
+        "operationId": "get_session_api_sessions__session_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionSnapshot"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Session",
+        "tags": [
+          "sessions"
+        ]
+      }
+    },
+    "/api/sessions/{session_id}/reset": {
+      "post": {
+        "operationId": "reset_session_api_sessions__session_id__reset_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/SessionReset"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Req"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionSnapshot"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reset Session",
+        "tags": [
+          "sessions"
+        ]
+      }
+    },
+    "/api/sessions/{session_id}/step": {
+      "post": {
+        "operationId": "step_session_api_sessions__session_id__step_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "session_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Session Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/StepRequest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Req"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StepResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Step Session",
+        "tags": [
+          "sessions"
+        ]
+      }
+    },
+    "/api/studies": {
+      "get": {
+        "operationId": "list_studies_api_studies_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response List Studies Api Studies Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Studies",
+        "tags": [
+          "studies"
+        ]
+      }
+    },
+    "/api/studies/{study_id}": {
+      "get": {
+        "operationId": "get_study_api_studies__study_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "study_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Study Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Get Study Api Studies  Study Id  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Study",
+        "tags": [
+          "studies"
+        ]
+      }
+    },
+    "/api/training/jobs": {
+      "get": {
+        "operationId": "list_jobs_api_training_jobs_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/JobStatus"
+                  },
+                  "title": "Response List Jobs Api Training Jobs Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Jobs",
+        "tags": [
+          "training"
+        ]
+      },
+      "post": {
+        "operationId": "launch_api_training_jobs_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrainRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Launch",
+        "tags": [
+          "training"
+        ]
+      }
+    },
+    "/api/training/jobs/{job_id}": {
+      "get": {
+        "operationId": "job_status_api_training_jobs__job_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Job Status",
+        "tags": [
+          "training"
+        ]
+      }
+    },
+    "/api/training/jobs/{job_id}/cancel": {
+      "post": {
+        "operationId": "cancel_api_training_jobs__job_id__cancel_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-][A-Za-z0-9._-]{0,127}$",
+              "title": "Job Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Cancel",
+        "tags": [
+          "training"
+        ]
+      }
+    }
+  }
+}

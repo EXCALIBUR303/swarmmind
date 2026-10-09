@@ -15,16 +15,45 @@ from marl.algorithms.common.policy import Policy
 from marl.analysis.metrics import compute_episode_metrics
 from marl.envs.core.config import EnvConfig
 from marl.envs.core.maps_io import MapSpec
-from marl.envs.core.types import OBSTACLE, EpisodeTrace
+from marl.envs.core.types import OBSTACLE, EpisodeTrace, StepResult, WorldState
 from marl.envs.core.world import SwarmWorld
 from marl.replay.schema import (
     Replay,
     ReplayEnvInfo,
     ReplayFrame,
+    ReplayInitial,
     ReplayMapInfo,
     ReplayOutcome,
     ReplayPolicyInfo,
 )
+
+
+def build_frame(
+    state: WorldState,
+    actions: np.ndarray,
+    result: StepResult,
+    known_before: np.ndarray,
+) -> tuple[ReplayFrame, np.ndarray]:
+    """One step's `ReplayFrame` (§27.2), taken straight from the world's own
+    `StepResult`. Returns `(frame, known_after_copy)`; pass the latter as
+    `known_before` for the next step. Shared by the recorder and the
+    backend's live sessions so both emit byte-identical frames."""
+    known_after = state.known_team
+    newly_known_cells = np.argwhere(known_after & ~known_before).tolist()
+    frame = ReplayFrame(
+        t=result.t,
+        pos=state.robot_pos.tolist(),
+        action=actions.tolist(),
+        moved=result.moved.tolist(),
+        blocked_by_robot=result.blocked_by_robot.tolist(),
+        bumped_wall=result.bumped_wall.tolist(),
+        newly_known=newly_known_cells,
+        discovered=list(result.discovered),
+        rescued=[[k, r] for k, r in result.rescued],
+        reward=result.reward.tolist(),
+        reward_components={k: v.tolist() for k, v in result.reward_components.items()},
+    )
+    return frame, known_after.copy()
 
 
 def record_episode(
@@ -71,30 +100,14 @@ def record_episode(
 
     frames: list[ReplayFrame] = []
     known_before = state.known_team.copy()
+    initial_known = np.argwhere(known_before).tolist()
 
     for _ in range(cfg.max_steps):
         actions = policy.act(world, rng)
         result = world.step(actions)
 
-        known_after = state.known_team
-        newly_known_cells = np.argwhere(known_after & ~known_before).tolist()
-        known_before = known_after.copy()
-
-        frames.append(
-            ReplayFrame(
-                t=result.t,
-                pos=state.robot_pos.tolist(),
-                action=actions.tolist(),
-                moved=result.moved.tolist(),
-                blocked_by_robot=result.blocked_by_robot.tolist(),
-                bumped_wall=result.bumped_wall.tolist(),
-                newly_known=newly_known_cells,
-                discovered=list(result.discovered),
-                rescued=[[k, r] for k, r in result.rescued],
-                reward=result.reward.tolist(),
-                reward_components={k: v.tolist() for k, v in result.reward_components.items()},
-            )
-        )
+        frame, known_before = build_frame(state, actions, result, known_before)
+        frames.append(frame)
 
         trace.positions.append(state.robot_pos.copy())
         trace.actions.append(actions.copy())
@@ -123,6 +136,7 @@ def record_episode(
         env=ReplayEnvInfo(level=cfg.name, config=cfg.model_dump()),
         map=map_info,
         policy=policy_info,
+        initial=ReplayInitial(known_team=initial_known),
         frames=frames,
         outcome=ReplayOutcome(
             success=trace.success,

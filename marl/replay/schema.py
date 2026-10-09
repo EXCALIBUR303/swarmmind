@@ -37,6 +37,15 @@ class ReplayPolicyInfo(BaseModel):
     eval_seed: int | None = None
 
 
+class ReplayInitial(BaseModel):
+    """State right after reset (§27.2 `initial`). The reset-time sensing pass
+    reveals cells that no frame's `newly_known` delta ever contains, so a
+    viewer rebuilding the known map needs them: known(t) = initial.known_team
+    ∪ ⋃_{i<=t} frames[i].newly_known."""
+
+    known_team: list[list[int]]
+
+
 class ReplayFrame(BaseModel):
     """One step's delta (§27.2). `t` is the POST-step index (1-based)."""
 
@@ -67,5 +76,8 @@ class Replay(BaseModel):
     env: ReplayEnvInfo
     map: ReplayMapInfo
     policy: ReplayPolicyInfo
+    # Absent in replays recorded before this field existed (Phases 3-8); the
+    # backend derives it for those by re-running reset (GET /replays/{id}/initial).
+    initial: ReplayInitial | None = None
     frames: list[ReplayFrame]
     outcome: ReplayOutcome

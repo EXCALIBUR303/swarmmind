@@ -35,3 +35,6 @@ models/*.pt
 # IDE
 .vscode/
 .idea/
+
+# Backend job logs/records (runtime state)
+results/jobs/

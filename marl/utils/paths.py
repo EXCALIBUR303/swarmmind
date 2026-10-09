@@ -26,8 +26,11 @@ _SAFE_ID_RE = re.compile(r"^[A-Za-z0-9._-]{1,128}$")
 
 
 def is_safe_id(value: str) -> bool:
-    """True iff `value` is safe to use as a single path segment."""
-    return bool(_SAFE_ID_RE.match(value))
+    """True iff `value` is safe to use as a single path segment.
+
+    The character class admits '.', so '.' and '..' (and any dot-leading
+    name, which would also be a hidden file) are rejected explicitly."""
+    return bool(_SAFE_ID_RE.match(value)) and not value.startswith(".")
 
 
 class UnsafePathError(ValueError):

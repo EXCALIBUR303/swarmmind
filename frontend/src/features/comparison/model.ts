@@ -30,7 +30,7 @@ export const METRICS: MetricDef[] = [
   { key: "collisions_per_100_agent_steps", label: "Collisions", unit: "per 100 agent-steps", digits: 2, better: "lower" },
   { key: "exploration_efficiency", label: "Exploration efficiency", unit: "new cells per agent-step", digits: 3, better: "higher" },
   { key: "idle_fraction", label: "Idle fraction", unit: "fraction of steps", digits: 3, better: "lower", domain: [0, 1] },
-  { key: "oscillation_rate", label: "Oscillation rate", unit: "fraction of steps", digits: 3, better: "lower", domain: [0, 1] },
+  { key: "oscillation_rate", label: "Oscillation rate", unit: "fraction of moves that reverse the previous one", digits: 3, better: "lower", domain: [0, 1] },
   { key: "workload_gini", label: "Workload Gini", unit: "0 = even, 1 = one robot", digits: 3, better: "lower", domain: [0, 1] },
 ];
 export const PRIMARY_KEYS = ["success_rate", "censored_steps", "coverage", "return_mean", "collisions_per_100_agent_steps", "rescue_rate"];

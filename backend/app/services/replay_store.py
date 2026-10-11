@@ -71,7 +71,7 @@ class ReplayStore:
         return path
 
     def initial(self, replay_id: str) -> dict[str, Any]:
-        """`{known_team}` right after reset. Returned as recorded when the replay
+        """`{known_team, discovered}` right after reset. Returned as recorded when the replay
         has it; otherwise derived by re-running `SwarmWorld.reset` on the replay's
         own map and env config — the same deterministic code path that produced
         the replay — so old study replays need no re-recording."""
@@ -81,12 +81,15 @@ class ReplayStore:
         from marl.replay.loader import load_replay
 
         replay = load_replay(self.path(replay_id))
-        if replay.initial is not None:
-            return {"known_team": replay.initial.known_team, "source": "recorded"}
         m = replay.map
         spec = MapSpec(
             id=m.id, width=m.width, height=m.height, terrain_rows=m.terrain,
             robot_starts=[(p[0], p[1]) for p in m.robot_starts], targets=[(p[0], p[1]) for p in m.targets],
         )
         state = SwarmWorld(EnvConfig.model_validate(replay.env.config)).reset(map_spec=spec)
-        return {"known_team": np.argwhere(state.known_team).tolist(), "source": "derived"}
+        # Targets sensed by the reset pass appear in no frame's `discovered` (Phase 15 fix). Always taken
+        # from the deterministic reset, so replays recorded before the field existed are covered too.
+        discovered = [int(k) for k in np.flatnonzero(state.target_t_discovered >= 0)]
+        if replay.initial is not None:
+            return {"known_team": replay.initial.known_team, "discovered": discovered, "source": "recorded"}
+        return {"known_team": np.argwhere(state.known_team).tolist(), "discovered": discovered, "source": "derived"}

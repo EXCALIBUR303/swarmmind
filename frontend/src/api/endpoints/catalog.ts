@@ -55,5 +55,5 @@ export const catalogApi = {
   /** The browser transparently gunzips the stored `.json.gz` (Content-Encoding: gzip). */
   replay: (id: string) => request<Replay>(`/api/replays/${encodeURIComponent(id)}`),
   replayInitial: (id: string) =>
-    request<{ known_team: number[][]; source: "recorded" | "derived" }>(`/api/replays/${encodeURIComponent(id)}/initial`),
+    request<{ known_team: number[][]; discovered?: number[]; source: "recorded" | "derived" }>(`/api/replays/${encodeURIComponent(id)}/initial`),
 };

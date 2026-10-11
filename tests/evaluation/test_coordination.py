@@ -47,7 +47,7 @@ def test_run_isolation_null_is_deterministic():
     a = run_isolation_null(cfg, RandomPolicy, map_spec, eval_seed=0, n_robots=cfg.n_robots)
     b = run_isolation_null(cfg, RandomPolicy, map_spec, eval_seed=0, n_robots=cfg.n_robots)
     assert a == b
-    assert 0.0 <= a <= (cfg.n_robots - 1) / cfg.n_robots + 1e-9
+    assert 0.0 <= a[0] <= (cfg.n_robots - 1) / cfg.n_robots + 1e-9
 
 
 def test_run_isolation_null_differs_from_a_different_eval_seed_usually():
@@ -61,7 +61,8 @@ def test_run_coordination_episode_returns_metrics_and_der_iso():
     cfg = _cfg()
     map_spec = generate_map(cfg, seed=4)
     metrics, der_iso = run_coordination_episode(cfg, RandomPolicy, map_spec, eval_seed=0)
-    assert der_iso is not None and 0.0 <= der_iso <= 1.0
+    assert der_iso is not None and 0.0 <= der_iso[0] <= 1.0
+    assert der_iso[1] is None or 0.0 <= der_iso[1] <= 1.0
     assert 0.0 <= metrics.der <= 1.0
 
 
@@ -88,12 +89,13 @@ def test_aggregate_coordination_reports_excluded_counts_for_undefined_fields():
                             allocation_optimality=None, mean_inter_robot_distance=4.0,
                             min_inter_robot_distance=1.0, dispersion_speed=None),
     ]
-    agg = aggregate_coordination(episodes, der_iso_values=[0.4, 0.6])
+    agg = aggregate_coordination(episodes, der_iso_values=[(0.4, 0.3), (0.6, None)])
     assert agg["n_episodes"] == 2
     assert agg["der"] == pytest.approx(0.2)
     assert agg["der_at_50"] == {"mean": pytest.approx(0.2), "n_defined": 1, "n_excluded": 1}
     assert agg["redundant_pursuit"]["n_defined"] == 1 and agg["redundant_pursuit"]["n_excluded"] == 1
     assert agg["der_iso"] == pytest.approx(0.5)
+    assert agg["der_iso_at_50"] == {"mean": pytest.approx(0.3), "n_defined": 1, "n_excluded": 1}
 
 
 def test_aggregate_coordination_all_undefined_gives_none_mean():
@@ -132,5 +134,20 @@ def test_isolation_null_uses_the_frozen_l2_structured_maps_without_error():
 
     env_cfg = LevelRegistry().get("L2")
     maps = load_eval_set("L2", "structured")
-    der_iso = run_isolation_null(env_cfg, RandomPolicy, maps[0], eval_seed=0, n_robots=env_cfg.n_robots)
-    assert 0.0 <= der_iso <= 1.0
+    der_full, der_50 = run_isolation_null(env_cfg, RandomPolicy, maps[0], eval_seed=0, n_robots=env_cfg.n_robots)
+    assert 0.0 <= der_full <= 1.0 and (der_50 is None or 0.0 <= der_50 <= 1.0)
+
+
+
+def test_isolation_null_at_50_is_measured_at_matched_coverage_not_over_whole_solo_runs():
+    """Phase 15 regression: lone robots run far longer than a team, so DER over whole solo episodes
+    is inflated by episode length (§24.1). The matched-coverage null plays the solo trajectories on
+    one clock and stops at 50% combined coverage, like the team's DER@50, so it is never larger."""
+    from marl.algorithms.baselines.frontier_heuristic import FrontierHeuristicPolicy
+    from marl.envs.core.config import LevelRegistry
+    from marl.evaluation.eval_sets import load_eval_set
+
+    env_cfg = LevelRegistry().get("L2")
+    for m in load_eval_set("L2", "validation")[:5]:
+        full, at50 = run_isolation_null(env_cfg, FrontierHeuristicPolicy, m, eval_seed=0, n_robots=env_cfg.n_robots)
+        assert at50 is not None and at50 <= full + 1e-12

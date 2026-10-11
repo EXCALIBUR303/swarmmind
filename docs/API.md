@@ -25,7 +25,9 @@ Interactive docs while the server runs: `/docs`.
   Sessions expose it as `initial.known_team`; for replays use `GET /api/replays/{id}/initial` (recorded when the replay
   has `initial`, otherwise derived by re-running reset on the replay's own map — study replays from Phases 3–8 predate
   the field). Reconstruct the known map as `initial.known_team ∪ ⋃_{i<=t} frames[i].newly_known`; skipping the initial
-  cells leaves the start area fogged for the whole replay.
+  cells leaves the start area fogged for the whole replay. Likewise a target can already be sensed at reset
+  (`target_min_dist` is a BFS distance, sensing a Euclidean disc): it is in no frame's `discovered`, so both
+  `initial` objects list it in `initial.discovered` (always derived from the deterministic reset for replays).
 - **Seeds.** `seed` generates the map when it is procedural and always seeds the policy's sampling stream:
   `numpy.default_rng(episode_seed(map_id, seed))`, i.e. the batch evaluator's `eval_seed` stream (§28.4).
 - **Held-out maps.** `GET /api/maps?set=test|structured` and fixed-map sessions on those sets go through

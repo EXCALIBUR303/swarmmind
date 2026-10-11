@@ -118,7 +118,7 @@ describe("Swarm Analysis page", () => {
     expect(await screen.findByRole("img", { name: /Coverage over time for the illustrative episode/ })).toBeInTheDocument();
     expect(screen.getAllByText(/illustrative episode, not a statistic/i).length).toBeGreaterThanOrEqual(2);
     expect(screen.getByRole("img", { name: "Discovery and rescue times per target" })).toBeInTheDocument();
-    expect(screen.getByText("Gini 0.014")).toBeInTheDocument();
+    expect(screen.getByText(`Gini ${EP_MAPPO.workload_gini.toFixed(3)}`)).toBeInTheDocument(); // from the captured payload, not a literal
   });
   it("switching to collisions refetches the heatmaps; switching algorithm loads the other episode", async () => {
     stub(routes);

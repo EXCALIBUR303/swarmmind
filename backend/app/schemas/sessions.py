@@ -84,6 +84,8 @@ class LiveMetrics(BaseModel):
 class SessionInitial(BaseModel):
     pos: list[list[int]]
     known_team: list[list[int]]
+    # Targets already sensed at reset; no frame's `discovered` contains them (Phase 15 fix).
+    discovered: list[int] = Field(default_factory=list)
 
 
 class SessionSnapshot(BaseModel):

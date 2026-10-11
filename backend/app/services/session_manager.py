@@ -263,7 +263,8 @@ class SessionManager:
             robot_starts=[[int(p[0]), int(p[1])] for p in st.robot_pos],
             targets=[[int(p[0]), int(p[1])] for p in st.target_pos],
         )
-        initial = SessionInitial(pos=st.robot_pos.tolist(), known_team=np.argwhere(st.known_team).tolist())
+        initial = SessionInitial(pos=st.robot_pos.tolist(), known_team=np.argwhere(st.known_team).tolist(),
+                                 discovered=list(runner.trace.initial_discovered))
         # Same stream the evaluator uses for (map, eval_seed): parity (§28.4).
         rng = np.random.default_rng(episode_seed(st.map_id, seed))
         return runner, map_info, initial, rng

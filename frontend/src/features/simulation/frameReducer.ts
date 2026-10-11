@@ -7,9 +7,12 @@
  * known cells must come from `replay.initial` / `GET /replays/{id}/initial` /
  * `session.initial` — skipping them leaves the start area fogged forever.
  *
- * Limitation (documented, not hidden): a target discovered by the reset-time
- * sensing pass would not appear in any frame's `discovered`. Every shipped
- * level has target_min_dist (3) > sensor_radius (2), so it cannot occur.
+ * Likewise a target already sensed by the reset-time pass is in no frame's
+ * `discovered`; it comes from `initial.discovered`. (An earlier version of this
+ * comment claimed that could not happen because target_min_dist (3) >
+ * sensor_radius (2) — but target_min_dist is a BFS distance and sensing is a
+ * Euclidean disc, so an obstacle in between allows it: the Phase 15 audit found
+ * it on 1 of 50 validation and 2 of 100 test maps.)
  */
 import { DISCOVERED, HIDDEN, RESCUED, type Cell, type Frame, type SimMeta, type SimState } from "./model";
 
@@ -25,7 +28,11 @@ function markKnown(meta: SimMeta, state: SimState, cells: ArrayLike<number>[]): 
   }
 }
 
-export function createInitialState(meta: SimMeta, initialKnown: ArrayLike<number>[]): SimState {
+export function createInitialState(
+  meta: SimMeta,
+  initialKnown: ArrayLike<number>[],
+  initialDiscovered: ArrayLike<number> = [],
+): SimState {
   const state: SimState = {
     t: 0,
     pos: meta.robotStarts.map(([y, x]) => [y, x] as Cell),
@@ -41,6 +48,13 @@ export function createInitialState(meta: SimMeta, initialKnown: ArrayLike<number
     lastFrame: null,
   };
   markKnown(meta, state, initialKnown);
+  for (let i = 0; i < initialDiscovered.length; i++) {
+    const k = initialDiscovered[i];
+    if (state.targetStatus[k] === HIDDEN) {
+      state.targetStatus[k] = DISCOVERED;
+      state.discovered++;
+    }
+  }
   for (const [y, x] of state.pos) state.visited[idx(meta, y, x)]++; // world.reset counts the start cell
   return state;
 }

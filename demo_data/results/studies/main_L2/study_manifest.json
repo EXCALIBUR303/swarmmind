@@ -93,9 +93,9 @@
       "action": "new"
     },
     "eval/ippo/L2/s2-20260924T090709Z-c855b835": {
-      "attempts": 1,
+      "attempts": 2,
       "status": "completed",
-      "updated": "2026-09-24T14:01:15.019683+00:00",
+      "updated": "2026-10-09T14:50:03.307618+00:00",
       "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s2-20260924T090709Z-c855b835",
       "error": null,
       "written": [
@@ -105,9 +105,9 @@
       "skipped": []
     },
     "eval/ippo/L2/s4-20260924T090709Z-2722c0e1": {
-      "attempts": 1,
+      "attempts": 2,
       "status": "completed",
-      "updated": "2026-09-24T14:01:23.375440+00:00",
+      "updated": "2026-10-09T14:50:14.543141+00:00",
       "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s4-20260924T090709Z-2722c0e1",
       "error": null,
       "written": [
@@ -117,9 +117,9 @@
       "skipped": []
     },
     "eval/ippo/L2/s3-20260924T090709Z-6b96342a": {
-      "attempts": 1,
+      "attempts": 2,
       "status": "completed",
-      "updated": "2026-09-24T14:01:29.172070+00:00",
+      "updated": "2026-10-09T14:50:14.405773+00:00",
       "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s3-20260924T090709Z-6b96342a",
       "error": null,
       "written": [
@@ -129,9 +129,9 @@
       "skipped": []
     },
     "eval/ippo/L2/s1-20260924T090709Z-7722b73a": {
-      "attempts": 1,
+      "attempts": 2,
       "status": "completed",
-      "updated": "2026-09-24T14:01:32.342619+00:00",
+      "updated": "2026-10-09T14:50:01.289124+00:00",
       "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s1-20260924T090709Z-7722b73a",
       "error": null,
       "written": [
@@ -141,9 +141,9 @@
       "skipped": []
     },
     "eval/ippo/L2/s0-20260924T090709Z-33bf6a2b": {
-      "attempts": 1,
+      "attempts": 2,
       "status": "completed",
-      "updated": "2026-09-24T14:01:35.455996+00:00",
+      "updated": "2026-10-09T14:50:02.441739+00:00",
       "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/ippo/L2/s0-20260924T090709Z-33bf6a2b",
       "error": null,
       "written": [
@@ -153,9 +153,9 @@
       "skipped": []
     },
     "eval/mappo/L2/s2-20260924T090709Z-52468ee1": {
-      "attempts": 1,
+      "attempts": 2,
       "status": "completed",
-      "updated": "2026-09-24T15:33:48.089216+00:00",
+      "updated": "2026-10-09T14:50:02.143913+00:00",
       "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s2-20260924T090709Z-52468ee1",
       "error": null,
       "written": [
@@ -165,9 +165,9 @@
       "skipped": []
     },
     "eval/mappo/L2/s1-20260924T090709Z-36d3acc5": {
-      "attempts": 1,
+      "attempts": 2,
       "status": "completed",
-      "updated": "2026-09-24T15:34:09.096276+00:00",
+      "updated": "2026-10-09T14:50:01.779217+00:00",
       "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s1-20260924T090709Z-36d3acc5",
       "error": null,
       "written": [
@@ -177,9 +177,9 @@
       "skipped": []
     },
     "eval/mappo/L2/s0-20260924T090709Z-db4b31b9": {
-      "attempts": 1,
+      "attempts": 2,
       "status": "completed",
-      "updated": "2026-09-24T15:34:26.827160+00:00",
+      "updated": "2026-10-09T14:50:00.737752+00:00",
       "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s0-20260924T090709Z-db4b31b9",
       "error": null,
       "written": [
@@ -189,9 +189,9 @@
       "skipped": []
     },
     "eval/mappo/L2/s3-20260924T090709Z-56a79db1": {
-      "attempts": 1,
+      "attempts": 2,
       "status": "completed",
-      "updated": "2026-09-24T15:34:30.450189+00:00",
+      "updated": "2026-10-09T14:50:15.099729+00:00",
       "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s3-20260924T090709Z-56a79db1",
       "error": null,
       "written": [
@@ -201,9 +201,9 @@
       "skipped": []
     },
     "eval/mappo/L2/s4-20260924T140053Z-6f756841": {
-      "attempts": 1,
+      "attempts": 2,
       "status": "completed",
-      "updated": "2026-09-24T17:02:30.089302+00:00",
+      "updated": "2026-10-09T14:50:14.337938+00:00",
       "run_dir": "/Users/sid/Claude/swarmmind/results/runs/main_L2/mappo/L2/s4-20260924T140053Z-6f756841",
       "error": null,
       "written": [
@@ -213,9 +213,9 @@
       "skipped": []
     },
     "baseline/random/L2/s0": {
-      "attempts": 1,
+      "attempts": 2,
       "status": "completed",
-      "updated": "2026-09-24T17:02:50.462014+00:00",
+      "updated": "2026-10-09T14:50:42.336958+00:00",
       "error": null,
       "written": [
         "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s0/validation.json",
@@ -224,9 +224,9 @@
       ]
     },
     "baseline/random/L2/s1": {
-      "attempts": 1,
+      "attempts": 2,
       "status": "completed",
-      "updated": "2026-09-24T17:02:50.318820+00:00",
+      "updated": "2026-10-09T14:50:41.929130+00:00",
       "error": null,
       "written": [
         "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s1/validation.json",
@@ -235,9 +235,9 @@
       ]
     },
     "baseline/random/L2/s2": {
-      "attempts": 1,
+      "attempts": 2,
       "status": "completed",
-      "updated": "2026-09-24T17:02:50.381265+00:00",
+      "updated": "2026-10-09T14:50:42.055160+00:00",
       "error": null,
       "written": [
         "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s2/validation.json",
@@ -246,9 +246,9 @@
       ]
     },
     "baseline/random/L2/s3": {
-      "attempts": 1,
+      "attempts": 2,
       "status": "completed",
-      "updated": "2026-09-24T17:02:50.823306+00:00",
+      "updated": "2026-10-09T14:50:42.444820+00:00",
       "error": null,
       "written": [
         "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s3/validation.json",
@@ -257,9 +257,9 @@
       ]
     },
     "baseline/random/L2/s4": {
-      "attempts": 1,
+      "attempts": 2,
       "status": "completed",
-      "updated": "2026-09-24T17:02:50.244794+00:00",
+      "updated": "2026-10-09T14:50:41.729986+00:00",
       "error": null,
       "written": [
         "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/random/L2/s4/validation.json",
@@ -268,9 +268,9 @@
       ]
     },
     "baseline/heuristic/L2/ref": {
-      "attempts": 1,
+      "attempts": 2,
       "status": "completed",
-      "updated": "2026-09-24T17:02:37.759815+00:00",
+      "updated": "2026-10-09T14:50:25.335557+00:00",
       "error": null,
       "written": [
         "/Users/sid/Claude/swarmmind/results/studies/main_L2/baselines/heuristic/L2/ref/validation.json",
@@ -279,8 +279,8 @@
       ]
     }
   },
-  "started": "2026-09-24T09:07:08.099393+00:00",
-  "code_fingerprint": "5510d0a88d4f",
+  "started": "2026-10-09T14:49:39.801980+00:00",
+  "code_fingerprint": "bdb14d542e46",
   "config": {
     "study": "main_L2",
     "smoke": false,
@@ -352,16 +352,15 @@
     "configs/env/L2.yaml": "d2efaf3ef68b09ec74aecd8b6e6dcc547ddfc823f8c4a413027509820d6d5bc7"
   },
   "git": {
-    "commit": "84ea223dd3a948b4024856c6593be9d95546eb35",
-    "dirty": false
+    "commit": "52c9b59a63c1b95541f8f447f6c2c08e918fe8dd",
+    "dirty": true
   },
   "deviations": [],
   "stages": [
-    "train",
     "eval",
     "baselines"
   ],
-  "parallel": 9,
-  "updated": "2026-09-24T17:02:52.535085+00:00",
-  "finished": "2026-09-24T17:02:52.535032+00:00"
+  "parallel": 6,
+  "updated": "2026-10-09T14:50:43.113624+00:00",
+  "finished": "2026-10-09T14:50:43.113599+00:00"
 }

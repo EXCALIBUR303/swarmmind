@@ -161,6 +161,7 @@ def _coord_entry(der50, der_iso, rp):
             "redundant_pursuit": {"mean": rp, "n_defined": 1, "n_excluded": 0},
             "allocation_optimality": {"mean": 1.0, "n_defined": 1, "n_excluded": 0},
             "dispersion_speed": {"mean": 3, "n_defined": 1, "n_excluded": 0},
+            "der_iso_at_50": {"mean": der_iso, "n_defined": 1, "n_excluded": 0},
             "der_iso": der_iso}
 
 

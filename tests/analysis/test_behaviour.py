@@ -25,6 +25,7 @@ def _trace() -> EpisodeTrace:
     trace.actions = [np.array([4, 3])] * 2
     trace.rewards = [np.zeros(2)] * 2
     trace.reward_components = [{"explore": np.array([0.1, 0.1])}] * 2
+    trace.explore_credit = [np.array([3.0, 3.0]), np.array([1.0, 1.0])]
     trace.moved = [np.array([True, True])] * 2
     trace.blocked_by_robot = [np.array([False, False]), np.array([True, False])]
     trace.bumped_wall = [np.array([False, False])] * 2

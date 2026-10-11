@@ -69,3 +69,24 @@ def test_run_episode_map_id_matches_world():
     cfg = _cfg()
     result = run_episode(cfg, RandomPolicy(), np.random.default_rng(0), seed=42)
     assert result.trace.map_id.startswith("t-s42")
+
+
+def test_reset_discovery_and_observer_credit_on_a_real_map():
+    """Phase 15 regression on the frozen L2 validation map whose target is sensed at reset
+    (target_min_dist is a BFS distance; sensing is a Euclidean disc, so an obstacle between
+    them allows it). Also: per-step observer credit sums to the cells actually revealed."""
+    from marl.algorithms.baselines.frontier_heuristic import FrontierHeuristicPolicy
+    from marl.analysis.metrics import compute_episode_metrics
+    from marl.envs.core.config import LevelRegistry
+    from marl.envs.core.world import SwarmWorld
+    from marl.evaluation.eval_sets import load_eval_set
+
+    cfg = LevelRegistry().get("L2")
+    maps = load_eval_set("L2", "validation")
+    spec = next(m for m in maps if (SwarmWorld(cfg).reset(map_spec=m).target_t_discovered >= 0).any())
+    res = run_episode(cfg, FrontierHeuristicPolicy(), np.random.default_rng(0), map_spec=spec)
+    m = compute_episode_metrics(res.trace, res.n_reachable_free)
+    assert res.trace.initial_discovered
+    assert m.n_discovered >= m.n_rescued
+    revealed = (res.trace.coverage_over_time[-1] - res.trace.coverage_over_time[0]) * res.n_reachable_free
+    assert abs(float(np.sum(res.trace.explore_credit)) - revealed) < 1e-6

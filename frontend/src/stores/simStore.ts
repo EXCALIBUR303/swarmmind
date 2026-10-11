@@ -52,7 +52,7 @@ interface SimStore {
   setLoading: () => void;
   setError: (message: string) => void;
   clear: () => void;
-  loadReplay: (replay: Replay, initialKnown: number[][]) => void;
+  loadReplay: (replay: Replay, initialKnown: number[][], initialDiscovered?: number[]) => void;
   startLive: (snap: SessionSnapshot) => void;
   applyLiveState: (msg: WsStateMessage) => void;
   pushLiveFrame: (msg: WsFrameMessage, now?: number) => void;
@@ -94,7 +94,7 @@ export const useSimStore = create<SimStore>((set, get) => {
       config: (snap.env as { config: Record<string, unknown> }).config,
     });
     const base =
-      snap.step_index === 0 ? createInitialState(meta, snap.initial.known_team) : stateFromSnapshot(meta, snap as never);
+      snap.step_index === 0 ? createInitialState(meta, snap.initial.known_team, snap.initial.discovered ?? []) : stateFromSnapshot(meta, snap as never);
     const timeline = new Timeline(meta, base);
     return {
       mode: "live",
@@ -140,7 +140,7 @@ export const useSimStore = create<SimStore>((set, get) => {
     clear: () =>
       set({ mode: "none", load: "idle", error: null, meta: null, timeline: null, policy: null, replayInfo: null, playhead: 0, playing: false, focusedRobot: null, live: null, version: get().version + 1 }),
 
-    loadReplay: (replay, initialKnown) => {
+    loadReplay: (replay, initialKnown, initialDiscovered = []) => {
       const meta = envMeta({
         mapId: replay.map.id,
         width: replay.map.width,
@@ -151,7 +151,7 @@ export const useSimStore = create<SimStore>((set, get) => {
         config: replay.env.config,
       });
       const frames: Frame[] = replay.frames.map((f: ReplayFrame) => normalizeFrame(f));
-      const timeline = new Timeline(meta, createInitialState(meta, initialKnown), frames);
+      const timeline = new Timeline(meta, createInitialState(meta, initialKnown, initialDiscovered), frames);
       set({
         mode: "replay",
         load: "ready",

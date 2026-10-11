@@ -115,5 +115,7 @@ socket with 4409). Not designed for public hosting.
 | Browser flows against the results files | `frontend/e2e/run_e2e.py` | `make e2e` |
 | Number provenance | `scripts/audit_real_data.py` | `make audit` |
 | Fresh machine | `scripts/fresh_clone_check.sh` | `make fresh-clone` |
+| Re-training, checkpoints, independent statistics (full results tree) | `scripts/audit_checks.py` | see [`AUDIT.md`](AUDIT.md) |
 
-Known gaps are listed in the README ("Limitations") and in each phase report under "Remaining concerns".
+Known gaps are listed in the README ("Limitations"), in [`AUDIT.md`](AUDIT.md) and in each phase report under
+"Remaining concerns".

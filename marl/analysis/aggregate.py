@@ -171,7 +171,7 @@ def _h4(methods: dict[str, Any], prefix: str) -> dict[str, Any] | None:
 
 
 COORD_ALWAYS = ("der", "visitation_overlap", "mean_inter_robot_distance", "min_inter_robot_distance")
-COORD_SOMETIMES = ("der_at_50", "redundant_pursuit", "allocation_optimality", "dispersion_speed")
+COORD_SOMETIMES = ("der_at_50", "der_iso_at_50", "redundant_pursuit", "allocation_optimality", "dispersion_speed")
 
 
 def _coord_values(entries: list[dict[str, Any]], field: str) -> list[float]:
@@ -227,8 +227,14 @@ def _h3(coord: dict[str, Any] | None, h1: dict[str, Any], ablation_ok: dict[str,
         d_der50_random = welch_difference(der50_algo, der50_rnd)
         vs_random = bool(d_der50_random.hi is not None and d_der50_random.hi < 0)
 
-        der_iso_algo = [e["der_iso"] for e in algo_entries if e.get("der_iso") is not None]
-        paired = [a - b for a, b in zip(der50_algo, der_iso_algo, strict=False) if a is not None and b is not None]
+        # Criterion 2b compares like with like: the team's DER@50 against the isolation null measured
+        # at the same 50% coverage, paired by seed (Phase 15 fix; whole-episode DER_iso is inflated by
+        # the much longer solo runs and is kept only as a descriptive column).
+        paired = []
+        for e in algo_entries:
+            team, iso = _coord_values([e], "der_at_50"), _coord_values([e], "der_iso_at_50")
+            if team and iso:
+                paired.append(team[0] - iso[0])
         iv_paired = t_interval(paired) if len(paired) >= 2 else None
         vs_iso = bool(iv_paired and iv_paired.hi is not None and iv_paired.hi < 0)
         c2 = vs_random and vs_iso
@@ -277,6 +283,22 @@ def _coordination_block(coord: dict[str, Any]) -> dict[str, Any]:
         block["der_iso"] = _interval_or_none(der_iso) if der_iso else None
         out["methods"][arm] = block
     return out
+
+
+def parameter_counts(obs_radius: int) -> dict[str, int]:
+    """Trainable parameters of the networks being compared (§16.3: report them either way, since the
+    MAPPO critic is larger — a capacity confound for any MAPPO advantage)."""
+    from marl.envs.core.global_state import N_GLOBAL_CHANNELS, N_GLOBAL_VEC_FEATURES
+    from marl.networks.actor import ActorPolicy
+    from marl.networks.critics import CentralCritic, LocalCritic
+
+    k = 2 * obs_radius + 1
+    count = lambda m: sum(p.numel() for p in m.parameters())  # noqa: E731
+    return {
+        "actor": count(ActorPolicy(grid_size=k)),
+        "ippo_critic": count(LocalCritic(grid_size=k)),
+        "mappo_critic": count(CentralCritic(N_GLOBAL_CHANNELS, grid_size=k, global_vec_dim=N_GLOBAL_VEC_FEATURES)),
+    }
 
 
 def aggregate_study(study_dir: Path, runs: list[dict[str, Any]], cfg: dict[str, Any]) -> dict[str, Any]:
@@ -407,7 +429,10 @@ def aggregate_study(study_dir: Path, runs: list[dict[str, Any]], cfg: dict[str, 
         h4 = _h4(methods, prefix)
         if h4:
             hyp["H4"] = h4
-        level_summary: dict[str, Any] = {"methods": methods, "comparisons": comparisons, "hypotheses": hyp}
+        from marl.envs.core.config import LevelRegistry
+
+        level_summary: dict[str, Any] = {"methods": methods, "comparisons": comparisons, "hypotheses": hyp,
+                                         "parameter_counts": parameter_counts(LevelRegistry().get(level).obs_radius)}
         if coord:
             level_summary["coordination"] = _coordination_block(coord)
         summary["levels"][level] = level_summary

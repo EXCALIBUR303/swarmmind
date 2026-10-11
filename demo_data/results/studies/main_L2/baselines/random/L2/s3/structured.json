@@ -1,6 +1,6 @@
 {
  "protocol": {
-  "version": 1,
+  "version": 2,
   "level": "L2",
   "split": "structured",
   "eval_seeds": [
@@ -31,7 +31,7 @@
     "rescue_efficiency": 0.001548030804705226,
     "idle_fraction": 0.3462480152136183,
     "oscillation_rate": 0.25401099679713557,
-    "workload_gini": 0.1510189098786489,
+    "workload_gini": 0.3933705594971117,
     "steps_on_success": 87.33333333333333,
     "rescue_latency": 41.0
    },
@@ -64,7 +64,7 @@
      "rescue_latency": 19.0,
      "idle_fraction": 0.24,
      "oscillation_rate": 0.2561629732849433,
-     "workload_gini": 0.03381642618289663
+     "workload_gini": 0.25120772946859904
     },
     {
      "map_id": "L2-struct-bottleneck_horizontal",
@@ -94,7 +94,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.26,
      "oscillation_rate": 0.21737001411182752,
-     "workload_gini": 0.05691056887041348
+     "workload_gini": 0.11382113821138212
     },
     {
      "map_id": "L2-struct-bottleneck_vertical",
@@ -124,7 +124,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.36000000000000004,
      "oscillation_rate": 0.19806753346499892,
-     "workload_gini": 0.14379085235593195
+     "workload_gini": 0.39215686274509803
     },
     {
      "map_id": "L2-struct-bottleneck_vertical",
@@ -154,7 +154,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.31111111111111106,
      "oscillation_rate": 0.24334447855239208,
-     "workload_gini": 0.05228758088475246
+     "workload_gini": 0.28104575163398693
     },
     {
      "map_id": "L2-struct-corridor_lattice",
@@ -184,7 +184,7 @@
      "rescue_latency": 58.0,
      "idle_fraction": 0.3111111111111111,
      "oscillation_rate": 0.30185185185185187,
-     "workload_gini": 0.20454545911146868
+     "workload_gini": 0.3181818181818182
     },
     {
      "map_id": "L2-struct-corridor_lattice",
@@ -214,7 +214,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.3622222222222222,
      "oscillation_rate": 0.30038416075650115,
-     "workload_gini": 0.15079365486158755
+     "workload_gini": 0.28571428571428575
     },
     {
      "map_id": "L2-struct-corridor_serpentine",
@@ -244,7 +244,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.54,
      "oscillation_rate": 0.27674306621437444,
-     "workload_gini": 0.46666666666666673
+     "workload_gini": 0.6666666666666666
     },
     {
      "map_id": "L2-struct-corridor_serpentine",
@@ -274,7 +274,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.4377777777777778,
      "oscillation_rate": 0.34064971641971525,
-     "workload_gini": 0.25000000000000006
+     "workload_gini": 0.6666666666666666
     },
     {
      "map_id": "L2-struct-maze_branching",
@@ -304,7 +304,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.41333333333333333,
      "oscillation_rate": 0.3252347682367966,
-     "workload_gini": 0.1309523806692621
+     "workload_gini": 0.5
     },
     {
      "map_id": "L2-struct-maze_branching",
@@ -334,7 +334,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.4444444444444445,
      "oscillation_rate": 0.23529038355739254,
-     "workload_gini": 0.24999999999999997
+     "workload_gini": 0.6
     },
     {
      "map_id": "L2-struct-maze_pockets",
@@ -364,7 +364,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.5022222222222222,
      "oscillation_rate": 0.3309326785185481,
-     "workload_gini": 0.07936507936507937
+     "workload_gini": 0.3015873015873016
     },
     {
      "map_id": "L2-struct-maze_pockets",
@@ -394,7 +394,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.44222222222222224,
      "oscillation_rate": 0.2933710859427049,
-     "workload_gini": 0.19047619047619055
+     "workload_gini": 0.38095238095238093
     },
     {
      "map_id": "L2-struct-maze_spiral",
@@ -424,7 +424,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.41333333333333333,
      "oscillation_rate": 0.33965794027072443,
-     "workload_gini": 0.38888888987195164
+     "workload_gini": 0.6666666666666666
     },
     {
      "map_id": "L2-struct-maze_spiral",
@@ -454,7 +454,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.4466666666666667,
      "oscillation_rate": 0.32284884938803604,
-     "workload_gini": 0.3333333308926259
+     "workload_gini": 0.6666666666666666
     },
     {
      "map_id": "L2-struct-open_corner_spawn",
@@ -484,7 +484,7 @@
      "rescue_latency": 4.0,
      "idle_fraction": 0.2598870056497175,
      "oscillation_rate": 0.21133259505352528,
-     "workload_gini": 0.07777777745583903
+     "workload_gini": 0.3333333333333333
     },
     {
      "map_id": "L2-struct-open_corner_spawn",
@@ -514,7 +514,7 @@
      "rescue_latency": 15.0,
      "idle_fraction": 0.28888888888888886,
      "oscillation_rate": 0.21048799860681047,
-     "workload_gini": 0.12698412744169282
+     "workload_gini": 0.27777777777777785
     },
     {
      "map_id": "L2-struct-open_sparse",
@@ -544,7 +544,7 @@
      "rescue_latency": 15.0,
      "idle_fraction": 0.2745098039215686,
      "oscillation_rate": 0.16711159211159213,
-     "workload_gini": 0.030303031236918538
+     "workload_gini": 0.0909090909090909
     },
     {
      "map_id": "L2-struct-open_sparse",
@@ -574,7 +574,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.21777777777777776,
      "oscillation_rate": 0.194199323647263,
-     "workload_gini": 0.0877193003735528
+     "workload_gini": 0.21052631578947367
     },
     {
      "map_id": "L2-struct-rooms_four",
@@ -604,7 +604,7 @@
      "rescue_latency": 38.0,
      "idle_fraction": 0.28888888888888886,
      "oscillation_rate": 0.22773949150854125,
-     "workload_gini": 0.08695652125693966
+     "workload_gini": 0.4242424242424243
     },
     {
      "map_id": "L2-struct-rooms_four",
@@ -634,7 +634,7 @@
      "rescue_latency": 84.0,
      "idle_fraction": 0.31777777777777777,
      "oscillation_rate": 0.22366826156299838,
-     "workload_gini": 0.04242424199680898
+     "workload_gini": 0.3151515151515151
     },
     {
      "map_id": "L2-struct-rooms_three_bays",
@@ -664,7 +664,7 @@
      "rescue_latency": 95.0,
      "idle_fraction": 0.27999999999999997,
      "oscillation_rate": 0.22058654160532865,
-     "workload_gini": 0.1694915254237288
+     "workload_gini": 0.48587570621468923
     },
     {
      "map_id": "L2-struct-rooms_three_bays",
@@ -694,7 +694,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.32222222222222224,
      "oscillation_rate": 0.21605739118474787,
-     "workload_gini": 0.12345679012345678
+     "workload_gini": 0.46913580246913583
     },
     {
      "map_id": "L2-struct-rooms_two_door",
@@ -724,7 +724,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.2955555555555555,
      "oscillation_rate": 0.19407153470168673,
-     "workload_gini": 0.05376344118357749
+     "workload_gini": 0.43010752688172044
     },
     {
      "map_id": "L2-struct-rooms_two_door",
@@ -754,7 +754,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.27999999999999997,
      "oscillation_rate": 0.24909969257795347,
-     "workload_gini": 0.09375000038623207
+     "workload_gini": 0.3125
     }
    ]
   }

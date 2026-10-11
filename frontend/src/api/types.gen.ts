@@ -91,6 +91,7 @@ export type Level1 = string | null;
 export type Map = ProceduralMap | FixedMap;
 export type Seed1 = number;
 export type Stochastic1 = boolean;
+export type Discovered1 = number[];
 export type KnownTeam = number[][];
 export type Pos1 = number[][];
 export type Map1 = (ProceduralMap | FixedMap) | null;
@@ -353,6 +354,7 @@ export interface SessionCreate {
  * via the `definition` "SessionInitial".
  */
 export interface SessionInitial {
+  discovered?: Discovered1;
   known_team: KnownTeam;
   pos: Pos1;
 }

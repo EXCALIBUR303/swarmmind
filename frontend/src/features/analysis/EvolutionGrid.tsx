@@ -22,7 +22,7 @@ async function loadAll(entries: ReplayIndexEntry[]): Promise<Loaded[]> {
     entries.map(async (entry) => {
       const [replay, initial] = await Promise.all([catalogApi.replay(entry.replay_id), catalogApi.replayInitial(entry.replay_id)]);
       const meta = envMeta({ mapId: replay.map.id, width: replay.map.width, height: replay.map.height, terrain: replay.map.terrain, robotStarts: replay.map.robot_starts, targets: replay.map.targets, config: replay.env.config });
-      return { entry, timeline: new Timeline(meta, createInitialState(meta, initial.known_team), replay.frames.map(normalizeFrame)) };
+      return { entry, timeline: new Timeline(meta, createInitialState(meta, initial.known_team, initial.discovered ?? []), replay.frames.map(normalizeFrame)) };
     }),
   );
 }

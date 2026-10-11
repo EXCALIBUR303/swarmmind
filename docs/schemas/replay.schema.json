@@ -135,6 +135,13 @@
     "ReplayInitial": {
       "description": "State right after reset (\u00a727.2 `initial`). The reset-time sensing pass\nreveals cells that no frame's `newly_known` delta ever contains, so a\nviewer rebuilding the known map needs them: known(t) = initial.known_team\n\u222a \u22c3_{i<=t} frames[i].newly_known.",
       "properties": {
+        "discovered": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Discovered",
+          "type": "array"
+        },
         "known_team": {
           "items": {
             "items": {

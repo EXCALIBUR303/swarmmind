@@ -144,3 +144,13 @@ describe("timeline", () => {
     expect(tl.stateAt(999).t).toBe(25);
   });
 });
+
+describe("targets sensed at reset (Phase 15 regression)", () => {
+  it("start DISCOVERED and are counted, instead of looking hidden until rescued", () => {
+    const meta = metaOf(REAL_SUCCESS);
+    const s = createInitialState(meta, REAL_SUCCESS.initial!.known_team, [0]);
+    expect(s.targetStatus[0]).toBe(DISCOVERED);
+    expect(s.discovered).toBe(1);
+    expect(createInitialState(meta, REAL_SUCCESS.initial!.known_team).discovered).toBe(0);
+  });
+});

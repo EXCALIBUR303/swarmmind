@@ -36,7 +36,7 @@ HELD_OUT_SPLITS = ("test", "structured")
 DEFAULT_EVAL_SEEDS = (0, 1)
 # Bump if the per-episode record or seeding changes: results files written
 # under a different protocol version are never silently mixed.
-EVAL_PROTOCOL_VERSION = 1
+EVAL_PROTOCOL_VERSION = 2  # 2 (Phase 15): reset-time discoveries counted; §23 workload credit
 ACCESS_LOG = RESULTS_DIR / "heldout_access_log.jsonl"
 
 

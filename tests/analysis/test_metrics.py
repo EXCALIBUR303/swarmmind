@@ -38,6 +38,7 @@ def _make_trace(n_robots=2, n_targets=1) -> EpisodeTrace:
     trace.discovered_events = [[], [0], []]
     trace.rescued_events = [[], [], [(0, 0)]]
     trace.coverage_over_time = [0.1, 0.2, 0.3, 0.4]
+    trace.explore_credit = [np.array([1.0, 0.0]), np.array([1.0, 0.0]), np.array([0.0, 0.0])]
     trace.success = True
     trace.final_t = 3
     return trace
@@ -102,6 +103,7 @@ def test_oscillation_rate_detects_back_and_forth():
     trace.discovered_events = [[], [], []]
     trace.rescued_events = [[], [], []]
     trace.coverage_over_time = [0.1, 0.1, 0.1, 0.1]
+    trace.explore_credit = [np.zeros(1)] * 3
     trace.success = False
     trace.final_t = 3
 
@@ -133,3 +135,25 @@ def test_zero_step_trace_does_not_crash():
     m = compute_episode_metrics(trace, n_reachable_free=10)
     assert m.n_discovered == 0
     assert m.steps_to_completion == 0
+
+
+def test_target_sensed_at_reset_counts_as_discovered():
+    """Phase 15 regression: a target already sensed by the reset-time sensing pass appears in no
+    step's `discovered_events`; it used to be missing from n_discovered (discover_rate < rescue_rate)."""
+    trace = _make_trace()
+    trace.discovered_events = [[], [], []]
+    trace.initial_discovered = [0]
+    m = compute_episode_metrics(trace, n_reachable_free=10)
+    assert m.n_discovered == 1 and m.discover_rate >= m.rescue_rate
+    assert m.rescue_latency_mean == 2  # discovered at reset (t=0), rescued during step index 2
+
+
+def test_workload_share_uses_observer_credit_not_movement():
+    """Phase 15 regression (§23): credit follows who sensed the newly known cells. A robot that moves
+    but reveals nothing earns nothing; the terminal payout (in the explore reward) earns nothing."""
+    trace = _make_trace()
+    m = compute_episode_metrics(trace, n_reachable_free=10)
+    assert m.workload_share_per_robot == [1.0, 0.0]
+    trace.explore_credit = [np.array([0.5, 0.5]), np.array([1.0, 1.0]), np.array([0.0, 0.0])]
+    m = compute_episode_metrics(trace, n_reachable_free=10)
+    assert m.workload_share_per_robot == [0.5, 0.5] and abs(m.workload_gini) < 1e-12

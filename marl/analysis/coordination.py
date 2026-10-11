@@ -142,7 +142,7 @@ def _target_windows(
     """For every target discovered AND rescued this episode:
     `{k: (discovered_step_idx, rescued_step_idx, rescuing_robot)}`, using
     `positions`' indexing (i.e. per-step-list index i -> positions[i+1])."""
-    discovered_at: dict[int, int] = {}
+    discovered_at: dict[int, int] = {k: 0 for k in trace.initial_discovered}  # sensed at reset: positions[0]
     for i, ks in enumerate(trace.discovered_events):
         for k in ks:
             discovered_at[k] = i + 1

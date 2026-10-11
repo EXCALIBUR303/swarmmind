@@ -44,6 +44,9 @@ class ReplayInitial(BaseModel):
     ∪ ⋃_{i<=t} frames[i].newly_known."""
 
     known_team: list[list[int]]
+    # Targets already sensed at reset (Phase 15 fix): they appear in no frame's `discovered`.
+    # Optional so replays recorded before the field existed still validate (read as "none").
+    discovered: list[int] = Field(default_factory=list)
 
 
 class ReplayFrame(BaseModel):

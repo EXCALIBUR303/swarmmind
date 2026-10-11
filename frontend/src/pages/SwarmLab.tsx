@@ -60,7 +60,7 @@ export function SwarmLab() {
     try {
       const [replay, initial] = await Promise.all([catalogApi.replay(id), catalogApi.replayInitial(id)]);
       if (token !== loadToken.current) return; // a newer selection won
-      useSimStore.getState().loadReplay(replay, initial.known_team);
+      useSimStore.getState().loadReplay(replay, initial.known_team, initial.discovered ?? []);
       useScenario.getState().patch({ replayId: id });
     } catch (err) {
       if (token === loadToken.current) useSimStore.getState().setError(err instanceof Error ? err.message : "could not load the replay");

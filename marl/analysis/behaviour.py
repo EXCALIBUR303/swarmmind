@@ -56,7 +56,7 @@ def discovery_timeline(trace: EpisodeTrace) -> list[dict[str, Any]]:
     Gantt-style discovery/rescue timeline). `positions`-indexed (index 0 =
     the reset state), matching every other module's convention. A target
     never discovered/rescued this episode has `None` for that field."""
-    discovered_at: dict[int, int] = {}
+    discovered_at: dict[int, int] = {k: 0 for k in trace.initial_discovered}  # sensed at reset
     for i, ks in enumerate(trace.discovered_events):
         for k in ks:
             discovered_at[k] = i + 1

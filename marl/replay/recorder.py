@@ -15,8 +15,7 @@ from marl.algorithms.common.policy import Policy
 from marl.analysis.metrics import compute_episode_metrics
 from marl.envs.core.config import EnvConfig
 from marl.envs.core.maps_io import MapSpec
-from marl.envs.core.types import OBSTACLE, EpisodeTrace, StepResult, WorldState
-from marl.envs.core.world import SwarmWorld
+from marl.envs.core.types import StepResult, WorldState
 from marl.replay.schema import (
     Replay,
     ReplayEnvInfo,
@@ -65,9 +64,13 @@ def record_episode(
     seed: int | None = None,
     map_spec: MapSpec | None = None,
 ) -> Replay:
-    """Run one episode of `policy` and record it as a `Replay`."""
-    world = SwarmWorld(cfg)
-    state = world.reset(seed=seed, map_spec=map_spec)
+    """Run one episode of `policy` and record it as a `Replay`. Steps through `EpisodeRunner`, the
+    same stepper the evaluator and the backend's live sessions use, so the trace (and therefore the
+    metrics) cannot differ between them."""
+    from marl.evaluation.evaluator import EpisodeRunner
+
+    runner = EpisodeRunner(cfg, seed=seed, map_spec=map_spec)
+    state = runner.state
 
     # Rebuild the exact MapSpec (terrain + starts + targets) from world state
     # so the replay's map info and content hash always match what was
@@ -89,44 +92,14 @@ def record_episode(
         targets=[[int(p[0]), int(p[1])] for p in state.target_pos],
     )
 
-    trace = EpisodeTrace(
-        map_id=state.map_id, width=cfg.width, height=cfg.height, n_robots=cfg.n_robots, n_targets=cfg.n_targets
-    )
-    trace.positions.append(state.robot_pos.copy())
-    n_reachable_free = int(np.sum(state.terrain != OBSTACLE))
-    trace.coverage_over_time.append(
-        float(np.sum(state.known_team & (state.terrain != OBSTACLE))) / max(n_reachable_free, 1)
-    )
-
     frames: list[ReplayFrame] = []
     known_before = state.known_team.copy()
     initial_known = np.argwhere(known_before).tolist()
-
-    for _ in range(cfg.max_steps):
-        actions = policy.act(world, rng)
-        result = world.step(actions)
-
+    while not runner.done:
+        actions, result = runner.step(policy, rng)
         frame, known_before = build_frame(state, actions, result, known_before)
         frames.append(frame)
-
-        trace.positions.append(state.robot_pos.copy())
-        trace.actions.append(actions.copy())
-        trace.rewards.append(result.reward.copy())
-        trace.reward_components.append({k: v.copy() for k, v in result.reward_components.items()})
-        trace.moved.append(result.moved.copy())
-        trace.blocked_by_robot.append(result.blocked_by_robot.copy())
-        trace.bumped_wall.append(result.bumped_wall.copy())
-        trace.discovered_events.append(list(result.discovered))
-        trace.rescued_events.append(list(result.rescued))
-        trace.coverage_over_time.append(result.coverage)
-
-        if result.terminated or result.truncated:
-            trace.success = result.success
-            trace.final_t = result.t
-            break
-    else:
-        trace.success = False
-        trace.final_t = cfg.max_steps
+    trace, n_reachable_free = runner.trace, runner.n_reachable_free
 
     metrics = compute_episode_metrics(trace, n_reachable_free)
 
@@ -136,7 +109,7 @@ def record_episode(
         env=ReplayEnvInfo(level=cfg.name, config=cfg.model_dump()),
         map=map_info,
         policy=policy_info,
-        initial=ReplayInitial(known_team=initial_known),
+        initial=ReplayInitial(known_team=initial_known, discovered=list(trace.initial_discovered)),
         frames=frames,
         outcome=ReplayOutcome(
             success=trace.success,

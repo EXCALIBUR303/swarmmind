@@ -16,6 +16,7 @@ import numpy as np
 from marl.algorithms.common.policy import Policy
 from marl.envs.core.config import EnvConfig
 from marl.envs.core.maps_io import MapSpec
+from marl.envs.core.sensing import sensed_mask
 from marl.envs.core.types import OBSTACLE, EpisodeTrace, StepResult
 from marl.envs.core.world import SwarmWorld
 
@@ -53,6 +54,11 @@ class EpisodeRunner:
             n_targets=cfg.n_targets,
         )
         self.trace.positions.append(self.state.robot_pos.copy())
+        # A target can already be sensed at reset (target_min_dist is a BFS distance, sensing is a
+        # Euclidean disc, so an obstacle between them allows it); no step's events would show it.
+        self.trace.initial_discovered = [int(k) for k in np.flatnonzero(self.state.target_t_discovered >= 0)]
+        self._free = self.state.terrain != OBSTACLE
+        self._known = self.state.known_team.copy()
         self.trace.coverage_over_time.append(
             float(np.sum(self.state.known_team & (self.state.terrain != OBSTACLE)))
             / max(self.n_reachable_free, 1)
@@ -76,6 +82,7 @@ class EpisodeRunner:
         trace.discovered_events.append(list(result.discovered))
         trace.rescued_events.append(list(result.rescued))
         trace.coverage_over_time.append(result.coverage)
+        trace.explore_credit.append(self._explore_credit())
 
         if result.terminated or result.truncated:
             trace.success = result.success
@@ -86,6 +93,22 @@ class EpisodeRunner:
             trace.final_t = self.cfg.max_steps
             self.done = True
         return actions, result
+
+
+    def _explore_credit(self) -> np.ndarray:
+        """Credit for this step's newly team-known free cells (§23): each cell is split equally among
+        the robots whose sensing disc covered it this step (sensing happens after the move)."""
+        st = self.state
+        new = st.known_team & ~self._known & self._free
+        self._known = st.known_team.copy()
+        credit = np.zeros(st.n_robots, dtype=np.float64)
+        if not new.any():
+            return credit
+        masks = np.stack([sensed_mask((int(p[0]), int(p[1])), self.cfg.sensor_radius, st.height, st.width) & new
+                          for p in st.robot_pos])
+        counts = masks.sum(axis=0)
+        credit[:] = (masks / np.maximum(counts, 1)).sum(axis=(1, 2))
+        return credit
 
 
 def run_episode(

@@ -1,6 +1,6 @@
 {
  "protocol": {
-  "version": 1,
+  "version": 2,
   "level": "L2",
   "split": "test",
   "eval_seeds": [
@@ -22,7 +22,7 @@
     "censored_steps": 118.915,
     "return_mean": 1.934737083222717,
     "rescue_rate": 0.6525,
-    "discover_rate": 0.85,
+    "discover_rate": 0.86,
     "coverage": 0.8556316018623081,
     "visited_coverage": 0.6254469721006246,
     "collisions_per_100_agent_steps": 5.0207638289259595,
@@ -31,9 +31,9 @@
     "rescue_efficiency": 0.005557619683195407,
     "idle_fraction": 0.2973919974633477,
     "oscillation_rate": 0.2319853086258547,
-    "workload_gini": 0.09639068020730512,
+    "workload_gini": 0.2984078236676983,
     "steps_on_success": 82.42391304347827,
-    "rescue_latency": 29.43452380952381
+    "rescue_latency": 29.414201183431953
    },
    "episodes": [
     {
@@ -64,7 +64,7 @@
      "rescue_latency": 34.0,
      "idle_fraction": 0.2611111111111111,
      "oscillation_rate": 0.24394760614272812,
-     "workload_gini": 0.07729468599033817
+     "workload_gini": 0.3389830508474576
     },
     {
      "map_id": "L2-test-s2000000-a0",
@@ -94,7 +94,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.2733333333333333,
      "oscillation_rate": 0.207649473770696,
-     "workload_gini": 0.05847953216374276
+     "workload_gini": 0.16374269005847952
     },
     {
      "map_id": "L2-test-s2000001-a0",
@@ -124,7 +124,7 @@
      "rescue_latency": 25.0,
      "idle_fraction": 0.27111111111111114,
      "oscillation_rate": 0.2275998084484323,
-     "workload_gini": 0.14414414414414414
+     "workload_gini": 0.45045045045045046
     },
     {
      "map_id": "L2-test-s2000001-a0",
@@ -154,7 +154,7 @@
      "rescue_latency": 4.0,
      "idle_fraction": 0.2733333333333333,
      "oscillation_rate": 0.23027320762276812,
-     "workload_gini": 0.140625
+     "workload_gini": 0.3020833333333333
     },
     {
      "map_id": "L2-test-s2000002-a0",
@@ -184,7 +184,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.3244444444444445,
      "oscillation_rate": 0.22953417196838247,
-     "workload_gini": 0.191358024691358
+     "workload_gini": 0.5802469135802469
     },
     {
      "map_id": "L2-test-s2000002-a0",
@@ -214,7 +214,7 @@
      "rescue_latency": 9.0,
      "idle_fraction": 0.34,
      "oscillation_rate": 0.22252356967583622,
-     "workload_gini": 0.12612612612612614
+     "workload_gini": 0.5585585585585586
     },
     {
      "map_id": "L2-test-s2000003-a0",
@@ -244,7 +244,7 @@
      "rescue_latency": 22.0,
      "idle_fraction": 0.3720238095238095,
      "oscillation_rate": 0.23223987801452592,
-     "workload_gini": 0.10769230245074342
+     "workload_gini": 0.5
     },
     {
      "map_id": "L2-test-s2000003-a0",
@@ -274,7 +274,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.36666666666666664,
      "oscillation_rate": 0.32321206841304173,
-     "workload_gini": 0.36936936844643714
+     "workload_gini": 0.6666666666666666
     },
     {
      "map_id": "L2-test-s2000004-a0",
@@ -304,7 +304,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.23555555555555555,
      "oscillation_rate": 0.24283374283374282,
-     "workload_gini": 0.04938271560671707
+     "workload_gini": 0.13580246913580246
     },
     {
      "map_id": "L2-test-s2000004-a0",
@@ -334,7 +334,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.27111111111111114,
      "oscillation_rate": 0.2249619375541658,
-     "workload_gini": 0.02515723238954104
+     "workload_gini": 0.18238993710691828
     },
     {
      "map_id": "L2-test-s2000005-a0",
@@ -364,7 +364,7 @@
      "rescue_latency": 2.0,
      "idle_fraction": 0.31555555555555553,
      "oscillation_rate": 0.25251259858212566,
-     "workload_gini": 0.1851851849296784
+     "workload_gini": 0.34567901234567905
     },
     {
      "map_id": "L2-test-s2000005-a0",
@@ -394,7 +394,7 @@
      "rescue_latency": 7.0,
      "idle_fraction": 0.3333333333333333,
      "oscillation_rate": 0.2156906516868526,
-     "workload_gini": 0.08484848585831554
+     "workload_gini": 0.3878787878787879
     },
     {
      "map_id": "L2-test-s2000006-a0",
@@ -424,7 +424,7 @@
      "rescue_latency": 4.0,
      "idle_fraction": 0.30888888888888894,
      "oscillation_rate": 0.23482817075050086,
-     "workload_gini": 0.052631578703143465
+     "workload_gini": 0.5380116959064327
     },
     {
      "map_id": "L2-test-s2000006-a0",
@@ -454,7 +454,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.3355555555555556,
      "oscillation_rate": 0.2257963256674597,
-     "workload_gini": 0.10062893031542293
+     "workload_gini": 0.5157232704402516
     },
     {
      "map_id": "L2-test-s2000007-a0",
@@ -484,7 +484,7 @@
      "rescue_latency": 52.0,
      "idle_fraction": 0.28971962616822433,
      "oscillation_rate": 0.28148638667447723,
-     "workload_gini": 0.11290322580645167
+     "workload_gini": 0.24528301886792456
     },
     {
      "map_id": "L2-test-s2000007-a0",
@@ -514,7 +514,7 @@
      "rescue_latency": 31.0,
      "idle_fraction": 0.3022222222222222,
      "oscillation_rate": 0.2316312833793411,
-     "workload_gini": 0.13071895347494944
+     "workload_gini": 0.35294117647058815
     },
     {
      "map_id": "L2-test-s2000008-a0",
@@ -544,7 +544,7 @@
      "rescue_latency": 59.0,
      "idle_fraction": 0.3,
      "oscillation_rate": 0.21537702918391446,
-     "workload_gini": 0.07602339299099281
+     "workload_gini": 0.3625730994152046
     },
     {
      "map_id": "L2-test-s2000008-a0",
@@ -574,7 +574,7 @@
      "rescue_latency": 26.5,
      "idle_fraction": 0.28160919540229884,
      "oscillation_rate": 0.24965106909551352,
-     "workload_gini": 0.023148147878668257
+     "workload_gini": 0.24
     },
     {
      "map_id": "L2-test-s2000009-a0",
@@ -604,7 +604,7 @@
      "rescue_latency": 12.0,
      "idle_fraction": 0.3,
      "oscillation_rate": 0.2058227381610466,
-     "workload_gini": 0.18181817768972164
+     "workload_gini": 0.25531914893617025
     },
     {
      "map_id": "L2-test-s2000009-a0",
@@ -634,7 +634,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.3244444444444444,
      "oscillation_rate": 0.18946006955115666,
-     "workload_gini": 0.13425925925925927
+     "workload_gini": 0.3148148148148148
     },
     {
      "map_id": "L2-test-s2000010-a0",
@@ -664,7 +664,7 @@
      "rescue_latency": 25.5,
      "idle_fraction": 0.3483709273182958,
      "oscillation_rate": 0.2621416897158662,
-     "workload_gini": 0.18686868707464965
+     "workload_gini": 0.2711864406779661
     },
     {
      "map_id": "L2-test-s2000010-a0",
@@ -694,7 +694,7 @@
      "rescue_latency": 24.0,
      "idle_fraction": 0.2577777777777778,
      "oscillation_rate": 0.21210736619541648,
-     "workload_gini": 0.078125000051538
+     "workload_gini": 0.22916666666666666
     },
     {
      "map_id": "L2-test-s2000011-a0",
@@ -724,7 +724,7 @@
      "rescue_latency": 12.0,
      "idle_fraction": 0.2644444444444444,
      "oscillation_rate": 0.20810708646734646,
-     "workload_gini": 0.036529679686101844
+     "workload_gini": 0.05936073059360728
     },
     {
      "map_id": "L2-test-s2000011-a0",
@@ -754,7 +754,7 @@
      "rescue_latency": 14.0,
      "idle_fraction": 0.27777777777777773,
      "oscillation_rate": 0.23072774347869304,
-     "workload_gini": 0.07878787775577842
+     "workload_gini": 0.27878787878787875
     },
     {
      "map_id": "L2-test-s2000012-a0",
@@ -784,7 +784,7 @@
      "rescue_latency": 6.0,
      "idle_fraction": 0.4047619047619048,
      "oscillation_rate": 0.0,
-     "workload_gini": 0.0398009950719016
+     "workload_gini": 0.27956989247311825
     },
     {
      "map_id": "L2-test-s2000012-a0",
@@ -814,7 +814,7 @@
      "rescue_latency": 4.0,
      "idle_fraction": 0.3,
      "oscillation_rate": 0.29067652951148093,
-     "workload_gini": 0.029239764530622565
+     "workload_gini": 0.12865497076023394
     },
     {
      "map_id": "L2-test-s2000013-a0",
@@ -844,7 +844,7 @@
      "rescue_latency": 87.0,
      "idle_fraction": 0.27735368956743,
      "oscillation_rate": 0.239462608798145,
-     "workload_gini": 0.17333333431846557
+     "workload_gini": 0.5753424657534246
     },
     {
      "map_id": "L2-test-s2000013-a0",
@@ -874,7 +874,7 @@
      "rescue_latency": 14.0,
      "idle_fraction": 0.34467120181405897,
      "oscillation_rate": 0.2296947004608295,
-     "workload_gini": 0.0711111109375402
+     "workload_gini": 0.41904761904761906
     },
     {
      "map_id": "L2-test-s2000014-a0",
@@ -904,7 +904,7 @@
      "rescue_latency": 14.5,
      "idle_fraction": 0.3307291666666667,
      "oscillation_rate": 0.2487103538877057,
-     "workload_gini": 0.15637860230924347
+     "workload_gini": 0.38235294117647056
     },
     {
      "map_id": "L2-test-s2000014-a0",
@@ -934,7 +934,7 @@
      "rescue_latency": 4.0,
      "idle_fraction": 0.26666666666666666,
      "oscillation_rate": 0.22291859727844707,
-     "workload_gini": 0.0493827150018045
+     "workload_gini": 0.29629629629629634
     },
     {
      "map_id": "L2-test-s2000015-a0",
@@ -964,7 +964,7 @@
      "rescue_latency": 5.5,
      "idle_fraction": 0.263681592039801,
      "oscillation_rate": 0.24888888888888885,
-     "workload_gini": 0.06965174061753336
+     "workload_gini": 0.3333333333333333
     },
     {
      "map_id": "L2-test-s2000015-a0",
@@ -994,7 +994,7 @@
      "rescue_latency": 36.0,
      "idle_fraction": 0.25252525252525254,
      "oscillation_rate": 0.29524139752988576,
-     "workload_gini": 0.04975124360474711
+     "workload_gini": 0.29850746268656714
     },
     {
      "map_id": "L2-test-s2000016-a0",
@@ -1024,7 +1024,7 @@
      "rescue_latency": 85.0,
      "idle_fraction": 0.2866666666666667,
      "oscillation_rate": 0.27064584963169214,
-     "workload_gini": 0.053763440330430456
+     "workload_gini": 0.3655913978494623
     },
     {
      "map_id": "L2-test-s2000016-a0",
@@ -1054,7 +1054,7 @@
      "rescue_latency": 24.0,
      "idle_fraction": 0.2621722846441948,
      "oscillation_rate": 0.2399466823195637,
-     "workload_gini": 0.10256410160008263
+     "workload_gini": 0.2185792349726776
     },
     {
      "map_id": "L2-test-s2000017-a0",
@@ -1084,7 +1084,7 @@
      "rescue_latency": 37.0,
      "idle_fraction": 0.3584905660377358,
      "oscillation_rate": 0.22776622776622776,
-     "workload_gini": 0.03111111080618915
+     "workload_gini": 0.07142857142857144
     },
     {
      "map_id": "L2-test-s2000017-a0",
@@ -1114,7 +1114,7 @@
      "rescue_latency": 33.0,
      "idle_fraction": 0.27619047619047615,
      "oscillation_rate": 0.2677846844513511,
-     "workload_gini": 0.17777777819997734
+     "workload_gini": 0.425531914893617
     },
     {
      "map_id": "L2-test-s2000018-a0",
@@ -1144,7 +1144,7 @@
      "rescue_latency": 6.5,
      "idle_fraction": 0.2261904761904762,
      "oscillation_rate": 0.32301587301587303,
-     "workload_gini": 0.03603603610429219
+     "workload_gini": 0.3673469387755102
     },
     {
      "map_id": "L2-test-s2000018-a0",
@@ -1174,7 +1174,7 @@
      "rescue_latency": 46.0,
      "idle_fraction": 0.2948717948717949,
      "oscillation_rate": 0.20496782496782498,
-     "workload_gini": 0.22972972173888276
+     "workload_gini": 0.26666666666666666
     },
     {
      "map_id": "L2-test-s2000019-a0",
@@ -1204,7 +1204,7 @@
      "rescue_latency": 19.0,
      "idle_fraction": 0.39285714285714285,
      "oscillation_rate": 0.1829248366013072,
-     "workload_gini": 0.10126582396668397
+     "workload_gini": 0.411764705882353
     },
     {
      "map_id": "L2-test-s2000019-a0",
@@ -1234,7 +1234,7 @@
      "rescue_latency": 23.5,
      "idle_fraction": 0.35964912280701755,
      "oscillation_rate": 0.21095238095238092,
-     "workload_gini": 0.029535864790877553
+     "workload_gini": 0.4927536231884058
     },
     {
      "map_id": "L2-test-s2000020-a0",
@@ -1264,7 +1264,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.25555555555555554,
      "oscillation_rate": 0.21415118888054244,
-     "workload_gini": 0.05820105820105818
+     "workload_gini": 0.15873015873015875
     },
     {
      "map_id": "L2-test-s2000020-a0",
@@ -1294,7 +1294,7 @@
      "rescue_latency": 62.5,
      "idle_fraction": 0.25333333333333335,
      "oscillation_rate": 0.21841919053416078,
-     "workload_gini": 0.047619047619047596
+     "workload_gini": 0.24338624338624337
     },
     {
      "map_id": "L2-test-s2000021-a0",
@@ -1324,7 +1324,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.34,
      "oscillation_rate": 0.253875952570599,
-     "workload_gini": 0.014184397021461792
+     "workload_gini": 0.15602836879432622
     },
     {
      "map_id": "L2-test-s2000021-a0",
@@ -1354,7 +1354,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.3288888888888889,
      "oscillation_rate": 0.20590642301860096,
-     "workload_gini": 0.08045977284357368
+     "workload_gini": 0.16091954022988506
     },
     {
      "map_id": "L2-test-s2000022-a0",
@@ -1373,7 +1373,7 @@
       "collision": 0.7000000327825546
      },
      "rescue_rate": 0.5,
-     "discover_rate": 0.5,
+     "discover_rate": 1.0,
      "coverage": 0.9620253164556962,
      "visited_coverage": 0.7341772151898734,
      "collisions": 42,
@@ -1381,10 +1381,10 @@
      "invalid_actions": 0,
      "exploration_efficiency": 0.13333333333333333,
      "rescue_efficiency": 0.0022222222222222222,
-     "rescue_latency": null,
+     "rescue_latency": 38.0,
      "idle_fraction": 0.34,
      "oscillation_rate": 0.22188141832843342,
-     "workload_gini": 0.09444444554124916
+     "workload_gini": 0.26666666666666666
     },
     {
      "map_id": "L2-test-s2000022-a0",
@@ -1403,7 +1403,7 @@
       "collision": 0.1666666753590107
      },
      "rescue_rate": 0.5,
-     "discover_rate": 0.5,
+     "discover_rate": 1.0,
      "coverage": 0.8481012658227848,
      "visited_coverage": 0.6455696202531646,
      "collisions": 10,
@@ -1414,7 +1414,7 @@
      "rescue_latency": 8.0,
      "idle_fraction": 0.31777777777777777,
      "oscillation_rate": 0.25292207792207794,
-     "workload_gini": 0.12418300880833655
+     "workload_gini": 0.130718954248366
     },
     {
      "map_id": "L2-test-s2000023-a0",
@@ -1444,7 +1444,7 @@
      "rescue_latency": 16.5,
      "idle_fraction": 0.29914529914529914,
      "oscillation_rate": 0.16508133443617315,
-     "workload_gini": 0.2876712302325183
+     "workload_gini": 0.5911949685534591
     },
     {
      "map_id": "L2-test-s2000023-a0",
@@ -1474,7 +1474,7 @@
      "rescue_latency": 17.0,
      "idle_fraction": 0.3568075117370892,
      "oscillation_rate": 0.24582003343973247,
-     "workload_gini": 0.09589041131047298
+     "workload_gini": 0.4533333333333333
     },
     {
      "map_id": "L2-test-s2000024-a0",
@@ -1504,7 +1504,7 @@
      "rescue_latency": 25.0,
      "idle_fraction": 0.2422222222222222,
      "oscillation_rate": 0.2577663870767319,
-     "workload_gini": 0.043010751854730356
+     "workload_gini": 0.12903225806451613
     },
     {
      "map_id": "L2-test-s2000024-a0",
@@ -1534,7 +1534,7 @@
      "rescue_latency": 5.0,
      "idle_fraction": 0.27555555555555555,
      "oscillation_rate": 0.21826859870244933,
-     "workload_gini": 0.03174603180657124
+     "workload_gini": 0.21164021164021163
     },
     {
      "map_id": "L2-test-s2000025-a0",
@@ -1564,7 +1564,7 @@
      "rescue_latency": 2.0,
      "idle_fraction": 0.3066666666666667,
      "oscillation_rate": 0.2012539929206596,
-     "workload_gini": 0.08333333252070878
+     "workload_gini": 0.39215686274509803
     },
     {
      "map_id": "L2-test-s2000025-a0",
@@ -1594,7 +1594,7 @@
      "rescue_latency": 27.5,
      "idle_fraction": 0.2416666666666667,
      "oscillation_rate": 0.20707070707070707,
-     "workload_gini": 0.10526315967418216
+     "workload_gini": 0.5333333333333333
     },
     {
      "map_id": "L2-test-s2000026-a0",
@@ -1624,7 +1624,7 @@
      "rescue_latency": 7.0,
      "idle_fraction": 0.31777777777777777,
      "oscillation_rate": 0.1995686237750985,
-     "workload_gini": 0.10937499947158362
+     "workload_gini": 0.375
     },
     {
      "map_id": "L2-test-s2000026-a0",
@@ -1654,7 +1654,7 @@
      "rescue_latency": 2.0,
      "idle_fraction": 0.3022222222222222,
      "oscillation_rate": 0.2215476336619395,
-     "workload_gini": 0.06878306810790495
+     "workload_gini": 0.08465608465608465
     },
     {
      "map_id": "L2-test-s2000027-a0",
@@ -1684,7 +1684,7 @@
      "rescue_latency": 22.5,
      "idle_fraction": 0.2625,
      "oscillation_rate": 0.22854951586616815,
-     "workload_gini": 0.11666666433680795
+     "workload_gini": 0.37777777777777777
     },
     {
      "map_id": "L2-test-s2000027-a0",
@@ -1714,7 +1714,7 @@
      "rescue_latency": 69.0,
      "idle_fraction": 0.25333333333333335,
      "oscillation_rate": 0.2408437665314759,
-     "workload_gini": 0.15277777390319555
+     "workload_gini": 0.2986111111111111
     },
     {
      "map_id": "L2-test-s2000028-a0",
@@ -1744,7 +1744,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.2866666666666667,
      "oscillation_rate": 0.2184968496849685,
-     "workload_gini": 0.03921568511975574
+     "workload_gini": 0.009803921568627453
     },
     {
      "map_id": "L2-test-s2000028-a0",
@@ -1774,7 +1774,7 @@
      "rescue_latency": 55.0,
      "idle_fraction": 0.2866666666666667,
      "oscillation_rate": 0.215709257564892,
-     "workload_gini": 0.015384615163449208
+     "workload_gini": 0.2871794871794872
     },
     {
      "map_id": "L2-test-s2000029-a0",
@@ -1804,7 +1804,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.3444444444444445,
      "oscillation_rate": 0.24477682811016144,
-     "workload_gini": 0.15238095238095237
+     "workload_gini": 0.5142857142857143
     },
     {
      "map_id": "L2-test-s2000029-a0",
@@ -1834,7 +1834,7 @@
      "rescue_latency": 3.0,
      "idle_fraction": 0.3955555555555555,
      "oscillation_rate": 0.19223429365384936,
-     "workload_gini": 0.125
+     "workload_gini": 0.2166666666666667
     },
     {
      "map_id": "L2-test-s2000030-a0",
@@ -1864,7 +1864,7 @@
      "rescue_latency": 58.0,
      "idle_fraction": 0.32,
      "oscillation_rate": 0.2267628205128205,
-     "workload_gini": 0.02450980381012143
+     "workload_gini": 0.17647058823529407
     },
     {
      "map_id": "L2-test-s2000030-a0",
@@ -1894,7 +1894,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.2777777777777778,
      "oscillation_rate": 0.2137933333008176,
-     "workload_gini": 0.10493827160493825
+     "workload_gini": 0.3271604938271605
     },
     {
      "map_id": "L2-test-s2000031-a0",
@@ -1924,7 +1924,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.22222222222222224,
      "oscillation_rate": 0.2323962233053142,
-     "workload_gini": 0.07189542530781261
+     "workload_gini": 0.19607843137254902
     },
     {
      "map_id": "L2-test-s2000031-a0",
@@ -1954,7 +1954,7 @@
      "rescue_latency": 39.0,
      "idle_fraction": 0.2111111111111111,
      "oscillation_rate": 0.2490740740740741,
-     "workload_gini": 0.10416666646293982
+     "workload_gini": 0.3385416666666667
     },
     {
      "map_id": "L2-test-s2000032-a0",
@@ -1984,7 +1984,7 @@
      "rescue_latency": 25.5,
      "idle_fraction": 0.2835249042145594,
      "oscillation_rate": 0.30385306070093815,
-     "workload_gini": 0.06493506493506492
+     "workload_gini": 0.15384615384615385
     },
     {
      "map_id": "L2-test-s2000032-a0",
@@ -2014,7 +2014,7 @@
      "rescue_latency": 30.0,
      "idle_fraction": 0.30158730158730157,
      "oscillation_rate": 0.20892857142857144,
-     "workload_gini": 0.1774891741716648
+     "workload_gini": 0.09420289855072465
     },
     {
      "map_id": "L2-test-s2000033-a0",
@@ -2044,7 +2044,7 @@
      "rescue_latency": 51.5,
      "idle_fraction": 0.2905982905982906,
      "oscillation_rate": 0.22746554694229112,
-     "workload_gini": 0.07352941223815501
+     "workload_gini": 0.20430107526881722
     },
     {
      "map_id": "L2-test-s2000033-a0",
@@ -2074,7 +2074,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.30888888888888894,
      "oscillation_rate": 0.19633400089007566,
-     "workload_gini": 0.10714285562747816
+     "workload_gini": 0.5
     },
     {
      "map_id": "L2-test-s2000034-a0",
@@ -2104,7 +2104,7 @@
      "rescue_latency": 7.5,
      "idle_fraction": 0.25806451612903225,
      "oscillation_rate": 0.1893942772203642,
-     "workload_gini": 0.06103286411038534
+     "workload_gini": 0.04694835680751175
     },
     {
      "map_id": "L2-test-s2000034-a0",
@@ -2134,7 +2134,7 @@
      "rescue_latency": 27.0,
      "idle_fraction": 0.2469135802469136,
      "oscillation_rate": 0.22237484737484736,
-     "workload_gini": 0.1877934298759071
+     "workload_gini": 0.1575757575757576
     },
     {
      "map_id": "L2-test-s2000035-a0",
@@ -2164,7 +2164,7 @@
      "rescue_latency": 59.0,
      "idle_fraction": 0.3444444444444444,
      "oscillation_rate": 0.2481183602231191,
-     "workload_gini": 0.07070707004456885
+     "workload_gini": 0.4444444444444445
     },
     {
      "map_id": "L2-test-s2000035-a0",
@@ -2194,7 +2194,7 @@
      "rescue_latency": 41.0,
      "idle_fraction": 0.2837837837837837,
      "oscillation_rate": 0.21927092874152776,
-     "workload_gini": 0.07407407486933922
+     "workload_gini": 0.30952380952380953
     },
     {
      "map_id": "L2-test-s2000036-a0",
@@ -2224,7 +2224,7 @@
      "rescue_latency": 20.0,
      "idle_fraction": 0.2644444444444444,
      "oscillation_rate": 0.24015604389436165,
-     "workload_gini": 0.0438596493403736
+     "workload_gini": 0.27631578947368424
     },
     {
      "map_id": "L2-test-s2000036-a0",
@@ -2254,7 +2254,7 @@
      "rescue_latency": 70.0,
      "idle_fraction": 0.26666666666666666,
      "oscillation_rate": 0.1990393228925339,
-     "workload_gini": 0.05627705604101859
+     "workload_gini": 0.1818181818181818
     },
     {
      "map_id": "L2-test-s2000037-a0",
@@ -2284,7 +2284,7 @@
      "rescue_latency": 29.5,
      "idle_fraction": 0.37198067632850246,
      "oscillation_rate": 0.14794427542584093,
-     "workload_gini": 0.041666667859923755
+     "workload_gini": 0.14035087719298248
     },
     {
      "map_id": "L2-test-s2000037-a0",
@@ -2314,7 +2314,7 @@
      "rescue_latency": 40.0,
      "idle_fraction": 0.3137254901960784,
      "oscillation_rate": 0.26127206127206126,
-     "workload_gini": 0.10416666766104762
+     "workload_gini": 0.372093023255814
     },
     {
      "map_id": "L2-test-s2000038-a0",
@@ -2344,7 +2344,7 @@
      "rescue_latency": 34.0,
      "idle_fraction": 0.3374485596707819,
      "oscillation_rate": 0.1766770925516847,
-     "workload_gini": 0.14871794835996813
+     "workload_gini": 0.24867724867724872
     },
     {
      "map_id": "L2-test-s2000038-a0",
@@ -2374,7 +2374,7 @@
      "rescue_latency": 20.0,
      "idle_fraction": 0.3925925925925926,
      "oscillation_rate": 0.1700524949749234,
-     "workload_gini": 0.18461538466476127
+     "workload_gini": 0.2768361581920904
     },
     {
      "map_id": "L2-test-s2000039-a0",
@@ -2404,7 +2404,7 @@
      "rescue_latency": 11.0,
      "idle_fraction": 0.26666666666666666,
      "oscillation_rate": 0.19818137319119852,
-     "workload_gini": 0.05022830400382198
+     "workload_gini": 0.43137254901960786
     },
     {
      "map_id": "L2-test-s2000039-a0",
@@ -2434,7 +2434,7 @@
      "rescue_latency": 101.0,
      "idle_fraction": 0.3933333333333333,
      "oscillation_rate": 0.2848369422708014,
-     "workload_gini": 0.12994350282485878
+     "workload_gini": 0.4632768361581921
     },
     {
      "map_id": "L2-test-s2000040-a0",
@@ -2464,7 +2464,7 @@
      "rescue_latency": 26.5,
      "idle_fraction": 0.3065134099616858,
      "oscillation_rate": 0.26027164685908316,
-     "workload_gini": 0.08585858817734254
+     "workload_gini": 0.15476190476190474
     },
     {
      "map_id": "L2-test-s2000040-a0",
@@ -2494,7 +2494,7 @@
      "rescue_latency": 26.0,
      "idle_fraction": 0.19496855345911945,
      "oscillation_rate": 0.21195652173913046,
-     "workload_gini": 0.1262626277769163
+     "workload_gini": 0.15384615384615385
     },
     {
      "map_id": "L2-test-s2000041-a0",
@@ -2513,7 +2513,7 @@
       "collision": 0.05000000260770321
      },
      "rescue_rate": 1.0,
-     "discover_rate": 0.5,
+     "discover_rate": 1.0,
      "coverage": 0.47058823529411764,
      "visited_coverage": 0.24705882352941178,
      "collisions": 3,
@@ -2521,10 +2521,10 @@
      "invalid_actions": 0,
      "exploration_efficiency": 0.47368421052631576,
      "rescue_efficiency": 0.03508771929824561,
-     "rescue_latency": 10.0,
+     "rescue_latency": 14.0,
      "idle_fraction": 0.2982456140350877,
      "oscillation_rate": 0.25757575757575757,
-     "workload_gini": 0.03240740669478274
+     "workload_gini": 0.4444444444444445
     },
     {
      "map_id": "L2-test-s2000041-a0",
@@ -2543,7 +2543,7 @@
       "collision": 0.10000000521540642
      },
      "rescue_rate": 1.0,
-     "discover_rate": 0.5,
+     "discover_rate": 1.0,
      "coverage": 0.6352941176470588,
      "visited_coverage": 0.36470588235294116,
      "collisions": 6,
@@ -2551,10 +2551,10 @@
      "invalid_actions": 0,
      "exploration_efficiency": 0.2907801418439716,
      "rescue_efficiency": 0.014184397163120567,
-     "rescue_latency": 37.0,
+     "rescue_latency": 21.0,
      "idle_fraction": 0.3120567375886525,
      "oscillation_rate": 0.12273057371096587,
-     "workload_gini": 0.21296296302404508
+     "workload_gini": 0.47154471544715454
     },
     {
      "map_id": "L2-test-s2000042-a0",
@@ -2584,7 +2584,7 @@
      "rescue_latency": 12.0,
      "idle_fraction": 0.24222222222222223,
      "oscillation_rate": 0.23205208009129577,
-     "workload_gini": 0.10691823987552174
+     "workload_gini": 0.1509433962264151
     },
     {
      "map_id": "L2-test-s2000042-a0",
@@ -2614,7 +2614,7 @@
      "rescue_latency": 18.0,
      "idle_fraction": 0.3191489361702128,
      "oscillation_rate": 0.197926267281106,
-     "workload_gini": 0.06666666208869883
+     "workload_gini": 0.3333333333333333
     },
     {
      "map_id": "L2-test-s2000043-a0",
@@ -2644,7 +2644,7 @@
      "rescue_latency": 29.0,
      "idle_fraction": 0.2555555555555556,
      "oscillation_rate": 0.22479117801332107,
-     "workload_gini": 0.11282051282051282
+     "workload_gini": 0.1692307692307692
     },
     {
      "map_id": "L2-test-s2000043-a0",
@@ -2674,7 +2674,7 @@
      "rescue_latency": 2.5,
      "idle_fraction": 0.3417366946778711,
      "oscillation_rate": 0.23138199967468262,
-     "workload_gini": 0.019607837087417906
+     "workload_gini": 0.2033898305084746
     },
     {
      "map_id": "L2-test-s2000044-a0",
@@ -2704,7 +2704,7 @@
      "rescue_latency": 5.5,
      "idle_fraction": 0.31464174454828664,
      "oscillation_rate": 0.1797166885195054,
-     "workload_gini": 0.09230769099039439
+     "workload_gini": 0.22222222222222224
     },
     {
      "map_id": "L2-test-s2000044-a0",
@@ -2734,7 +2734,7 @@
      "rescue_latency": 2.0,
      "idle_fraction": 0.26,
      "oscillation_rate": 0.24788462894145846,
-     "workload_gini": 0.03636363803314117
+     "workload_gini": 0.21818181818181814
     },
     {
      "map_id": "L2-test-s2000045-a0",
@@ -2764,7 +2764,7 @@
      "rescue_latency": 28.0,
      "idle_fraction": 0.28888888888888886,
      "oscillation_rate": 0.22374708513322372,
-     "workload_gini": 0.11290322608103502
+     "workload_gini": 0.10752688172043012
     },
     {
      "map_id": "L2-test-s2000045-a0",
@@ -2794,7 +2794,7 @@
      "rescue_latency": 39.5,
      "idle_fraction": 0.28070175438596495,
      "oscillation_rate": 0.20932802829354555,
-     "workload_gini": 0.0858585861554146
+     "workload_gini": 0.22435897435897434
     },
     {
      "map_id": "L2-test-s2000046-a0",
@@ -2824,7 +2824,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.2688888888888889,
      "oscillation_rate": 0.25668190163678267,
-     "workload_gini": 0.09999999958607886
+     "workload_gini": 0.3444444444444444
     },
     {
      "map_id": "L2-test-s2000046-a0",
@@ -2854,7 +2854,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.3666666666666667,
      "oscillation_rate": 0.26080371234070615,
-     "workload_gini": 0.18888888978571805
+     "workload_gini": 0.5888888888888889
     },
     {
      "map_id": "L2-test-s2000047-a0",
@@ -2884,7 +2884,7 @@
      "rescue_latency": 9.0,
      "idle_fraction": 0.2692307692307692,
      "oscillation_rate": 0.19666699666699664,
-     "workload_gini": 0.08796296349341914
+     "workload_gini": 0.3285024154589372
     },
     {
      "map_id": "L2-test-s2000047-a0",
@@ -2914,7 +2914,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.3133333333333333,
      "oscillation_rate": 0.21253906968192682,
-     "workload_gini": 0.04545454691631132
+     "workload_gini": 0.04545454545454545
     },
     {
      "map_id": "L2-test-s2000048-a0",
@@ -2974,7 +2974,7 @@
      "rescue_latency": 24.0,
      "idle_fraction": 0.31111111111111106,
      "oscillation_rate": 0.22353389185072356,
-     "workload_gini": 0.1217948717948718
+     "workload_gini": 0.44871794871794873
     },
     {
      "map_id": "L2-test-s2000049-a0",
@@ -3004,7 +3004,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.24888888888888885,
      "oscillation_rate": 0.2237494054225464,
-     "workload_gini": 0.06547619047619051
+     "workload_gini": 0.3452380952380952
     },
     {
      "map_id": "L2-test-s2000049-a0",
@@ -3034,7 +3034,7 @@
      "rescue_latency": 17.0,
      "idle_fraction": 0.2644444444444444,
      "oscillation_rate": 0.26705152324311204,
-     "workload_gini": 0.12429378531073447
+     "workload_gini": 0.3389830508474576
     },
     {
      "map_id": "L2-test-s2000050-a0",
@@ -3064,7 +3064,7 @@
      "rescue_latency": 34.0,
      "idle_fraction": 0.29777777777777775,
      "oscillation_rate": 0.24670592875216588,
-     "workload_gini": 0.2352941176470588
+     "workload_gini": 0.49019607843137253
     },
     {
      "map_id": "L2-test-s2000050-a0",
@@ -3094,7 +3094,7 @@
      "rescue_latency": 7.0,
      "idle_fraction": 0.29111111111111115,
      "oscillation_rate": 0.23015873015873015,
-     "workload_gini": 0.08457711442786071
+     "workload_gini": 0.3582089552238806
     },
     {
      "map_id": "L2-test-s2000051-a0",
@@ -3124,7 +3124,7 @@
      "rescue_latency": 4.0,
      "idle_fraction": 0.27777777777777773,
      "oscillation_rate": 0.22919662315107361,
-     "workload_gini": 0.13615023434389498
+     "workload_gini": 0.23943661971830985
     },
     {
      "map_id": "L2-test-s2000051-a0",
@@ -3154,7 +3154,7 @@
      "rescue_latency": 37.5,
      "idle_fraction": 0.2898550724637681,
      "oscillation_rate": 0.23792894935752074,
-     "workload_gini": 0.08108108176205535
+     "workload_gini": 0.21004566210045664
     },
     {
      "map_id": "L2-test-s2000052-a0",
@@ -3184,7 +3184,7 @@
      "rescue_latency": 51.0,
      "idle_fraction": 0.25541125541125537,
      "oscillation_rate": 0.2608203624332657,
-     "workload_gini": 0.08450704260947191
+     "workload_gini": 0.44047619047619047
     },
     {
      "map_id": "L2-test-s2000052-a0",
@@ -3214,7 +3214,7 @@
      "rescue_latency": 8.0,
      "idle_fraction": 0.29777777777777775,
      "oscillation_rate": 0.22960685281623183,
-     "workload_gini": 0.08571428664053982
+     "workload_gini": 0.1619047619047619
     },
     {
      "map_id": "L2-test-s2000053-a0",
@@ -3244,7 +3244,7 @@
      "rescue_latency": 51.0,
      "idle_fraction": 0.27111111111111114,
      "oscillation_rate": 0.25018074781970506,
-     "workload_gini": 0.14611872139378618
+     "workload_gini": 0.4931506849315068
     },
     {
      "map_id": "L2-test-s2000053-a0",
@@ -3274,7 +3274,7 @@
      "rescue_latency": 41.5,
      "idle_fraction": 0.31899641577060933,
      "oscillation_rate": 0.2514368050458092,
-     "workload_gini": 0.21052631316814022
+     "workload_gini": 0.3684210526315789
     },
     {
      "map_id": "L2-test-s2000054-a0",
@@ -3304,7 +3304,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.30888888888888894,
      "oscillation_rate": 0.22151515151515153,
-     "workload_gini": 0.23563218441634212
+     "workload_gini": 0.2873563218390805
     },
     {
      "map_id": "L2-test-s2000054-a0",
@@ -3334,7 +3334,7 @@
      "rescue_latency": 38.5,
      "idle_fraction": 0.2886904761904762,
      "oscillation_rate": 0.2530306718597858,
-     "workload_gini": 0.16417910299878205
+     "workload_gini": 0.3333333333333333
     },
     {
      "map_id": "L2-test-s2000055-a0",
@@ -3364,7 +3364,7 @@
      "rescue_latency": 9.0,
      "idle_fraction": 0.25333333333333335,
      "oscillation_rate": 0.2426098996192454,
-     "workload_gini": 0.11111111057175933
+     "workload_gini": 0.25252525252525254
     },
     {
      "map_id": "L2-test-s2000055-a0",
@@ -3394,7 +3394,7 @@
      "rescue_latency": 8.0,
      "idle_fraction": 0.3103448275862069,
      "oscillation_rate": 0.2898082309847016,
-     "workload_gini": 0.13615024457144634
+     "workload_gini": 0.6666666666666666
     },
     {
      "map_id": "L2-test-s2000056-a0",
@@ -3424,7 +3424,7 @@
      "rescue_latency": 64.0,
      "idle_fraction": 0.25474254742547425,
      "oscillation_rate": 0.2511547276359248,
-     "workload_gini": 0.0677083330141008
+     "workload_gini": 0.0625
     },
     {
      "map_id": "L2-test-s2000056-a0",
@@ -3454,7 +3454,7 @@
      "rescue_latency": 3.0,
      "idle_fraction": 0.27999999999999997,
      "oscillation_rate": 0.19825982598259825,
-     "workload_gini": 0.09523809478193715
+     "workload_gini": 0.1164021164021164
     },
     {
      "map_id": "L2-test-s2000057-a0",
@@ -3484,7 +3484,7 @@
      "rescue_latency": 11.0,
      "idle_fraction": 0.26666666666666666,
      "oscillation_rate": 0.2547727918571909,
-     "workload_gini": 0.09743589743589742
+     "workload_gini": 0.2153846153846154
     },
     {
      "map_id": "L2-test-s2000057-a0",
@@ -3514,7 +3514,7 @@
      "rescue_latency": 21.5,
      "idle_fraction": 0.34591194968553457,
      "oscillation_rate": 0.2363350745703687,
-     "workload_gini": 0.11255411495009394
+     "workload_gini": 0.39548022598870053
     },
     {
      "map_id": "L2-test-s2000058-a0",
@@ -3544,7 +3544,7 @@
      "rescue_latency": 9.0,
      "idle_fraction": 0.25555555555555554,
      "oscillation_rate": 0.29476342371079217,
-     "workload_gini": 0.018867926799857937
+     "workload_gini": 0.1761006289308176
     },
     {
      "map_id": "L2-test-s2000058-a0",
@@ -3574,7 +3574,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.24666666666666667,
      "oscillation_rate": 0.24613485678022218,
-     "workload_gini": 0.04687500106244132
+     "workload_gini": 0.125
     },
     {
      "map_id": "L2-test-s2000059-a0",
@@ -3604,7 +3604,7 @@
      "rescue_latency": 16.0,
      "idle_fraction": 0.25777777777777783,
      "oscillation_rate": 0.1988695102359144,
-     "workload_gini": 0.10294117781164688
+     "workload_gini": 0.18627450980392155
     },
     {
      "map_id": "L2-test-s2000059-a0",
@@ -3634,7 +3634,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.3111111111111111,
      "oscillation_rate": 0.206818420159773,
-     "workload_gini": 0.09150326956664095
+     "workload_gini": 0.24183006535947715
     },
     {
      "map_id": "L2-test-s2000060-a0",
@@ -3664,7 +3664,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.3355555555555556,
      "oscillation_rate": 0.24889066826810793,
-     "workload_gini": 0.07692307684592596
+     "workload_gini": 0.30769230769230765
     },
     {
      "map_id": "L2-test-s2000060-a0",
@@ -3694,7 +3694,7 @@
      "rescue_latency": 16.0,
      "idle_fraction": 0.2888888888888889,
      "oscillation_rate": 0.24071647007426825,
-     "workload_gini": 0.09178744008456721
+     "workload_gini": 0.4444444444444444
     },
     {
      "map_id": "L2-test-s2000061-a0",
@@ -3724,7 +3724,7 @@
      "rescue_latency": 19.0,
      "idle_fraction": 0.2777777777777778,
      "oscillation_rate": 0.252147395815229,
-     "workload_gini": 0.11290322742229474
+     "workload_gini": 0.20430107526881722
     },
     {
      "map_id": "L2-test-s2000061-a0",
@@ -3754,7 +3754,7 @@
      "rescue_latency": 8.0,
      "idle_fraction": 0.2688888888888889,
      "oscillation_rate": 0.25238524528585377,
-     "workload_gini": 0.041025641025641026
+     "workload_gini": 0.23589743589743586
     },
     {
      "map_id": "L2-test-s2000062-a0",
@@ -3784,7 +3784,7 @@
      "rescue_latency": 7.0,
      "idle_fraction": 0.2722222222222222,
      "oscillation_rate": 0.27449633699633696,
-     "workload_gini": 0.14141414034855104
+     "workload_gini": 0.32380952380952377
     },
     {
      "map_id": "L2-test-s2000062-a0",
@@ -3814,7 +3814,7 @@
      "rescue_latency": 14.0,
      "idle_fraction": 0.2977777777777778,
      "oscillation_rate": 0.2537037037037037,
-     "workload_gini": 0.07407407292429302
+     "workload_gini": 0.08465608465608465
     },
     {
      "map_id": "L2-test-s2000063-a0",
@@ -3844,7 +3844,7 @@
      "rescue_latency": 110.0,
      "idle_fraction": 0.2866666666666667,
      "oscillation_rate": 0.21956521739130438,
-     "workload_gini": 0.14754098468029406
+     "workload_gini": 0.2841530054644809
     },
     {
      "map_id": "L2-test-s2000063-a0",
@@ -3874,7 +3874,7 @@
      "rescue_latency": 2.0,
      "idle_fraction": 0.2511111111111111,
      "oscillation_rate": 0.23897725476672846,
-     "workload_gini": 0.024509804120965154
+     "workload_gini": 0.053921568627450976
     },
     {
      "map_id": "L2-test-s2000064-a0",
@@ -3904,7 +3904,7 @@
      "rescue_latency": 11.0,
      "idle_fraction": 0.3916666666666666,
      "oscillation_rate": 0.14461152882205514,
-     "workload_gini": 0.09195402276702587
+     "workload_gini": 0.12345679012345678
     },
     {
      "map_id": "L2-test-s2000064-a0",
@@ -3934,7 +3934,7 @@
      "rescue_latency": 124.0,
      "idle_fraction": 0.29777777777777775,
      "oscillation_rate": 0.2927464816585586,
-     "workload_gini": 0.07471264349820854
+     "workload_gini": 0.32183908045977017
     },
     {
      "map_id": "L2-test-s2000065-a0",
@@ -3964,7 +3964,7 @@
      "rescue_latency": 40.5,
      "idle_fraction": 0.2674897119341564,
      "oscillation_rate": 0.19975120664775836,
-     "workload_gini": 0.21126760685869236
+     "workload_gini": 0.19444444444444442
     },
     {
      "map_id": "L2-test-s2000065-a0",
@@ -3994,7 +3994,7 @@
      "rescue_latency": 15.0,
      "idle_fraction": 0.3076923076923077,
      "oscillation_rate": 0.1764022086602732,
-     "workload_gini": 0.05633802748328528
+     "workload_gini": 0.17241379310344826
     },
     {
      "map_id": "L2-test-s2000066-a0",
@@ -4024,7 +4024,7 @@
      "rescue_latency": 15.0,
      "idle_fraction": 0.23484848484848486,
      "oscillation_rate": 0.3084737316236368,
-     "workload_gini": 0.052380951174667935
+     "workload_gini": 0.36231884057971014
     },
     {
      "map_id": "L2-test-s2000066-a0",
@@ -4054,7 +4054,7 @@
      "rescue_latency": 59.0,
      "idle_fraction": 0.3244444444444444,
      "oscillation_rate": 0.2542653009413971,
-     "workload_gini": 0.057692305994297276
+     "workload_gini": 0.07692307692307694
     },
     {
      "map_id": "L2-test-s2000067-a0",
@@ -4084,7 +4084,7 @@
      "rescue_latency": 23.0,
      "idle_fraction": 0.27555555555555555,
      "oscillation_rate": 0.2093020855907454,
-     "workload_gini": 0.01960784338834676
+     "workload_gini": 0.3235294117647059
     },
     {
      "map_id": "L2-test-s2000067-a0",
@@ -4114,7 +4114,7 @@
      "rescue_latency": 6.0,
      "idle_fraction": 0.26,
      "oscillation_rate": 0.25097478279296465,
-     "workload_gini": 0.04411764729279552
+     "workload_gini": 0.10784313725490195
     },
     {
      "map_id": "L2-test-s2000068-a0",
@@ -4144,7 +4144,7 @@
      "rescue_latency": 32.5,
      "idle_fraction": 0.30333333333333334,
      "oscillation_rate": 0.23164974929680815,
-     "workload_gini": 0.10526315744584443
+     "workload_gini": 0.3285024154589372
     },
     {
      "map_id": "L2-test-s2000068-a0",
@@ -4174,7 +4174,7 @@
      "rescue_latency": 90.0,
      "idle_fraction": 0.32,
      "oscillation_rate": 0.19653081542858977,
-     "workload_gini": 0.09803921568627456
+     "workload_gini": 0.4705882352941176
     },
     {
      "map_id": "L2-test-s2000069-a0",
@@ -4204,7 +4204,7 @@
      "rescue_latency": 4.0,
      "idle_fraction": 0.35333333333333333,
      "oscillation_rate": 0.25958001175257506,
-     "workload_gini": 0.024390244208817007
+     "workload_gini": 0.34959349593495936
     },
     {
      "map_id": "L2-test-s2000069-a0",
@@ -4234,7 +4234,7 @@
      "rescue_latency": 46.0,
      "idle_fraction": 0.3311111111111111,
      "oscillation_rate": 0.2765120065120065,
-     "workload_gini": 0.10526315320716595
+     "workload_gini": 0.06140350877192979
     },
     {
      "map_id": "L2-test-s2000070-a0",
@@ -4264,7 +4264,7 @@
      "rescue_latency": 142.0,
      "idle_fraction": 0.2644444444444444,
      "oscillation_rate": 0.1943485837291147,
-     "workload_gini": 0.07222222222222223
+     "workload_gini": 0.3333333333333333
     },
     {
      "map_id": "L2-test-s2000070-a0",
@@ -4294,7 +4294,7 @@
      "rescue_latency": 29.0,
      "idle_fraction": 0.26666666666666666,
      "oscillation_rate": 0.23426576459363344,
-     "workload_gini": 0.021857923497267746
+     "workload_gini": 0.0888888888888889
     },
     {
      "map_id": "L2-test-s2000071-a0",
@@ -4324,7 +4324,7 @@
      "rescue_latency": 22.0,
      "idle_fraction": 0.2511111111111111,
      "oscillation_rate": 0.19198285374755963,
-     "workload_gini": 0.1186440675665219
+     "workload_gini": 0.3163841807909605
     },
     {
      "map_id": "L2-test-s2000071-a0",
@@ -4354,7 +4354,7 @@
      "rescue_latency": 66.0,
      "idle_fraction": 0.22318840579710145,
      "oscillation_rate": 0.2299145299145299,
-     "workload_gini": 0.04477611850492654
+     "workload_gini": 0.2929292929292929
     },
     {
      "map_id": "L2-test-s2000072-a0",
@@ -4384,7 +4384,7 @@
      "rescue_latency": 6.5,
      "idle_fraction": 0.3650793650793651,
      "oscillation_rate": 0.22292217029059136,
-     "workload_gini": 0.047619048288079356
+     "workload_gini": 0.4057971014492754
     },
     {
      "map_id": "L2-test-s2000072-a0",
@@ -4414,7 +4414,7 @@
      "rescue_latency": 15.0,
      "idle_fraction": 0.2655367231638418,
      "oscillation_rate": 0.2437133673662318,
-     "workload_gini": 0.014285714285714271
+     "workload_gini": 0.23728813559322037
     },
     {
      "map_id": "L2-test-s2000073-a0",
@@ -4444,7 +4444,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.30444444444444446,
      "oscillation_rate": 0.2593795093795094,
-     "workload_gini": 0.03846153823559628
+     "workload_gini": 0.25641025641025644
     },
     {
      "map_id": "L2-test-s2000073-a0",
@@ -4474,7 +4474,7 @@
      "rescue_latency": 59.0,
      "idle_fraction": 0.31555555555555553,
      "oscillation_rate": 0.24964509029519308,
-     "workload_gini": 0.08602150452868869
+     "workload_gini": 0.25806451612903225
     },
     {
      "map_id": "L2-test-s2000074-a0",
@@ -4504,7 +4504,7 @@
      "rescue_latency": 15.5,
      "idle_fraction": 0.26785714285714285,
      "oscillation_rate": 0.2994200244200244,
-     "workload_gini": 0.10952380952380951
+     "workload_gini": 0.40972222222222227
     },
     {
      "map_id": "L2-test-s2000074-a0",
@@ -4534,7 +4534,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.2933333333333334,
      "oscillation_rate": 0.25173125370798694,
-     "workload_gini": 0.055555555555555546
+     "workload_gini": 0.14583333333333334
     },
     {
      "map_id": "L2-test-s2000075-a0",
@@ -4564,7 +4564,7 @@
      "rescue_latency": 12.0,
      "idle_fraction": 0.31333333333333335,
      "oscillation_rate": 0.251984126984127,
-     "workload_gini": 0.05185185324615286
+     "workload_gini": 0.1037037037037037
     },
     {
      "map_id": "L2-test-s2000075-a0",
@@ -4594,7 +4594,7 @@
      "rescue_latency": 4.0,
      "idle_fraction": 0.2511111111111111,
      "oscillation_rate": 0.2081254331254331,
-     "workload_gini": 0.04477611997905359
+     "workload_gini": 0.1990049751243781
     },
     {
      "map_id": "L2-test-s2000076-a0",
@@ -4624,7 +4624,7 @@
      "rescue_latency": 13.0,
      "idle_fraction": 0.2911111111111111,
      "oscillation_rate": 0.3084196803467425,
-     "workload_gini": 0.13461538482031687
+     "workload_gini": 0.44871794871794873
     },
     {
      "map_id": "L2-test-s2000076-a0",
@@ -4654,7 +4654,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.32222222222222224,
      "oscillation_rate": 0.22565325502484915,
-     "workload_gini": 0.08187134515918722
+     "workload_gini": 0.2456140350877193
     },
     {
      "map_id": "L2-test-s2000077-a0",
@@ -4684,7 +4684,7 @@
      "rescue_latency": 43.5,
      "idle_fraction": 0.2835249042145594,
      "oscillation_rate": 0.22172619047619047,
-     "workload_gini": 0.21126760563380273
+     "workload_gini": 0.3380281690140845
     },
     {
      "map_id": "L2-test-s2000077-a0",
@@ -4714,7 +4714,7 @@
      "rescue_latency": 56.0,
      "idle_fraction": 0.24822695035460995,
      "oscillation_rate": 0.2604856359573341,
-     "workload_gini": 0.03755868544600941
+     "workload_gini": 0.24338624338624337
     },
     {
      "map_id": "L2-test-s2000078-a0",
@@ -4744,7 +4744,7 @@
      "rescue_latency": 3.0,
      "idle_fraction": 0.24222222222222223,
      "oscillation_rate": 0.23481477721948715,
-     "workload_gini": 0.019047619047619018
+     "workload_gini": 0.22380952380952382
     },
     {
      "map_id": "L2-test-s2000078-a0",
@@ -4774,7 +4774,7 @@
      "rescue_latency": 57.0,
      "idle_fraction": 0.24666666666666667,
      "oscillation_rate": 0.24952516619183288,
-     "workload_gini": 0.11111111111111094
+     "workload_gini": 0.4398148148148148
     },
     {
      "map_id": "L2-test-s2000079-a0",
@@ -4804,7 +4804,7 @@
      "rescue_latency": 30.0,
      "idle_fraction": 0.33035714285714285,
      "oscillation_rate": 0.26526075462629173,
-     "workload_gini": 0.029411764441631665
+     "workload_gini": 0.29885057471264365
     },
     {
      "map_id": "L2-test-s2000079-a0",
@@ -4834,7 +4834,7 @@
      "rescue_latency": 2.5,
      "idle_fraction": 0.3005952380952381,
      "oscillation_rate": 0.23395218002812943,
-     "workload_gini": 0.03921568556984123
+     "workload_gini": 0.2573099415204679
     },
     {
      "map_id": "L2-test-s2000080-a0",
@@ -4864,7 +4864,7 @@
      "rescue_latency": 23.5,
      "idle_fraction": 0.3005464480874317,
      "oscillation_rate": 0.2396017438435254,
-     "workload_gini": 0.12380952442685762
+     "workload_gini": 0.3020833333333333
     },
     {
      "map_id": "L2-test-s2000080-a0",
@@ -4894,7 +4894,7 @@
      "rescue_latency": 35.0,
      "idle_fraction": 0.27111111111111114,
      "oscillation_rate": 0.24195631528964864,
-     "workload_gini": 0.12380952493775454
+     "workload_gini": 0.3761904761904762
     },
     {
      "map_id": "L2-test-s2000081-a0",
@@ -4924,7 +4924,7 @@
      "rescue_latency": 18.0,
      "idle_fraction": 0.36666666666666664,
      "oscillation_rate": 0.2085137085137085,
-     "workload_gini": 0.0740740754231504
+     "workload_gini": 0.13333333333333333
     },
     {
      "map_id": "L2-test-s2000081-a0",
@@ -4954,7 +4954,7 @@
      "rescue_latency": 10.0,
      "idle_fraction": 0.29523809523809524,
      "oscillation_rate": 0.19520815572605854,
-     "workload_gini": 0.11111111515834016
+     "workload_gini": 0.37837837837837834
     },
     {
      "map_id": "L2-test-s2000082-a0",
@@ -4984,7 +4984,7 @@
      "rescue_latency": 12.0,
      "idle_fraction": 0.28222222222222226,
      "oscillation_rate": 0.21472903647564598,
-     "workload_gini": 0.14646464713705443
+     "workload_gini": 0.3333333333333333
     },
     {
      "map_id": "L2-test-s2000082-a0",
@@ -5014,7 +5014,7 @@
      "rescue_latency": 4.0,
      "idle_fraction": 0.31555555555555553,
      "oscillation_rate": 0.20832425103411847,
-     "workload_gini": 0.033898305350060776
+     "workload_gini": 0.2824858757062147
     },
     {
      "map_id": "L2-test-s2000083-a0",
@@ -5044,7 +5044,7 @@
      "rescue_latency": 76.0,
      "idle_fraction": 0.3266666666666667,
      "oscillation_rate": 0.24362717723706953,
-     "workload_gini": 0.1714285721310547
+     "workload_gini": 0.49047619047619045
     },
     {
      "map_id": "L2-test-s2000083-a0",
@@ -5074,7 +5074,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.34888888888888897,
      "oscillation_rate": 0.3099838969404187,
-     "workload_gini": 0.15819208869496706
+     "workload_gini": 0.519774011299435
     },
     {
      "map_id": "L2-test-s2000084-a0",
@@ -5104,7 +5104,7 @@
      "rescue_latency": 20.0,
      "idle_fraction": 0.32389937106918243,
      "oscillation_rate": 0.24606356085229328,
-     "workload_gini": 0.03555555608112507
+     "workload_gini": 0.13541666666666666
     },
     {
      "map_id": "L2-test-s2000084-a0",
@@ -5134,7 +5134,7 @@
      "rescue_latency": 27.0,
      "idle_fraction": 0.25252525252525254,
      "oscillation_rate": 0.2323240407274021,
-     "workload_gini": 0.14222222074375113
+     "workload_gini": 0.4675925925925926
     },
     {
      "map_id": "L2-test-s2000085-a0",
@@ -5164,7 +5164,7 @@
      "rescue_latency": 39.0,
      "idle_fraction": 0.33730158730158727,
      "oscillation_rate": 0.20678402782857472,
-     "workload_gini": 0.029411763217055298
+     "workload_gini": 0.5847953216374269
     },
     {
      "map_id": "L2-test-s2000085-a0",
@@ -5194,7 +5194,7 @@
      "rescue_latency": 26.5,
      "idle_fraction": 0.5,
      "oscillation_rate": 0.24963924963924963,
-     "workload_gini": 0.3529411763577983
+     "workload_gini": 0.4666666666666666
     },
     {
      "map_id": "L2-test-s2000086-a0",
@@ -5224,7 +5224,7 @@
      "rescue_latency": 26.0,
      "idle_fraction": 0.34,
      "oscillation_rate": 0.2321340459346725,
-     "workload_gini": 0.2283105011113641
+     "workload_gini": 0.6118721461187214
     },
     {
      "map_id": "L2-test-s2000086-a0",
@@ -5254,7 +5254,7 @@
      "rescue_latency": 54.0,
      "idle_fraction": 0.34222222222222226,
      "oscillation_rate": 0.2260500307990864,
-     "workload_gini": 0.24154589392872347
+     "workload_gini": 0.463768115942029
     },
     {
      "map_id": "L2-test-s2000087-a0",
@@ -5284,7 +5284,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.30444444444444446,
      "oscillation_rate": 0.26785442609596716,
-     "workload_gini": 0.06666666788359472
+     "workload_gini": 0.22222222222222224
     },
     {
      "map_id": "L2-test-s2000087-a0",
@@ -5314,7 +5314,7 @@
      "rescue_latency": 34.5,
      "idle_fraction": 0.25757575757575757,
      "oscillation_rate": 0.2782051282051282,
-     "workload_gini": 0.06666666730856281
+     "workload_gini": 0.2711864406779661
     },
     {
      "map_id": "L2-test-s2000088-a0",
@@ -5344,7 +5344,7 @@
      "rescue_latency": 2.5,
      "idle_fraction": 0.4102564102564103,
      "oscillation_rate": 0.303941672362725,
-     "workload_gini": 0.06565656369528639
+     "workload_gini": 0.3166666666666667
     },
     {
      "map_id": "L2-test-s2000088-a0",
@@ -5374,7 +5374,7 @@
      "rescue_latency": 22.0,
      "idle_fraction": 0.2888888888888889,
      "oscillation_rate": 0.316798418972332,
-     "workload_gini": 0.10606060609481444
+     "workload_gini": 0.4047619047619047
     },
     {
      "map_id": "L2-test-s2000089-a0",
@@ -5404,7 +5404,7 @@
      "rescue_latency": 82.0,
      "idle_fraction": 0.2898550724637681,
      "oscillation_rate": 0.2537234350012524,
-     "workload_gini": 0.08080808006005802
+     "workload_gini": 0.13580246913580246
     },
     {
      "map_id": "L2-test-s2000089-a0",
@@ -5434,7 +5434,7 @@
      "rescue_latency": 62.5,
      "idle_fraction": 0.2838283828382839,
      "oscillation_rate": 0.18953724891939996,
-     "workload_gini": 0.04040404003002903
+     "workload_gini": 0.29292929292929293
     },
     {
      "map_id": "L2-test-s2000090-a0",
@@ -5464,7 +5464,7 @@
      "rescue_latency": 7.0,
      "idle_fraction": 0.2923076923076923,
      "oscillation_rate": 0.319433465085639,
-     "workload_gini": 0.08717948552066754
+     "workload_gini": 0.38333333333333336
     },
     {
      "map_id": "L2-test-s2000090-a0",
@@ -5494,7 +5494,7 @@
      "rescue_latency": 11.5,
      "idle_fraction": 0.3148148148148148,
      "oscillation_rate": 0.15889911520163622,
-     "workload_gini": 0.0564102564102564
+     "workload_gini": 0.28571428571428575
     },
     {
      "map_id": "L2-test-s2000091-a0",
@@ -5524,7 +5524,7 @@
      "rescue_latency": 44.0,
      "idle_fraction": 0.286231884057971,
      "oscillation_rate": 0.20679320679320679,
-     "workload_gini": 0.060606060101731675
+     "workload_gini": 0.338235294117647
     },
     {
      "map_id": "L2-test-s2000091-a0",
@@ -5554,7 +5554,7 @@
      "rescue_latency": 45.0,
      "idle_fraction": 0.30576441102756896,
      "oscillation_rate": 0.2127225573331002,
-     "workload_gini": 0.07792207873260652
+     "workload_gini": 0.3245614035087719
     },
     {
      "map_id": "L2-test-s2000092-a0",
@@ -5584,7 +5584,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.3466666666666667,
      "oscillation_rate": 0.19620401918792899,
-     "workload_gini": 0.19999999961860127
+     "workload_gini": 0.37142857142857144
     },
     {
      "map_id": "L2-test-s2000092-a0",
@@ -5614,7 +5614,7 @@
      "rescue_latency": 76.0,
      "idle_fraction": 0.37777777777777777,
      "oscillation_rate": 0.1788715486194478,
-     "workload_gini": 0.060185185313936684
+     "workload_gini": 0.3240740740740741
     },
     {
      "map_id": "L2-test-s2000093-a0",
@@ -5644,7 +5644,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.2555555555555556,
      "oscillation_rate": 0.19703548984041483,
-     "workload_gini": 0.038647342118879546
+     "workload_gini": 0.14492753623188406
     },
     {
      "map_id": "L2-test-s2000093-a0",
@@ -5674,7 +5674,7 @@
      "rescue_latency": 11.5,
      "idle_fraction": 0.27106227106227104,
      "oscillation_rate": 0.2201740911418331,
-     "workload_gini": 0.04285714325184617
+     "workload_gini": 0.1919191919191919
     },
     {
      "map_id": "L2-test-s2000094-a0",
@@ -5704,7 +5704,7 @@
      "rescue_latency": 6.0,
      "idle_fraction": 0.2762762762762763,
      "oscillation_rate": 0.2602934633432938,
-     "workload_gini": 0.1341991341991342
+     "workload_gini": 0.46929824561403505
     },
     {
      "map_id": "L2-test-s2000094-a0",
@@ -5734,7 +5734,7 @@
      "rescue_latency": 16.0,
      "idle_fraction": 0.288135593220339,
      "oscillation_rate": 0.2753290747193186,
-     "workload_gini": 0.0692640695589593
+     "workload_gini": 0.34259259259259256
     },
     {
      "map_id": "L2-test-s2000095-a0",
@@ -5764,7 +5764,7 @@
      "rescue_latency": 24.5,
      "idle_fraction": 0.2733333333333333,
      "oscillation_rate": 0.18508475580844,
-     "workload_gini": 0.06372548842131538
+     "workload_gini": 0.14
     },
     {
      "map_id": "L2-test-s2000095-a0",
@@ -5794,7 +5794,7 @@
      "rescue_latency": 9.5,
      "idle_fraction": 0.2916666666666667,
      "oscillation_rate": 0.24273504273504273,
-     "workload_gini": 0.07352941121116245
+     "workload_gini": 0.26455026455026454
     },
     {
      "map_id": "L2-test-s2000096-a0",
@@ -5824,7 +5824,7 @@
      "rescue_latency": 82.0,
      "idle_fraction": 0.3133333333333333,
      "oscillation_rate": 0.22436125965537732,
-     "workload_gini": 0.2063492066284389
+     "workload_gini": 0.5291005291005292
     },
     {
      "map_id": "L2-test-s2000096-a0",
@@ -5854,7 +5854,7 @@
      "rescue_latency": 56.0,
      "idle_fraction": 0.25362318840579706,
      "oscillation_rate": 0.22975948837950932,
-     "workload_gini": 0.19907407400790178
+     "workload_gini": 0.39024390243902435
     },
     {
      "map_id": "L2-test-s2000097-a0",
@@ -5884,7 +5884,7 @@
      "rescue_latency": 98.0,
      "idle_fraction": 0.2796420581655481,
      "oscillation_rate": 0.19341161775560164,
-     "workload_gini": 0.05392156805108106
+     "workload_gini": 0.33879781420765026
     },
     {
      "map_id": "L2-test-s2000097-a0",
@@ -5914,7 +5914,7 @@
      "rescue_latency": 53.5,
      "idle_fraction": 0.3244047619047619,
      "oscillation_rate": 0.2188217834559298,
-     "workload_gini": 0.13725490132164136
+     "workload_gini": 0.45679012345679015
     },
     {
      "map_id": "L2-test-s2000098-a0",
@@ -5944,7 +5944,7 @@
      "rescue_latency": 9.0,
      "idle_fraction": 0.2777777777777778,
      "oscillation_rate": 0.23739778739778739,
-     "workload_gini": 0.02604166654236902
+     "workload_gini": 0.2552083333333333
     },
     {
      "map_id": "L2-test-s2000098-a0",
@@ -5974,7 +5974,7 @@
      "rescue_latency": 45.5,
      "idle_fraction": 0.30128205128205127,
      "oscillation_rate": 0.24457558902003348,
-     "workload_gini": 0.052083332836142894
+     "workload_gini": 0.20430107526881716
     },
     {
      "map_id": "L2-test-s2000099-a0",
@@ -6004,7 +6004,7 @@
      "rescue_latency": 25.5,
      "idle_fraction": 0.2798053527980535,
      "oscillation_rate": 0.24168240082462758,
-     "workload_gini": 0.0180180205698011
+     "workload_gini": 0.2824074074074074
     },
     {
      "map_id": "L2-test-s2000099-a0",
@@ -6034,7 +6034,7 @@
      "rescue_latency": null,
      "idle_fraction": 0.29333333333333333,
      "oscillation_rate": 0.23094090754641214,
-     "workload_gini": 0.08547008419831886
+     "workload_gini": 0.358974358974359
     }
    ]
   }

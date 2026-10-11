@@ -329,7 +329,7 @@ def audit_fixtures(res: Path) -> tuple[bool | str | None, str]:
     return ("PARTIAL" if partial else True), detail
 
 
-NUM_RE = re.compile(r"(?<![\w.])(\d+\.\d{2,3})(?![\w.+])")  # `20.19+` is a version, not a result
+NUM_RE = re.compile(r"(?<![\w.])(\d+\.\d{1,3})(?![\w.+])")  # `20.19+` is a version, not a result
 
 
 def _doc_claims(summary: dict) -> dict[str, list[tuple[str, float]]]:
@@ -337,14 +337,21 @@ def _doc_claims(summary: dict) -> dict[str, list[tuple[str, float]]]:
     A number in a doc that is not registered here FAILS the audit (so new unchecked numbers cannot slip in)."""
     L = summary["levels"][LEVEL]
     test = lambda m: L["methods"][m]["splits"]["test"]["stochastic"]["success_rate"]["interval"]["mean"]  # noqa: E731
+    stat = lambda m, split, key: L["methods"][m]["splits"][split]["stochastic"][key]["interval"]["mean"]  # noqa: E731
     H = L["hypotheses"]
     return {
         "0.44": [("Random held-out test success (mean over its 5 sampling seeds)", test("random"))],
-        "1.00": [("IPPO held-out test success (mean over 5 seeds)", test("ippo")), ("MAPPO held-out test success (mean over 5 seeds)", test("mappo"))],
+        "1.00": [("IPPO held-out test success (mean over 5 seeds)", test("ippo")), ("MAPPO held-out test success (mean over 5 seeds)", test("mappo")),
+                 ("Heuristic structured-map success", stat("heuristic", "structured", "success_rate"))],
+        "14.09": [("IPPO test censored steps", stat("ippo", "test", "censored_steps"))],
+        "13.77": [("MAPPO test censored steps", stat("mappo", "test", "censored_steps"))],
+        "15.89": [("Heuristic test censored steps", stat("heuristic", "test", "censored_steps"))],
+        "0.82": [("IPPO structured success", stat("ippo", "structured", "success_rate")),
+                 ("MAPPO structured success", stat("mappo", "structured", "success_rate")),
+                 ("H4: MAPPO structured/test retention", H["H4"]["retention"]["mappo"]["interval"]["mean"])],
         "0.56": [("H1 IPPO: success difference vs Random", H["H1"]["ippo"]["difference"]["diff"])],
         "0.32": [("H2: |MAPPO - IPPO| censored steps difference", abs(H["H2"]["difference"]["diff"]))],
         "0.83": [("H4: IPPO structured/test retention", H["H4"]["retention"]["ippo"]["interval"]["mean"])],
-        "0.82": [("H4: MAPPO structured/test retention", H["H4"]["retention"]["mappo"]["interval"]["mean"])],
         "0.33": [("H4: Random structured/test retention", H["H4"]["retention"]["random"]["interval"]["mean"])],
     }
 
@@ -360,8 +367,8 @@ def audit_doc_numbers(summary: dict) -> tuple[bool, str]:
         text = re.sub(r"```.*?```", "", p.read_text(), flags=re.S)
         for m in NUM_RE.finditer(text):
             tok = m.group(1)
-            if text[max(0, m.start() - 7):m.start()].lower().endswith(("python ", "node ", "ode.js ")):
-                continue  # a tool version, not a result
+            if text[max(0, m.start() - 7):m.start()].lower().endswith(("python ", "node ", "ode.js ", "§")):
+                continue  # a tool version or a spec section reference, not a result
             checked += 1
             if tok not in claims:
                 bad.append(f"{name}: {tok} (not a registered, checked claim)")

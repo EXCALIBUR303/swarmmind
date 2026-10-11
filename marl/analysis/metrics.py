@@ -82,7 +82,7 @@ def compute_episode_metrics(trace: EpisodeTrace, n_reachable_free: int) -> Episo
         for key, arr in step_components.items():
             component_totals[key] = component_totals.get(key, 0.0) + float(np.mean(arr))
 
-    discovered_indices: set[int] = set()
+    discovered_indices: set[int] = set(trace.initial_discovered)
     for d in trace.discovered_events:
         discovered_indices.update(d)
     n_discovered = len(discovered_indices)
@@ -130,7 +130,7 @@ def compute_episode_metrics(trace: EpisodeTrace, n_reachable_free: int) -> Episo
 
     # Rescue latency needs t_discovered/t_rescued, which aren't stored per
     # step in EpisodeTrace directly — reconstruct from the event lists.
-    discovered_at: dict[int, int] = {}
+    discovered_at: dict[int, int] = {k: 0 for k in trace.initial_discovered}  # reset sensing: world t = 0
     for t, targets in enumerate(trace.discovered_events):
         for k in targets:
             discovered_at[k] = t
@@ -141,27 +141,12 @@ def compute_episode_metrics(trace: EpisodeTrace, n_reachable_free: int) -> Episo
                 rescue_latencies.append(t - discovered_at[k])
     rescue_latency_mean = float(np.mean(rescue_latencies)) if rescue_latencies else None
 
-    # Workload share: credit each robot for cells it was the sole (or a
-    # tied) discoverer of, i.e. present at the moment of first team-level
-    # discovery of that cell — approximated here via each robot's own
-    # distance travelled as a coverage-contribution proxy is insufficient;
-    # instead we credit exploration by attributing each step's team
-    # newly-known cells equally among robots that moved that step (a
-    # reasonable, auditable approximation given EpisodeTrace's granularity).
-    workload_credit = np.zeros(n)
-    for t in range(t_ep):
-        moved_this_step = moved_mask[t]
-        n_moved = int(moved_this_step.sum())
-        if n_moved == 0:
-            continue
-        explore_components = trace.reward_components[t].get("explore")
-        if explore_components is None:
-            continue
-        team_explore = float(np.mean(explore_components))
-        if team_explore <= 0:
-            continue
-        share = team_explore / n_moved
-        workload_credit[moved_this_step] += share
+    # Workload share (§23): newly team-known free cells credited to the robot(s) whose sensing covered
+    # them, split among simultaneous observers (recorded per step by EpisodeRunner). The terminal
+    # exploration payout is a reward, not exploration by anyone, so it earns no credit.
+    if len(trace.explore_credit) != t_ep:
+        raise ValueError("trace has no per-step explore_credit; build traces with EpisodeRunner")
+    workload_credit = np.sum(np.stack(trace.explore_credit), axis=0) if t_ep else np.zeros(n)
     total_credit = workload_credit.sum()
     workload_share = (workload_credit / total_credit).tolist() if total_credit > 0 else [1.0 / n] * n
     workload_gini = _gini(np.array(workload_share))

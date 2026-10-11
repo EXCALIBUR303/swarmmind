@@ -35,9 +35,9 @@ from marl.analysis.figures import plot_der_vs_coverage, plot_discovery_timeline,
 from marl.envs.core.config import LevelRegistry
 from marl.evaluation.ablation import run_ablation_for_checkpoint, summarize_ablation
 from marl.evaluation.coordination import run_coordination_for_seed
-from marl.evaluation.eval_sets import eval_set_exists, load_eval_set
+from marl.evaluation.eval_sets import eval_set_exists
 from marl.evaluation.evaluator import run_episode
-from marl.evaluation.final_eval import episode_seed
+from marl.evaluation.final_eval import episode_seed, load_heldout_maps
 from marl.experiments.config import load_study_config
 from marl.experiments.outputs import planned_runs
 from marl.utils.paths import DOCS_DIR, STUDIES_DIR
@@ -54,7 +54,8 @@ def analyze_level(
 ) -> dict:
     env_cfg = LevelRegistry().get(level)
     eval_seeds = cfg.final_eval.eval_seeds
-    test_maps = load_eval_set(level, "test")[:n_maps]
+    # Through the held-out gatekeeper, so the access is logged (§20.3).
+    test_maps = load_heldout_maps(level, "test", {"requester": "analyze_study", "study": cfg.study})[:n_maps]
     runs = [r for r in planned_runs(cfg) if r["level"] == level]
 
     methods: dict[str, list[dict]] = {}
@@ -73,7 +74,7 @@ def analyze_level(
             coord = run_coordination_for_seed(env_cfg, make_policy, test_maps, eval_seeds, with_isolation)
             entries.append({"seed": r["seed"], **coord})
             log(f"  [{algo} s{r['seed']}] der={coord['der']:.3f} "
-                f"der50={coord['der_at_50']['mean']} der_iso={coord['der_iso']}")
+                f"der50={coord['der_at_50']['mean']} der_iso50={(coord['der_iso_at_50'] or {}).get('mean')}")
 
             ablation_entries.append(run_ablation_for_checkpoint(env_cfg, actor, test_maps, eval_seeds))
         methods[algo] = entries
@@ -86,7 +87,8 @@ def analyze_level(
             env_cfg, RandomPolicy, test_maps, eval_seeds, with_isolation, sampling_seed=s
         )
         random_entries.append({"sampling_seed": s, **coord})
-        log(f"  [random s{s}] der={coord['der']:.3f} der50={coord['der_at_50']['mean']} der_iso={coord['der_iso']}")
+        log(f"  [random s{s}] der={coord['der']:.3f} der50={coord['der_at_50']['mean']} "
+            f"der_iso50={(coord['der_iso_at_50'] or {}).get('mean')}")
     methods["random"] = random_entries
 
     return {
@@ -106,7 +108,9 @@ def write_showcase(cfg, level: str, n_showcase_maps: int, n_showcase_episodes: i
     if not eval_set_exists(level, "structured"):
         log(f"  no structured set for {level}; skipping showcase figures")
         return []
-    showcase_maps = load_eval_set(level, "structured")[:n_showcase_maps]
+    showcase_maps = load_heldout_maps(level, "structured", {"requester": "analyze_study/showcase", "study": cfg.study})[
+        :n_showcase_maps
+    ]
     runs = [r for r in planned_runs(cfg) if r["level"] == level and r["run_dir"] is not None]
 
     written: list[str] = []

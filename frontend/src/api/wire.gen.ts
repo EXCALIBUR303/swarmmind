@@ -13,6 +13,7 @@ export type Rescued = number[][];
 export type Reward = number[];
 export type T = number;
 export type Frames = ReplayFrame[];
+export type Discovered1 = number[];
 export type KnownTeam = number[][];
 export type Hash = string;
 export type Height = number;
@@ -86,6 +87,7 @@ export interface RewardComponents {
  * via the `definition` "ReplayInitial".
  */
 export interface ReplayInitial {
+  discovered?: Discovered1;
   known_team: KnownTeam;
 }
 /**
@@ -196,6 +198,7 @@ export interface LiveMetrics {
  * via the `definition` "ReplayFrame".
  */
 export interface SessionInitial {
+  discovered?: Discovered1;
   known_team: KnownTeam;
   pos: Pos1;
 }

@@ -180,3 +180,8 @@ class EpisodeTrace:
     coverage_over_time: list[float] = field(default_factory=list)
     success: bool = False
     final_t: int = 0
+    # Targets the reset-time sensing pass already revealed (in no step's `discovered_events`).
+    initial_discovered: list[int] = field(default_factory=list)
+    # Per step, float[N]: each newly team-known FREE cell credited to the robot(s) that sensed it,
+    # split equally among simultaneous observers (§23 workload share). Excludes the terminal payout.
+    explore_credit: list[np.ndarray] = field(default_factory=list)

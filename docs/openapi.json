@@ -721,6 +721,13 @@
       },
       "SessionInitial": {
         "properties": {
+          "discovered": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Discovered",
+            "type": "array"
+          },
           "known_team": {
             "items": {
               "items": {

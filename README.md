@@ -24,6 +24,10 @@ decision for every hypothesis are in [`docs/RESULTS.md`](docs/RESULTS.md), which
 - **Coordination emergence not shown.** Learned robots divide exploration more than Random (lower DER@50),
   but the pre-set criteria for "learned coordination" are not all met (redundant pursuit is higher than Random),
   so the project does not claim emergent cooperation. MAPPO is not claimed to be better than IPPO.
+- **Against the hand-written frontier heuristic** (a reference line, not part of any hypothesis): on the test maps
+  the learned policies finish slightly faster (censored steps 14.09 IPPO and 13.77 MAPPO vs 15.89), but on the
+  unseen structured maps they succeed less often (0.82 vs 1.00). The learned policies are not better than the
+  heuristic overall.
 - **H4 (descriptive).** On unseen, differently structured maps IPPO keeps 0.83 and MAPPO 0.82 of their
   test success; Random keeps 0.33.
 
@@ -71,6 +75,7 @@ a held-out map, compare algorithms, inspect behaviour, launch a real training jo
 | `make e2e` | headless-browser run of the demo flow on the production build → [`docs/E2E_REPORT.md`](docs/E2E_REPORT.md) |
 | `make audit` | every reported number re-derived from a more primary file; the actors re-run on held-out maps → [`docs/REAL_DATA_AUDIT.md`](docs/REAL_DATA_AUDIT.md) |
 | `make perf` | measured latencies and throughput → [`docs/PERFORMANCE.md`](docs/PERFORMANCE.md) |
+| `scripts/audit_checks.py` | needs the full `results/` (checkpoints): re-training reproducibility, checkpoint/replay integrity, independent statistics → [`docs/AUDIT_CHECKS.md`](docs/AUDIT_CHECKS.md) |
 | `make fresh-clone` | all of the above in a brand-new directory → [`docs/FRESH_CLONE_REPORT.md`](docs/FRESH_CLONE_REPORT.md) |
 
 ## Reproducing the study from scratch
@@ -115,6 +120,7 @@ verify the numbers is in `demo_data/`.
 | [`docs/API.md`](docs/API.md) | REST + WebSocket reference (generated from the OpenAPI schema) |
 | [`docs/DEMO.md`](docs/DEMO.md) | timed demo script |
 | [`docs/design/`](docs/design) | UI spec, design system, polish checklist |
+| [`docs/AUDIT.md`](docs/AUDIT.md) | final MARL + system audit: findings, fixes, what changed, the §16.8 checklist |
 | [`docs/phase_reports/`](docs/phase_reports) | what was built, tested and found in each phase, including problems |
 | [`docs/REAL_DATA_AUDIT.md`](docs/REAL_DATA_AUDIT.md), [`docs/E2E_REPORT.md`](docs/E2E_REPORT.md), [`docs/PERFORMANCE.md`](docs/PERFORMANCE.md), [`docs/FRESH_CLONE_REPORT.md`](docs/FRESH_CLONE_REPORT.md) | generated verification reports |
 

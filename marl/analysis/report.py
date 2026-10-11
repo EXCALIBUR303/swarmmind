@@ -21,7 +21,8 @@ COMPARE_METRICS = ["success_rate", "censored_steps", "coverage", "collisions_per
 COORD_TABLE_METRICS = [
     ("der", "DER", 3),
     ("der_at_50", "DER@50", 3),
-    ("der_iso", "DER (isolation null)", 3),
+    ("der_iso_at_50", "DER@50 (isolation null)", 3),
+    ("der_iso", "DER (isolation null, whole solo runs)", 3),
     ("visitation_overlap", "Visitation overlap", 3),
     ("redundant_pursuit", "Redundant pursuit", 2),
     ("allocation_optimality", "Allocation optimality", 2),
@@ -135,6 +136,19 @@ def render_results_md(summary: dict[str, Any], figures: list[Path], md_path: Pat
             else:
                 lines.append(f"- {hyp[h]['statement']}")
         lines.append("")
+        pc = data.get("parameter_counts")
+        if pc:
+            lines += [
+                "**Reading the IPPO/MAPPO comparison.** The actors are identical "
+                f"({pc['actor']:,} parameters each); only the critic differs: IPPO {pc['ippo_critic']:,} vs "
+                f"MAPPO {pc['mappo_critic']:,} parameters ({pc['mappo_critic'] / pc['ippo_critic']:.2f}×), so a MAPPO "
+                "advantage could partly reflect critic capacity (§16.3). A centralized critic conditioned on the "
+                "true state can be a biased value estimate for an observation-conditioned policy in a POMDP "
+                "(Lyu et al., 2021/2023): the policy gradient stays unbiased in expectation, but bootstrapped "
+                "targets can inherit the bias and variance can rise. MAPPO not beating IPPO is therefore a known "
+                "possibility, not by itself evidence of a bug (§16.7).",
+                "",
+            ]
         if "coordination" in data:
             coord_table = _coordination_table(data["coordination"])
             criteria_table = _h3_criteria_table(hyp.get("H3", {}))
